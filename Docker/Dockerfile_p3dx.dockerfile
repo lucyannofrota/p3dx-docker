@@ -238,10 +238,10 @@ RUN rm /etc/ros/rosdep/sources.list.d/20-default.list && \
     
     # https://answers.ros.org/question/325245/minimal-ros2-installation/?answer=325249#post-id-325249
     rosinstall_generator --deps --rosdistro ${ROS2_DISTRO} ${ROS2_PKG} \
-        ros1_bridge \
-        > ros2.${ROS2_DISTRO}.${ROS2_PKG}.rosinstall && \
-    cat ros2.${ROS2_DISTRO}.${ROS2_PKG}.rosinstall && \
-    vcs import src < ros2.${ROS2_DISTRO}.${ROS2_PKG}.rosinstall && \
+        rmw \
+        > ros2.${ROS2_DISTRO}.${ROS2_PKG}-deps.rosinstall && \
+    cat ros2.${ROS2_DISTRO}.${ROS2_PKG}-deps.rosinstall && \
+    vcs import src < ros2.${ROS2_DISTRO}.${ROS2_PKG}-deps.rosinstall && \
     
     # https://github.com/dusty-nv/jetson-containers/issues/181
     rm -r ${ROS2_ROOT}/src/ament_cmake && \
@@ -389,7 +389,60 @@ ENV WORKSPACE=${WORKSPACE}
 
 FROM p3dx:noetic-drivers as noetic-robot-pkgs
 
+ARG WORKSPACE=/workspace
+ENV WORKSPACE=${WORKSPACE}
+
+COPY p3dx-pkgs ${WORKSPACE}/noetic/src
+
+WORKDIR ${WORKSPACE}/noetic
+
+SHELL ["/bin/bash", "-c"] 
+
+RUN . /opt/ros/noetic/setup.bash && \
+    catkin_make && \
+    echo "alias noetic='source /workspace/noetic/devel/setup.bash'" >> ~/.bashrc && \
+    echo "noetic" >> ~/.bashrc
+
+# ENTRYPOINT ["/bin/bash","-c","tail -f /dev/null" ]
+
+
+
+
+
+
 
 
 
 FROM p3dx:noetic-foxy-drivers as noetic-foxy-robot-pkgs
+
+ARG WORKSPACE=/workspace
+ENV WORKSPACE=${WORKSPACE}
+
+# setup ROS noetic ws
+
+COPY p3dx-pkgs ${WORKSPACE}/noetic/src
+
+WORKDIR ${WORKSPACE}/noetic
+
+SHELL ["/bin/bash", "-c"] 
+
+RUN . /opt/ros/noetic/setup.bash && \
+    catkin_make && \
+    echo "alias noetic='source /workspace/noetic/devel/setup.bash'" >> ~/.bashrc
+
+# setup ROS foxy ws
+
+
+# ros1_bridge
+WORKDIR ${WORKSPACE}/foxy
+
+ENV ROS1_INSTALL_PATH=/opt/ros/noetic
+ENV ROS2_INSTALL_PATH=/opt/ros/foxy/install
+
+RUN mkdir src && \
+    echo "alias foxy='source /workspace/foxy/install/setup.bash'" >> ~/.bashrc
+
+
+# git clone https://github.com/ros2/ros1_bridge.git ${WORKSPACE}/foxy/src/ros1_bridge
+
+colcon build --symlink-install --packages-skip ros1_bridge
