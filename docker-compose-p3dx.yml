@@ -1,0 +1,89 @@
+version: '2.2'
+
+services:
+ 
+  noetic:
+    image: p3dx:noetic
+    container_name: noetic
+    build:
+      network: host
+      context: ./Docker
+      dockerfile: ./Dockerfile_p3dx.dockerfile
+      target: noetic
+      args:
+        IMAGE_NAME: nvcr.io/nvidia/l4t-base:r35.2.1
+
+        # ROS
+        ROS1_DISTRO: noetic
+        ROS1_BUILD: /ROS_NOETIC
+        WORKSPACE: /workspace
+
+        # Entrypoint
+        ENTRYPOINT_HOST_PATH: entrypoints/p3dx_entrypoint.bash
+
+  p3dx_noetic:
+    image: p3dx:noetic-drivers
+    container_name: p3dx-noetic
+    build:
+      network: host
+      context: ./Docker
+      dockerfile: ./Dockerfile_p3dx.dockerfile
+      target: noetic-drivers
+      args:
+        IMAGE_NAME: nvcr.io/nvidia/l4t-base:r35.2.1
+
+        # ROS
+        ROS1_DISTRO: noetic
+        ROS1_BUILD: /ROS_NOETIC
+        WORKSPACE: /workspace
+
+        # Entrypoint
+        ENTRYPOINT_HOST_PATH: entrypoints/p3dx_entrypoint.bash
+
+  noetic_foxy:
+    image: p3dx:noetic-foxy
+    container_name: noetic-foxy
+    build:
+      network: host
+      context: ./Docker
+      dockerfile: ./Dockerfile_p3dx.dockerfile
+      target: noetic-foxy
+      args:
+        IMAGE_NAME: nvcr.io/nvidia/l4t-base:r35.2.1
+
+        # ROS
+        ROS1_DISTRO: noetic
+        ROS2_DISTRO: foxy
+        ROS1_BUILD: /ROS_NOETIC
+        ROS2_BUILD: /ROS_FOXY
+        WORKSPACE: /workspace
+
+        # ROS2 parameters
+        RMW_IMPLEMENTATION_INSTALL: rmw-cyclonedds-cpp
+        RMW_IMPLEMENTATION: rmw_cyclonedds_cpp
+        ROS_DOMAIN_ID: 7
+
+        # Entrypoint
+        ENTRYPOINT_HOST_PATH: entrypoints/p3dx_entrypoint.bash
+
+
+  p3dx_noetic_foxy:
+    image: p3dx:noetic-foxy-drivers
+    container_name: noetic-foxy-drivers
+    build:
+      network: host
+      context: ./Docker
+      dockerfile: ./Dockerfile_p3dx.dockerfile
+      target: noetic-foxy-drivers
+      args:
+        IMAGE_NAME: nvcr.io/nvidia/l4t-base:r35.2.1
+
+        # ROS
+        ROS_DISTRO: foxy
+        WORKSPACE: /workspace
+        RMW_IMPLEMENTATION_INSTALL: rmw-cyclonedds-cpp
+        RMW_IMPLEMENTATION: rmw_cyclonedds_cpp
+        ROS_DOMAIN_ID: 7
+
+        # Entrypoint
+        ENTRYPOINT_HOST_PATH: entrypoints/p3dx_entrypoint.bash
