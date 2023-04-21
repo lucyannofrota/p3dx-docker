@@ -59,12 +59,48 @@ services:
       - SYS_PTRACE
     command: bash -c "tail -F /dev/null"
 
+  noetic_foxy:
+    image: lucyannofrota/p3dx:noetic-foxy #p3dx:noetic-foxy
+    container_name: noetic-foxy
+    extends:
+      file: docker-compose-p3dx.yml
+      service: noetic_foxy
+    network_mode: "host"
+    privileged: true
+    environment:
+      - "DISPLAY"
+      - "QT_X11_NO_MITSHM=1" #fix some QT bugs
+    volumes: 
+      - /tmp/.X11-unix:/tmp/.X11-unix # Share X11 socket with container
+      - $HOME/.Xauthority:/home/ros/.Xauthority # Share X11 permissions
+    cap_add:
+      - SYS_PTRACE
+    command: bash -c "tail -F /dev/null"
+
   p3dx_noetic:
     image: lucyannofrota/p3dx:noetic-drivers #p3dx:noetic-drivers
     container_name: p3dx-noetic
     extends:
       file: docker-compose-p3dx.yml
       service: p3dx_noetic
+    network_mode: "host"
+    privileged: true
+    environment:
+      - "DISPLAY"
+      - "QT_X11_NO_MITSHM=1" #fix some QT bugs
+    volumes: 
+      - /tmp/.X11-unix:/tmp/.X11-unix # Share X11 socket with container
+      - $HOME/.Xauthority:/home/ros/.Xauthority # Share X11 permissions
+    cap_add:
+      - SYS_PTRACE
+    command: bash -c "tail -F /dev/null"
+
+  p3dx_noetic_foxy:
+    image: lucyannofrota/p3dx:noetic-foxy-drivers #p3dx:noetic-foxy-drivers
+    container_name: noetic-foxy-drivers
+    extends:
+      file: docker-compose-p3dx.yml
+      service: p3dx_noetic_foxy
     network_mode: "host"
     privileged: true
     environment:
@@ -96,44 +132,8 @@ services:
     # . devel/setup.bash && roslaunch robot robot.launch &&
     # tail -F /dev/null && 
 
-  noetic_foxy:
-    #image: lucyannofrota/p3dx:noetic-foxy #p3dx:noetic-foxy
-    container_name: noetic-foxy
-    extends:
-      file: docker-compose-p3dx.yml
-      service: noetic_foxy
-    network_mode: "host"
-    privileged: true
-    environment:
-      - "DISPLAY"
-      - "QT_X11_NO_MITSHM=1" #fix some QT bugs
-    volumes: 
-      - /tmp/.X11-unix:/tmp/.X11-unix # Share X11 socket with container
-      - $HOME/.Xauthority:/home/ros/.Xauthority # Share X11 permissions
-    cap_add:
-      - SYS_PTRACE
-    command: bash -c "tail -F /dev/null"
-  
-  p3dx_noetic_foxy:
-    #image: lucyannofrota/p3dx:noetic-foxy-drivers #p3dx:noetic-foxy-drivers
-    container_name: noetic-foxy-drivers
-    extends:
-      file: docker-compose-p3dx.yml
-      service: p3dx_noetic_foxy
-    network_mode: "host"
-    privileged: true
-    environment:
-      - "DISPLAY"
-      - "QT_X11_NO_MITSHM=1" #fix some QT bugs
-    volumes: 
-      - /tmp/.X11-unix:/tmp/.X11-unix # Share X11 socket with container
-      - $HOME/.Xauthority:/home/ros/.Xauthority # Share X11 permissions
-    cap_add:
-      - SYS_PTRACE
-    command: bash -c "tail -F /dev/null"
-
   p3dx_noetic_foxy_pkgs:
-    image: p3dx:noetic-foxy-robot-pkgs
+    # image: lucyannofrota/p3dx:noetic-foxy-robot-pkgs
     extends:
       file: docker-compose-p3dx.yml
       service: p3dx_noetic_foxy_pkgs
@@ -147,6 +147,17 @@ services:
       - $HOME/.Xauthority:/home/ros/.Xauthority # Share X11 permissions
     cap_add:
       - SYS_PTRACE
-    command: bash -c ". /workspace/noetic/devel/setup.bash && roslaunch robot robot.launch && tail -F /dev/null"
+    command: >
+      bash -c "
+        (
+          (. /workspace/noetic/devel/setup.bash && roslaunch robot robot.launch) &
+          (
+            . /workspace/noetic/devel/setup.bash && 
+            . /workspace/foxy/install/setup.bash && 
+            ros2 run ros1_bridge dynamic_bridge
+          ) 
+        ) && 
+        tail -F /dev/null
+      "
     # . devel/setup.bash && roslaunch robot robot.launch &&
     # tail -F /dev/null && 

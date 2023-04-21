@@ -1,9 +1,9 @@
 # this dockerfile roughly follows the 'Installing from source' from:
 #   http://wiki.ros.org/noetic/Installation/Source
 #
-ARG IMAGE_NAME=nvcr.io/nvidia/l4t-base:r35.2.1
+ARG BASE_IMAGE=nvcr.io/nvidia/l4t-base:r35.2.1
 
-FROM ${IMAGE_NAME} as noetic
+FROM ${BASE_IMAGE} as noetic
 
 ## NOETIC
 ARG ROS1_PKG=ros_base
@@ -17,6 +17,13 @@ ENV ROS_PYTHON_VERSION=3
 
 ARG WORKSPACE=/workspace
 ENV WORKSPACE=${WORKSPACE}
+
+ARG BASE_IMAGE=nvcr.io/nvidia/l4t-base:r35.2.1
+ENV BASE_IMAGE=${BASE_IMAGE}
+ARG IMAGE_NAME=p3dx:noetic
+ENV IMAGE_NAME=${IMAGE_NAME}
+ENV L4T_VERSION=R35.2.1
+ARG L4T_VERSION=${L4T_VERSION}
 
 
 ENV DEBIAN_FRONTEND=noninteractive
@@ -74,6 +81,9 @@ RUN mkdir ros_base_ws && \
     python3 ./src/catkin/bin/catkin_make_isolated --install --install-space ${ROS1_ROOT} -DCMAKE_BUILD_TYPE=Release && \
     rm -rf /var/lib/apt/lists/*
 
+COPY entrypoints/p3dx_entrypoint.bash /sbin/entrypoint.bash
+
+ENTRYPOINT [ "/sbin/entrypoint.bash" ]
 
 
 
@@ -96,6 +106,14 @@ ENV RMW_IMPLEMENTATION=${RMW_IMPLEMENTATION}
 
 ARG ROS_DOMAIN_ID=7
 ENV ROS_DOMAIN_ID=${ROS_DOMAIN_ID}
+
+
+ARG BASE_IMAGE=lucyannofrota/p3dx:noetic
+ENV BASE_IMAGE=${BASE_IMAGE}
+ARG IMAGE_NAME=p3dx:noetic-foxy
+ENV IMAGE_NAME=${IMAGE_NAME}
+ENV L4T_VERSION=R35.2.1
+ARG L4T_VERSION=${L4T_VERSION}
 
 ENV DEBIAN_FRONTEND=noninteractive
 ENV SHELL /bin/bash
@@ -239,9 +257,9 @@ RUN rm /etc/ros/rosdep/sources.list.d/20-default.list && \
     # https://answers.ros.org/question/325245/minimal-ros2-installation/?answer=325249#post-id-325249
     rosinstall_generator --deps --rosdistro ${ROS2_DISTRO} ${ROS2_PKG} \
         rmw \
-        > ros2.${ROS2_DISTRO}.${ROS2_PKG}-deps.rosinstall && \
-    cat ros2.${ROS2_DISTRO}.${ROS2_PKG}-deps.rosinstall && \
-    vcs import src < ros2.${ROS2_DISTRO}.${ROS2_PKG}-deps.rosinstall && \
+        > ros2.${ROS2_DISTRO}.${ROS2_PKG}.rosinstall && \
+    cat ros2.${ROS2_DISTRO}.${ROS2_PKG}.rosinstall && \
+    vcs import src < ros2.${ROS2_DISTRO}.${ROS2_PKG}.rosinstall && \
     
     # https://github.com/dusty-nv/jetson-containers/issues/181
     rm -r ${ROS2_ROOT}/src/ament_cmake && \
@@ -264,6 +282,10 @@ RUN rm /etc/ros/rosdep/sources.list.d/20-default.list && \
     colcon build \
         --merge-install \
         --cmake-args -DCMAKE_BUILD_TYPE=Release -Wno-dev
+
+COPY entrypoints/p3dx_entrypoint.bash /sbin/entrypoint.bash
+
+ENTRYPOINT [ "/sbin/entrypoint.bash" ]
 
 
 
@@ -295,6 +317,15 @@ RUN rm /etc/ros/rosdep/sources.list.d/20-default.list && \
 
 FROM p3dx:noetic as noetic-drivers
 
+ARG BASE_IMAGE=lucyannofrota/p3dx:noetic
+ENV BASE_IMAGE=${BASE_IMAGE}
+ARG IMAGE_NAME=p3dx:noetic-drivers
+ENV IMAGE_NAME=${IMAGE_NAME}
+ENV L4T_VERSION=R35.2.1
+ARG L4T_VERSION=${L4T_VERSION}
+
+
+
 RUN git clone --recursive https://github.com/cinvesrob/Aria.git /usr/local/Aria \
   && cd /usr/local/Aria \
   && make clean \
@@ -322,8 +353,23 @@ RUN rm -rf ${ROS1_BUILD}
 
 WORKDIR ${WORKSPACE}
 
+COPY entrypoints/p3dx_entrypoint.bash /sbin/entrypoint.bash
+
+ENTRYPOINT [ "/sbin/entrypoint.bash" ]
+
 
 FROM p3dx:noetic-foxy as noetic-foxy-drivers
+
+ARG BASE_IMAGE=lucyannofrota/p3dx:noetic-foxy
+ENV BASE_IMAGE=${BASE_IMAGE}
+ARG IMAGE_NAME=p3dx:noetic-foxy-drivers
+ENV IMAGE_NAME=${IMAGE_NAME}
+ENV L4T_VERSION=R35.2.1
+ARG L4T_VERSION=${L4T_VERSION}
+
+
+ARG WORKSPACE=/workspace
+ENV WORKSPACE=${WORKSPACE}
 
 RUN git clone --recursive https://github.com/cinvesrob/Aria.git /usr/local/Aria \
   && cd /usr/local/Aria \
@@ -358,8 +404,10 @@ RUN rm -rf ${ROS1_BUILD} && \
 WORKDIR ${WORKSPACE}
 
 
-ARG WORKSPACE=/workspace
-ENV WORKSPACE=${WORKSPACE}
+
+COPY entrypoints/p3dx_entrypoint.bash /sbin/entrypoint.bash
+
+ENTRYPOINT [ "/sbin/entrypoint.bash" ]
 
 
 
@@ -392,6 +440,13 @@ FROM p3dx:noetic-drivers as noetic-robot-pkgs
 ARG WORKSPACE=/workspace
 ENV WORKSPACE=${WORKSPACE}
 
+ARG BASE_IMAGE=lucyannofrota/p3dx:noetic-drivers
+ENV BASE_IMAGE=${BASE_IMAGE}
+ARG IMAGE_NAME=p3dx:noetic-robot-pkgs
+ENV IMAGE_NAME=${IMAGE_NAME}
+ENV L4T_VERSION=R35.2.1
+ARG L4T_VERSION=${L4T_VERSION}
+
 COPY p3dx-pkgs ${WORKSPACE}/noetic/src
 
 WORKDIR ${WORKSPACE}/noetic
@@ -403,7 +458,9 @@ RUN . /opt/ros/noetic/setup.bash && \
     echo "alias noetic='source /workspace/noetic/devel/setup.bash'" >> ~/.bashrc && \
     echo "noetic" >> ~/.bashrc
 
-# ENTRYPOINT ["/bin/bash","-c","tail -f /dev/null" ]
+COPY entrypoints/p3dx_entrypoint.bash /sbin/entrypoint.bash
+
+ENTRYPOINT [ "/sbin/entrypoint.bash" ]
 
 
 
@@ -417,6 +474,16 @@ FROM p3dx:noetic-foxy-drivers as noetic-foxy-robot-pkgs
 
 ARG WORKSPACE=/workspace
 ENV WORKSPACE=${WORKSPACE}
+
+ARG BASE_IMAGE=lucyannofrota/p3dx:noetic-foxy-drivers
+ENV BASE_IMAGE=${BASE_IMAGE}
+ARG IMAGE_NAME=p3dx:noetic-foxy-robot-pkgs
+ENV IMAGE_NAME=${IMAGE_NAME}
+ENV L4T_VERSION=R35.2.1
+ARG L4T_VERSION=${L4T_VERSION}
+
+ARG ROS_MASTER_URI=http://localhost:11311
+ENV ROS_MASTER_URI=${ROS_MASTER_URI}
 
 # setup ROS noetic ws
 
@@ -439,10 +506,16 @@ WORKDIR ${WORKSPACE}/foxy
 ENV ROS1_INSTALL_PATH=/opt/ros/noetic
 ENV ROS2_INSTALL_PATH=/opt/ros/foxy/install
 
+COPY p3dx.repos ${WORKSPACE}/foxy
+
 RUN mkdir src && \
-    echo "alias foxy='source /workspace/foxy/install/setup.bash'" >> ~/.bashrc
+    echo "alias foxy='source /workspace/foxy/install/setup.bash'" >> ~/.bashrc && \
+    vcs import < p3dx.repos && \
+    colcon build --symlink-install --packages-skip ros1_bridge &&  \
+    source /opt/ros/noetic/setup.bash && \
+    source /opt/ros/foxy/install/setup.bash && \
+    colcon build --symlink-install --packages-select ros1_bridge --cmake-force-configure
 
+COPY entrypoints/p3dx_entrypoint.bash /sbin/entrypoint.bash
 
-# git clone https://github.com/ros2/ros1_bridge.git ${WORKSPACE}/foxy/src/ros1_bridge
-
-colcon build --symlink-install --packages-skip ros1_bridge
+ENTRYPOINT [ "/sbin/entrypoint.bash" ]
