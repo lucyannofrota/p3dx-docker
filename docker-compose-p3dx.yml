@@ -1,5 +1,7 @@
 version: '2.2'
 
+# BASE_IMAGE: lucyannofrota/
+
 services:
  
   noetic:

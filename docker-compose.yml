@@ -42,7 +42,7 @@ services:
       "
 
   noetic:
-    image: lucyannofrota/p3dx:noetic #p3dx:noetic
+    # image: lucyannofrota/p3dx:noetic #p3dx:noetic
     container_name: noetic
     extends:
       file: docker-compose-p3dx.yml
@@ -60,7 +60,7 @@ services:
     command: bash -c "tail -F /dev/null"
 
   noetic_foxy:
-    image: lucyannofrota/p3dx:noetic-foxy #p3dx:noetic-foxy
+    # image: lucyannofrota/p3dx:noetic-foxy #p3dx:noetic-foxy
     container_name: noetic-foxy
     extends:
       file: docker-compose-p3dx.yml
@@ -78,7 +78,7 @@ services:
     command: bash -c "tail -F /dev/null"
 
   p3dx_noetic:
-    image: lucyannofrota/p3dx:noetic-drivers #p3dx:noetic-drivers
+    # image: lucyannofrota/p3dx:noetic-drivers #p3dx:noetic-drivers
     container_name: p3dx-noetic
     extends:
       file: docker-compose-p3dx.yml
@@ -96,7 +96,7 @@ services:
     command: bash -c "tail -F /dev/null"
 
   p3dx_noetic_foxy:
-    image: lucyannofrota/p3dx:noetic-foxy-drivers #p3dx:noetic-foxy-drivers
+    # image: lucyannofrota/p3dx:noetic-foxy-drivers #p3dx:noetic-foxy-drivers
     container_name: noetic-foxy-drivers
     extends:
       file: docker-compose-p3dx.yml
@@ -114,7 +114,7 @@ services:
     command: bash -c "tail -F /dev/null"
 
   p3dx_noetic_pkgs:
-    image: lucyannofrota/p3dx:noetic-robot-pkgs #p3dx:noetic-robot-pkgs
+    # image: lucyannofrota/p3dx:noetic-robot-pkgs #p3dx:noetic-robot-pkgs
     extends:
       file: docker-compose-p3dx.yml
       service: p3dx_noetic_pkgs
@@ -161,3 +161,57 @@ services:
       "
     # . devel/setup.bash && roslaunch robot robot.launch &&
     # tail -F /dev/null && 
+
+  jetson_noetic:
+    #image: lucyannofrota/jetson:noetic
+    container_name: jetson-noetic
+    extends:
+      file: docker-compose-jetson.yml
+      service: jetson_noetic
+    network_mode: "host"
+    privileged: true
+    environment:
+      - "DISPLAY"
+      - "QT_X11_NO_MITSHM=1" #fix some QT bugs
+    volumes: 
+      - /tmp/.X11-unix:/tmp/.X11-unix # Share X11 socket with container
+      - $HOME/.Xauthority:/home/ros/.Xauthority # Share X11 permissions
+    cap_add:
+      - SYS_PTRACE
+    command: bash -c "tail -F /dev/null"
+
+  jetson_noetic_foxy:
+    #image: lucyannofrota/jetson:noetic-foxy
+    container_name: jetson-noetic-foxy
+    extends:
+      file: docker-compose-jetson.yml
+      service: jetson_noetic_foxy
+    network_mode: "host"
+    privileged: true
+    environment:
+      - "DISPLAY"
+      - "QT_X11_NO_MITSHM=1" #fix some QT bugs
+    volumes: 
+      - /tmp/.X11-unix:/tmp/.X11-unix # Share X11 socket with container
+      - $HOME/.Xauthority:/home/ros/.Xauthority # Share X11 permissions
+    cap_add:
+      - SYS_PTRACE
+    command: bash -c "tail -F /dev/null"
+
+  jetson_noetic_foxy_bridge:
+    #image: lucyannofrota/jetson:noetic-foxy-bridge
+    container_name: jetson-noetic-foxy-bridge
+    extends:
+      file: docker-compose-jetson.yml
+      service: jetson_noetic_foxy_bridge
+    network_mode: "host"
+    privileged: true
+    environment:
+      - "DISPLAY"
+      - "QT_X11_NO_MITSHM=1" #fix some QT bugs
+    volumes: 
+      - /tmp/.X11-unix:/tmp/.X11-unix # Share X11 socket with container
+      - $HOME/.Xauthority:/home/ros/.Xauthority # Share X11 permissions
+    cap_add:
+      - SYS_PTRACE
+    command: bash -c "tail -F /dev/null"
