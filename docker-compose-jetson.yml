@@ -8,7 +8,7 @@ services:
     build:
       network: host
       context: ./Docker
-      dockerfile: ./Dockerfile_ros1_bridge.dockerfile
+      dockerfile: ./noetic_base.dockerfile
       target: noetic
       args:
         BASE_IMAGE: nvcr.io/nvidia/l4t-base:r35.2.1
@@ -20,6 +20,9 @@ services:
         ROS1_DISTRO: noetic
         ROS1_BUILD: /ROS_NOETIC
         WORKSPACE: /workspace
+        ROS_MASTER_URI: http://localhost:11311
+
+        ENTRYPOINT: entrypoints/jetson_entrypoint.bash
 
   jetson_noetic_foxy:
     image: jetson:noetic-foxy
@@ -27,7 +30,7 @@ services:
     build:
       network: host
       context: ./Docker
-      dockerfile: ./Dockerfile_ros1_bridge.dockerfile
+      dockerfile: ./noetic_foxy.dockerfile
       target: noetic-foxy
       args:
         BASE_IMAGE: lucyannofrota/jetson:noetic
@@ -35,20 +38,15 @@ services:
         UBUNTU_VERSION: 20.04
         L4T_VERSION: R35.2.1
 
-        # ROS
-        ROS1_DISTRO: noetic
+        # ROS2
         ROS2_DISTRO: foxy
-        ROS1_BUILD: /ROS_NOETIC
-        ROS2_BUILD: /ROS_FOXY
         WORKSPACE: /workspace
-
-        # ROS2 parameters
         RMW_IMPLEMENTATION_INSTALL: rmw-cyclonedds-cpp
         RMW_IMPLEMENTATION: rmw_cyclonedds_cpp
         ROS_DOMAIN_ID: 7
 
         # Entrypoint
-        ENTRYPOINT_HOST_PATH: entrypoints/jetson_entrypoint.bash
+        ENTRYPOINT: entrypoints/jetson_entrypoint.bash
 
   jetson_noetic_foxy_bridge:
     image: jetson:noetic-foxy-bridge

@@ -2,28 +2,52 @@
 #   http://wiki.ros.org/noetic/Installation/Source
 #
 ARG BASE_IMAGE=nvcr.io/nvidia/l4t-base:r35.2.1
+# ARG IMAGE_NAME=p3dx:noetic
+# ARG WORKSPACE=/workspace
+# ARG L4T_VERSION=R35.2.1
+
+# ARG ROS1_PKG=ros_base
+# ARG ROS1_BUILD=/ROS_NOETIC
+# ARG ROS_MASTER_URI=http://localhost:11311
+
+# ARG ROS2_PKG=ros_base
+# ARG ROS2_BUILD=/ROS_FOXY
+# ARG RMW_IMPLEMENTATION_INSTALL=rmw-cyclonedds-cpp
+# ARG RMW_IMPLEMENTATION=rmw_cyclonedds_cpp
+# ARG ROS_DOMAIN_ID=7
+
 
 FROM ${BASE_IMAGE} as noetic
 
-## NOETIC
+ARG BASE_IMAGE=nvcr.io/nvidia/l4t-base:r35.2.1
+ARG IMAGE_NAME=p3dx:noetic
+ARG WORKSPACE=/workspace
+ARG L4T_VERSION=R35.2.1
+
 ARG ROS1_PKG=ros_base
-ENV ROS1_PKG=${ROS1_PKG}
-ENV ROS1_DISTRO=noetic
-ENV ROS1_ROOT=/opt/ros/${ROS1_DISTRO}
 ARG ROS1_BUILD=/ROS_NOETIC
+ARG ROS_MASTER_URI=http://localhost:11311
+
+ARG ROS2_PKG=ros_base
+ARG ROS2_BUILD=/ROS_FOXY
+ARG RMW_IMPLEMENTATION_INSTALL=rmw-cyclonedds-cpp
+ARG RMW_IMPLEMENTATION=rmw_cyclonedds_cpp
+ARG ROS_DOMAIN_ID=7
+
+## NOETIC
+ENV ROS1_DISTRO=noetic
+ENV ROS1_PKG=${ROS1_PKG}
+ENV ROS1_ROOT=/opt/ros/${ROS1_DISTRO}
 ENV ROS1_BUILD=${ROS1_BUILD}
+RUN echo ${ROS1_BUILD}
 ENV ROS_PYTHON_VERSION=3
 
 
-ARG WORKSPACE=/workspace
 ENV WORKSPACE=${WORKSPACE}
 
-ARG BASE_IMAGE=nvcr.io/nvidia/l4t-base:r35.2.1
 ENV BASE_IMAGE=${BASE_IMAGE}
-ARG IMAGE_NAME=p3dx:noetic
 ENV IMAGE_NAME=${IMAGE_NAME}
-ENV L4T_VERSION=R35.2.1
-ARG L4T_VERSION=${L4T_VERSION}
+ENV L4T_VERSION=${L4T_VERSION}
 
 
 ENV DEBIAN_FRONTEND=noninteractive
@@ -71,10 +95,10 @@ RUN apt-get update && \
 
 WORKDIR ${ROS1_BUILD}
 
-RUN mkdir ros_base_ws && \
+RUN mkdir -p ros_base_ws && \
     cd ros_base_ws && \
     rosinstall_generator ${ROS1_PKG} vision_msgs image_transport --rosdistro ${ROS1_DISTRO} --deps --tar > ${ROS1_DISTRO}-${ROS1_PKG}.rosinstall && \
-    mkdir src && \
+    mkdir -p src && \
     vcs import --input ${ROS1_DISTRO}-${ROS1_PKG}.rosinstall ./src && \
     apt-get update && \
     rosdep install --from-paths ./src --ignore-packages-from-source --rosdistro ${ROS1_DISTRO} --skip-keys python3-pykdl -y && \
@@ -83,37 +107,50 @@ RUN mkdir ros_base_ws && \
 
 COPY entrypoints/p3dx_entrypoint.bash /sbin/entrypoint.bash
 
+RUN mkdir -p ${WORKSPACE}
+WORKDIR ${WORKSPACE}
+
 ENTRYPOINT [ "/sbin/entrypoint.bash" ]
 
 
 
 ## FOXY
-FROM p3dx:noetic as noetic-foxy
+# p3dx:noetic
+FROM ${BASE_IMAGE} as noetic-foxy
+
+ARG BASE_IMAGE=nvcr.io/nvidia/l4t-base:r35.2.1
+ARG IMAGE_NAME=p3dx:noetic
+ARG WORKSPACE=/workspace
+ARG L4T_VERSION=R35.2.1
+
+ARG ROS1_PKG=ros_base
+ARG ROS1_BUILD=/ROS_NOETIC
+ARG ROS_MASTER_URI=http://localhost:11311
+
+ARG ROS2_PKG=ros_base
+ARG ROS2_BUILD=/ROS_FOXY
+ARG RMW_IMPLEMENTATION_INSTALL=rmw-cyclonedds-cpp
+ARG RMW_IMPLEMENTATION=rmw_cyclonedds_cpp
+ARG ROS_DOMAIN_ID=7
+
 
 ## FOXY
-ARG ROS2_PKG=ros_base
 ENV ROS2_PKG=${ROS2_PKG}
 ENV ROS2_DISTRO=foxy
 ENV ROS2_ROOT=/opt/ros/${ROS2_DISTRO}
-ARG ROS2_BUILD=/ROS_FOXY
 ENV ROS2_BUILD=${ROS2_BUILD}
 
-ARG RMW_IMPLEMENTATION_INSTALL=rmw-cyclonedds-cpp
 ENV RMW_IMPLEMENTATION_INSTALL=${RMW_IMPLEMENTATION_INSTALL}
 
-ARG RMW_IMPLEMENTATION=rmw_cyclonedds_cpp
 ENV RMW_IMPLEMENTATION=${RMW_IMPLEMENTATION}
-
-ARG ROS_DOMAIN_ID=7
 ENV ROS_DOMAIN_ID=${ROS_DOMAIN_ID}
 
+ENV WORKSPACE=${WORKSPACE}
 
-ARG BASE_IMAGE=lucyannofrota/p3dx:noetic
-ENV BASE_IMAGE=${BASE_IMAGE}
-ARG IMAGE_NAME=p3dx:noetic-foxy
+
+# ARG BASE_IMAGE=lucyannofrota/p3dx:noetic
 ENV IMAGE_NAME=${IMAGE_NAME}
-ENV L4T_VERSION=R35.2.1
-ARG L4T_VERSION=${L4T_VERSION}
+ENV L4T_VERSION=${L4T_VERSION}
 
 ENV DEBIAN_FRONTEND=noninteractive
 ENV SHELL /bin/bash
@@ -238,7 +275,7 @@ RUN apt purge -y python3.9 libpython3.9* || echo "python3.9 not found, skipping 
 #
 RUN git clone --branch yaml-cpp-0.6.0 https://github.com/jbeder/yaml-cpp yaml-cpp-0.6 && \
     cd yaml-cpp-0.6 && \
-    mkdir build && \
+    mkdir -p build && \
     cd build && \
     cmake -DBUILD_SHARED_LIBS=ON .. && \
     make -j$(nproc) && \
@@ -253,18 +290,15 @@ RUN git clone --branch yaml-cpp-0.6.0 https://github.com/jbeder/yaml-cpp yaml-cp
 RUN rm /etc/ros/rosdep/sources.list.d/20-default.list && \ 
     mkdir -p ${ROS2_ROOT}/src && \ 
     cd ${ROS2_ROOT} && \ 
-    
     # https://answers.ros.org/question/325245/minimal-ros2-installation/?answer=325249#post-id-325249
     rosinstall_generator --deps --rosdistro ${ROS2_DISTRO} ${ROS2_PKG} \
         rmw \
         > ros2.${ROS2_DISTRO}.${ROS2_PKG}.rosinstall && \
     cat ros2.${ROS2_DISTRO}.${ROS2_PKG}.rosinstall && \
     vcs import src < ros2.${ROS2_DISTRO}.${ROS2_PKG}.rosinstall && \
-    
     # https://github.com/dusty-nv/jetson-containers/issues/181
-    rm -r ${ROS2_ROOT}/src/ament_cmake && \
+    rm -rf ${ROS2_ROOT}/src/ament_cmake && \
     git -C ${ROS2_ROOT}/src/ clone https://github.com/ament/ament_cmake -b ${ROS2_DISTRO} && \
-    
     # install dependencies using rosdep
     apt-get update && \
     cd ${ROS2_ROOT} && \
@@ -277,13 +311,15 @@ RUN rm /etc/ros/rosdep/sources.list.d/20-default.list && \
 	  --skip-keys "libopencv-dev libopencv-contrib-dev libopencv-imgproc-dev python-opencv python3-opencv" && \
     rm -rf /var/lib/apt/lists/* && \
     apt-get clean && \
-
     # build it!
     colcon build \
         --merge-install \
         --cmake-args -DCMAKE_BUILD_TYPE=Release -Wno-dev
 
 COPY entrypoints/p3dx_entrypoint.bash /sbin/entrypoint.bash
+
+RUN mkdir ${WORKSPACE}
+WORKDIR ${WORKSPACE}
 
 ENTRYPOINT [ "/sbin/entrypoint.bash" ]
 
@@ -314,15 +350,30 @@ ENTRYPOINT [ "/sbin/entrypoint.bash" ]
 ########
 # Aria #
 ########
+# p3dx:noetic
+FROM ${BASE_IMAGE} as noetic-drivers
 
-FROM p3dx:noetic as noetic-drivers
+ARG BASE_IMAGE=nvcr.io/nvidia/l4t-base:r35.2.1
+ARG IMAGE_NAME=p3dx:noetic
+ARG WORKSPACE=/workspace
+ARG L4T_VERSION=R35.2.1
 
-ARG BASE_IMAGE=lucyannofrota/p3dx:noetic
+ARG ROS1_PKG=ros_base
+ARG ROS1_BUILD=/ROS_NOETIC
+ARG ROS_MASTER_URI=http://localhost:11311
+
+ARG ROS2_PKG=ros_base
+ARG ROS2_BUILD=/ROS_FOXY
+ARG RMW_IMPLEMENTATION_INSTALL=rmw-cyclonedds-cpp
+ARG RMW_IMPLEMENTATION=rmw_cyclonedds_cpp
+ARG ROS_DOMAIN_ID=7
+
+# ARG BASE_IMAGE=lucyannofrota/p3dx:noetic
 ENV BASE_IMAGE=${BASE_IMAGE}
-ARG IMAGE_NAME=p3dx:noetic-drivers
 ENV IMAGE_NAME=${IMAGE_NAME}
-ENV L4T_VERSION=R35.2.1
-ARG L4T_VERSION=${L4T_VERSION}
+ENV L4T_VERSION=${L4T_VERSION}
+
+ENV WORKSPACE=${WORKSPACE}
 
 
 
@@ -351,24 +402,36 @@ RUN cd ${ROS1_BUILD}/ros_base_ws && \
 RUN rm -rf ${ROS1_BUILD}
 
 
-WORKDIR ${WORKSPACE}
-
 COPY entrypoints/p3dx_entrypoint.bash /sbin/entrypoint.bash
+
+RUN mkdir -p ${WORKSPACE}
+WORKDIR ${WORKSPACE}
 
 ENTRYPOINT [ "/sbin/entrypoint.bash" ]
 
+# p3dx:noetic-foxy
+FROM ${BASE_IMAGE} as noetic-foxy-drivers
 
-FROM p3dx:noetic-foxy as noetic-foxy-drivers
-
-ARG BASE_IMAGE=lucyannofrota/p3dx:noetic-foxy
-ENV BASE_IMAGE=${BASE_IMAGE}
-ARG IMAGE_NAME=p3dx:noetic-foxy-drivers
-ENV IMAGE_NAME=${IMAGE_NAME}
-ENV L4T_VERSION=R35.2.1
-ARG L4T_VERSION=${L4T_VERSION}
-
-
+ARG BASE_IMAGE=nvcr.io/nvidia/l4t-base:r35.2.1
+ARG IMAGE_NAME=p3dx:noetic
 ARG WORKSPACE=/workspace
+ARG L4T_VERSION=R35.2.1
+
+ARG ROS1_PKG=ros_base
+ARG ROS1_BUILD=/ROS_NOETIC
+ARG ROS_MASTER_URI=http://localhost:11311
+
+ARG ROS2_PKG=ros_base
+ARG ROS2_BUILD=/ROS_FOXY
+ARG RMW_IMPLEMENTATION_INSTALL=rmw-cyclonedds-cpp
+ARG RMW_IMPLEMENTATION=rmw_cyclonedds_cpp
+ARG ROS_DOMAIN_ID=7
+
+# ARG BASE_IMAGE=lucyannofrota/p3dx:noetic-foxy
+ENV BASE_IMAGE=${BASE_IMAGE}
+ENV IMAGE_NAME=${IMAGE_NAME}
+ENV L4T_VERSION=${L4T_VERSION}
+
 ENV WORKSPACE=${WORKSPACE}
 
 RUN git clone --recursive https://github.com/cinvesrob/Aria.git /usr/local/Aria \
@@ -398,14 +461,15 @@ RUN rm -rf ${ROS1_BUILD} && \
     rm -rf ${ROS2_ROOT}/src && \
     rm -rf ${ROS2_ROOT}/logs && \
     rm -rf ${ROS2_ROOT}/build && \
-    rm ${ROS2_ROOT}/*.rosinstall
-
-
-WORKDIR ${WORKSPACE}
-
+    rm -f ${ROS2_ROOT}/*.rosinstall
 
 
 COPY entrypoints/p3dx_entrypoint.bash /sbin/entrypoint.bash
+
+
+RUN mkdir -p ${WORKSPACE}
+WORKDIR ${WORKSPACE}
+
 
 ENTRYPOINT [ "/sbin/entrypoint.bash" ]
 
@@ -434,18 +498,30 @@ ENTRYPOINT [ "/sbin/entrypoint.bash" ]
 # p3dx pkgs #
 #############
 
+# p3dx:noetic-drivers
+FROM ${BASE_IMAGE} as noetic-robot-pkgs
 
-FROM p3dx:noetic-drivers as noetic-robot-pkgs
-
+ARG BASE_IMAGE=nvcr.io/nvidia/l4t-base:r35.2.1
+ARG IMAGE_NAME=p3dx:noetic
 ARG WORKSPACE=/workspace
-ENV WORKSPACE=${WORKSPACE}
+ARG L4T_VERSION=R35.2.1
 
-ARG BASE_IMAGE=lucyannofrota/p3dx:noetic-drivers
+ARG ROS1_PKG=ros_base
+ARG ROS1_BUILD=/ROS_NOETIC
+ARG ROS_MASTER_URI=http://localhost:11311
+
+ARG ROS2_PKG=ros_base
+ARG ROS2_BUILD=/ROS_FOXY
+ARG RMW_IMPLEMENTATION_INSTALL=rmw-cyclonedds-cpp
+ARG RMW_IMPLEMENTATION=rmw_cyclonedds_cpp
+ARG ROS_DOMAIN_ID=7
+
+
+# ARG BASE_IMAGE=lucyannofrota/p3dx:noetic-drivers
 ENV BASE_IMAGE=${BASE_IMAGE}
-ARG IMAGE_NAME=p3dx:noetic-robot-pkgs
 ENV IMAGE_NAME=${IMAGE_NAME}
-ENV L4T_VERSION=R35.2.1
-ARG L4T_VERSION=${L4T_VERSION}
+ENV L4T_VERSION=${L4T_VERSION}
+ENV WORKSPACE=${WORKSPACE}
 
 COPY p3dx-pkgs ${WORKSPACE}/noetic/src
 
@@ -469,20 +545,31 @@ ENTRYPOINT [ "/sbin/entrypoint.bash" ]
 
 
 
+# p3dx:noetic-foxy-drivers
+FROM ${BASE_IMAGE} as noetic-foxy-robot-pkgs
 
-FROM p3dx:noetic-foxy-drivers as noetic-foxy-robot-pkgs
-
+ARG BASE_IMAGE=nvcr.io/nvidia/l4t-base:r35.2.1
+ARG IMAGE_NAME=p3dx:noetic
 ARG WORKSPACE=/workspace
+ARG L4T_VERSION=R35.2.1
+
+ARG ROS1_PKG=ros_base
+ARG ROS1_BUILD=/ROS_NOETIC
+ARG ROS_MASTER_URI=http://localhost:11311
+
+ARG ROS2_PKG=ros_base
+ARG ROS2_BUILD=/ROS_FOXY
+ARG RMW_IMPLEMENTATION_INSTALL=rmw-cyclonedds-cpp
+ARG RMW_IMPLEMENTATION=rmw_cyclonedds_cpp
+ARG ROS_DOMAIN_ID=7
+
 ENV WORKSPACE=${WORKSPACE}
 
-ARG BASE_IMAGE=lucyannofrota/p3dx:noetic-foxy-drivers
+# ARG BASE_IMAGE=lucyannofrota/p3dx:noetic-foxy-drivers
 ENV BASE_IMAGE=${BASE_IMAGE}
-ARG IMAGE_NAME=p3dx:noetic-foxy-robot-pkgs
 ENV IMAGE_NAME=${IMAGE_NAME}
-ENV L4T_VERSION=R35.2.1
-ARG L4T_VERSION=${L4T_VERSION}
+ENV L4T_VERSION=${L4T_VERSION}
 
-ARG ROS_MASTER_URI=http://localhost:11311
 ENV ROS_MASTER_URI=${ROS_MASTER_URI}
 
 # setup ROS noetic ws
@@ -508,7 +595,7 @@ ENV ROS2_INSTALL_PATH=/opt/ros/foxy/install
 
 COPY p3dx.repos ${WORKSPACE}/foxy
 
-RUN mkdir src && \
+RUN mkdir -p src && \
     echo "alias foxy='source /workspace/foxy/install/setup.bash'" >> ~/.bashrc && \
     vcs import < p3dx.repos && \
     colcon build --symlink-install --packages-skip ros1_bridge &&  \

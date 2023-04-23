@@ -1,157 +1,45 @@
-# this dockerfile roughly follows the 'Installing from source' from:
-#   http://wiki.ros.org/noetic/Installation/Source
-#
-ARG BASE_IMAGE=nvcr.io/nvidia/l4t-base:r35.2.1
-# ARG IMAGE_NAME=jetson:noetic
-# ARG L4T_VERSION=R35.2.1
+ARG BUILD_BASE_IMAGE=lucyannofrota/jetson:noetic
 
-# ARG ROS1_PKG=ros_base
-# ARG ROS1_BUILD=/ROS_NOETIC
-# ARG ROS_MASTER_URI=http://localhost:11311
+FROM ${BUILD_BASE_IMAGE} as noetic-foxy
 
-# ARG ROS2_PKG=ros_base
-# ARG ROS2_BUILD=/ROS_FOXY
-# ARG RMW_IMPLEMENTATION_INSTALL=rmw-cyclonedds-cpp
-# ARG RMW_IMPLEMENTATION=rmw_cyclonedds_cpp
-
-# ARG WORKSPACE=/workspace
-
-FROM ${BASE_IMAGE} as noetic
-
-ARG IMAGE_NAME=jetson:noetic
-ARG L4T_VERSION=R35.2.1
-
-ARG ROS1_PKG=ros_base
-ARG ROS1_BUILD=/ROS_NOETIC
-ARG ROS_MASTER_URI=http://localhost:11311
-
-ARG ROS2_PKG=ros_base
-ARG ROS2_BUILD=/ROS_FOXY
-ARG RMW_IMPLEMENTATION_INSTALL=rmw-cyclonedds-cpp
-ARG RMW_IMPLEMENTATION=rmw_cyclonedds_cpp
-
+ARG BUILD_BASE_IMAGE=lucyannofrota/jetson:noetic
+ARG BUILD_IMAGE_NAME=jetson:noetic-foxy
 ARG WORKSPACE=/workspace
 
-## NOETIC
-ENV ROS1_PKG=${ROS1_PKG}
-ENV ROS1_DISTRO=noetic
-ENV ROS1_ROOT=/opt/ros/${ROS1_DISTRO}
-ENV ROS1_BUILD=${ROS1_BUILD}
-ENV ROS_PYTHON_VERSION=3
+ARG ROS2_PKG=ros_base
+ARG RMW_IMPLEMENTATION_INSTALL=rmw-cyclonedds-cpp
+ARG RMW_IMPLEMENTATION=rmw_cyclonedds_cpp
+ARG ROS_DOMAIN_ID=7
+
+ARG ENTRYPOINT=entrypoints/jetson_entrypoint.bash
 
 
+ARG ROS1_DISTRO=noetic
+ARG ROS2_DISTRO=foxy
+
+ENV ROS1_DISTRO=${ROS1_DISTRO}
+## FOXY
+ENV ROS2_PKG=${ROS2_PKG}
+ENV ROS2_DISTRO=${ROS2_DISTRO}
+ENV ROS2_ROOT=/opt/ros/${ROS2_DISTRO}
+
+ENV RMW_IMPLEMENTATION_INSTALL=${RMW_IMPLEMENTATION_INSTALL}
+
+ENV RMW_IMPLEMENTATION=${RMW_IMPLEMENTATION}
+ENV ROS_DOMAIN_ID=${ROS_DOMAIN_ID}
 
 ENV WORKSPACE=${WORKSPACE}
 
-ENV BASE_IMAGE=${BASE_IMAGE}
-ENV IMAGE_NAME=${IMAGE_NAME}
-ENV L4T_VERSION=${L4T_VERSION}
+ENV BASE_IMAGE=${BUILD_BASE_IMAGE}
+ENV IMAGE_NAME=${BUILD_IMAGE_NAME}
 
-
-ENV DEBIAN_FRONTEND=noninteractive
-
-#
-# add the ROS deb repo to the apt sources list
-#
-RUN apt-get update && \
-    apt-get install -y --no-install-recommends \
-          git \
-		cmake \
-		build-essential \
-		curl \
-		wget \
-		gnupg2 \
-		lsb-release \
-		ca-certificates \
-    && rm -rf /var/lib/apt/lists/*
-
-RUN sh -c 'echo "deb http://packages.ros.org/ros/ubuntu $(lsb_release -sc) main" > /etc/apt/sources.list.d/ros-latest.list'
-RUN curl -s https://raw.githubusercontent.com/ros/rosdistro/master/ros.asc | apt-key add -
-
-#
-# install bootstrap dependencies
-#
-RUN apt-get update && \
-    apt-get install -y --no-install-recommends \
-        libpython3-dev \
-        python3-rosdep \
-        python3-rosinstall-generator \
-        python3-vcstool \
-        build-essential && \
-    rosdep init && \
-    rosdep update && \
-    rm -rf /var/lib/apt/lists/* && \
-    apt-get update && \
-    apt-get -y install python3-pip && \
-    pip3 install \ 
-        rospkg \
-        "rosdistro>=0.7.3"
-
-#
-# download/build the ROS source
-#
-
-WORKDIR ${ROS1_BUILD}
-
-RUN mkdir ros_base_ws && \
-    cd ros_base_ws && \
-    rosinstall_generator ${ROS1_PKG} vision_msgs image_transport --rosdistro ${ROS1_DISTRO} --deps --tar > ${ROS1_DISTRO}-${ROS1_PKG}.rosinstall && \
-    mkdir src && \
-    vcs import --input ${ROS1_DISTRO}-${ROS1_PKG}.rosinstall ./src && \
-    apt-get update && \
-    rosdep install --from-paths ./src --ignore-packages-from-source --rosdistro ${ROS1_DISTRO} --skip-keys python3-pykdl -y && \
-    python3 ./src/catkin/bin/catkin_make_isolated --install --install-space ${ROS1_ROOT} -DCMAKE_BUILD_TYPE=Release && \
-    rm -rf /var/lib/apt/lists/*
-
-COPY entrypoints/jetson_entrypoint.bash /sbin/entrypoint.bash
-
-RUN mkdir ${WORKSPACE}
-WORKDIR ${WORKSPACE}
-
-ENTRYPOINT [ "/sbin/entrypoint.bash" ]
-
-
-
-## FOXY
-# jetson:noetic
-FROM ${BASE_IMAGE} as noetic-foxy
-
-ARG IMAGE_NAME=jetson:noetic
-ARG L4T_VERSION=R35.2.1
-
-ARG ROS1_PKG=ros_base
-ARG ROS1_BUILD=/ROS_NOETIC
-ARG ROS_MASTER_URI=http://localhost:11311
-
-ARG ROS2_PKG=ros_base
-ARG ROS2_BUILD=/ROS_FOXY
-ARG RMW_IMPLEMENTATION_INSTALL=rmw-cyclonedds-cpp
-ARG RMW_IMPLEMENTATION=rmw_cyclonedds_cpp
-
-ARG WORKSPACE=/workspace
-
-## FOXY
-
-
-ENV ROS2_PKG=${ROS2_PKG}
-ENV ROS2_DISTRO=foxy
-ENV ROS2_ROOT=/opt/ros/${ROS2_DISTRO}
-ENV ROS2_BUILD=${ROS2_BUILD}
-
-ENV RMW_IMPLEMENTATION_INSTALL=${RMW_IMPLEMENTATION_INSTALL}
-ENV RMW_IMPLEMENTATION=${RMW_IMPLEMENTATION}
-
-
-
-ENV BASE_IMAGE=${BASE_IMAGE}
-ENV IMAGE_NAME=${IMAGE_NAME}
-ENV L4T_VERSION=${L4T_VERSION}
+ENV ENTRYPOINT=${ENTRYPOINT}
 
 ENV DEBIAN_FRONTEND=noninteractive
 ENV SHELL /bin/bash
 SHELL ["/bin/bash", "-c"] 
 
-WORKDIR ${ROS2_BUILD}
+WORKDIR ${ROS2_ROOT}/tmp
 
 # change the locale from POSIX to UTF-8
 RUN locale-gen en_US en_US.UTF-8 && update-locale LC_ALL=en_US.UTF-8 LANG=en_US.UTF-8
@@ -270,7 +158,7 @@ RUN apt purge -y python3.9 libpython3.9* || echo "python3.9 not found, skipping 
 #
 RUN git clone --branch yaml-cpp-0.6.0 https://github.com/jbeder/yaml-cpp yaml-cpp-0.6 && \
     cd yaml-cpp-0.6 && \
-    mkdir build && \
+    mkdir -p build && \
     cd build && \
     cmake -DBUILD_SHARED_LIBS=ON .. && \
     make -j$(nproc) && \
@@ -292,7 +180,7 @@ RUN rm /etc/ros/rosdep/sources.list.d/20-default.list && \
     cat ros2.${ROS2_DISTRO}.${ROS2_PKG}.rosinstall && \
     vcs import src < ros2.${ROS2_DISTRO}.${ROS2_PKG}.rosinstall && \
     # https://github.com/dusty-nv/jetson-containers/issues/181
-    rm -r ${ROS2_ROOT}/src/ament_cmake && \
+    rm -rf ${ROS2_ROOT}/src/ament_cmake && \
     git -C ${ROS2_ROOT}/src/ clone https://github.com/ament/ament_cmake -b ${ROS2_DISTRO} && \
     # install dependencies using rosdep
     apt-get update && \
@@ -311,55 +199,15 @@ RUN rm /etc/ros/rosdep/sources.list.d/20-default.list && \
         --merge-install \
         --cmake-args -DCMAKE_BUILD_TYPE=Release -Wno-dev
 
-COPY entrypoints/jetson_entrypoint.bash /sbin/entrypoint.bash
-
-RUN mkdir ${WORKSPACE}
-WORKDIR ${WORKSPACE}
-
-ENTRYPOINT [ "/sbin/entrypoint.bash" ]
-
-
-# jetson:noetic-foxy
-FROM ${BASE_IMAGE} as noetic-foxy-bridge
-
-ARG IMAGE_NAME=jetson:noetic
-ARG L4T_VERSION=R35.2.1
-
-ARG ROS1_PKG=ros_base
-ARG ROS1_BUILD=/ROS_NOETIC
-ARG ROS_MASTER_URI=http://localhost:11311
-
-ARG ROS2_PKG=ros_base
-ARG ROS2_BUILD=/ROS_FOXY
-ARG RMW_IMPLEMENTATION_INSTALL=rmw-cyclonedds-cpp
-ARG RMW_IMPLEMENTATION=rmw_cyclonedds_cpp
-
-ARG WORKSPACE=/workspace
-
-ENV WORKSPACE=${WORKSPACE}
-
-ENV BASE_IMAGE=${BASE_IMAGE}
-ENV IMAGE_NAME=${IMAGE_NAME}
-ENV L4T_VERSION=${L4T_VERSION}
-
-ENV ROS_MASTER_URI=${ROS_MASTER_URI}
-
-# setup ROS noetic ws
-
-COPY p3dx-pkgs ${WORKSPACE}/noetic/src
-
-WORKDIR ${WORKSPACE}/noetic
-
-SHELL ["/bin/bash", "-c"] 
-
-RUN . /opt/ros/noetic/setup.bash && \
-    catkin_make && \
-    echo "alias noetic='source /workspace/noetic/devel/setup.bash'" >> ~/.bashrc
-
-# setup ROS foxy ws
+RUN rm -rf ${ROS2_ROOT}/src && \
+    rm -rf ${ROS2_ROOT}/logs && \
+    rm -rf ${ROS2_ROOT}/build && \
+    rm -f ${ROS2_ROOT}/*.rosinstall && \
+    echo "alias foxy='source /opt/ros/foxy/setup.bash'" >> ~/.bashrc
 
 
-# ros1_bridge
+# ro1_bridge
+
 WORKDIR ${WORKSPACE}/foxy
 
 ENV ROS1_INSTALL_PATH=/opt/ros/noetic
@@ -367,14 +215,17 @@ ENV ROS2_INSTALL_PATH=/opt/ros/foxy/install
 
 COPY p3dx.repos ${WORKSPACE}/foxy
 
-RUN mkdir src && \
-    echo "alias foxy='source /workspace/foxy/install/setup.bash'" >> ~/.bashrc && \
+RUN mkdir -p src && \
     vcs import < p3dx.repos && \
     colcon build --symlink-install --packages-skip ros1_bridge &&  \
     source /opt/ros/noetic/setup.bash && \
     source /opt/ros/foxy/install/setup.bash && \
     colcon build --symlink-install --packages-select ros1_bridge --cmake-force-configure
 
-COPY entrypoints/jetson_entrypoint.bash /sbin/entrypoint.bash
+COPY ${ENTRYPOINT} /sbin/entrypoint.bash
+
+WORKDIR ${WORKSPACE}
 
 ENTRYPOINT [ "/sbin/entrypoint.bash" ]
+
+

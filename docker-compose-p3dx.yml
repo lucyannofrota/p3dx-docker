@@ -1,20 +1,20 @@
 version: '2.2'
 
-# BASE_IMAGE: lucyannofrota/
+# BUILD_BASE_IMAGE: lucyannofrota/
 
 services:
  
   noetic:
-    image: p3dx:noetic
-    container_name: noetic
+    image: jetson:noetic
+    container_name: jetson-noetic
     build:
       network: host
       context: ./Docker
-      dockerfile: ./Dockerfile_p3dx.dockerfile
+      dockerfile: ./noetic_base.dockerfile
       target: noetic
       args:
-        BASE_IMAGE: nvcr.io/nvidia/l4t-base:r35.2.1
-        IMAGE_NAME: p3dx:noetic
+        BUILD_BASE_IMAGE: nvcr.io/nvidia/l4t-base:r35.2.1
+        BUILD_IMAGE_NAME: jetson:noetic
         UBUNTU_VERSION: 20.04
         L4T_VERSION: R35.2.1
 
@@ -22,112 +22,67 @@ services:
         ROS1_DISTRO: noetic
         ROS1_BUILD: /ROS_NOETIC
         WORKSPACE: /workspace
+        ROS_MASTER_URI: http://localhost:11311
+
+        ENTRYPOINT: entrypoints/jetson_entrypoint.bash
 
   noetic_foxy:
-    image: p3dx:noetic-foxy
-    container_name: noetic-foxy
+    image: jetson:noetic-foxy
+    container_name: jetson-noetic-foxy
     build:
       network: host
       context: ./Docker
-      dockerfile: ./Dockerfile_p3dx.dockerfile
+      dockerfile: ./noetic_foxy.dockerfile
       target: noetic-foxy
       args:
-        BASE_IMAGE: lucyannofrota/p3dx:noetic
-        IMAGE_NAME: p3dx:noetic-foxy
-        UBUNTU_VERSION: 20.04
-        L4T_VERSION: R35.2.1
+        BUILD_BASE_IMAGE: lucyannofrota/jetson:noetic
+        BUILD_IMAGE_NAME: jetson:noetic-foxy
 
-        # ROS
+        # ROS2
         ROS1_DISTRO: noetic
         ROS2_DISTRO: foxy
-        ROS1_BUILD: /ROS_NOETIC
-        ROS2_BUILD: /ROS_FOXY
         WORKSPACE: /workspace
-
-        # ROS2 parameters
         RMW_IMPLEMENTATION_INSTALL: rmw-cyclonedds-cpp
         RMW_IMPLEMENTATION: rmw_cyclonedds_cpp
         ROS_DOMAIN_ID: 7
 
         # Entrypoint
-        ENTRYPOINT_HOST_PATH: entrypoints/p3dx_entrypoint.bash
+        ENTRYPOINT: entrypoints/jetson_entrypoint.bash
 
-  p3dx_noetic:
-    image: p3dx:noetic-drivers
+  noetic_p3dx:
+    image: p3dx:noetic
     container_name: p3dx-noetic
     build:
       network: host
       context: ./Docker
-      dockerfile: ./Dockerfile_p3dx.dockerfile
-      target: noetic-drivers
+      dockerfile: ./p3dx.dockerfile
+      target: p3dx
       args:
-        BASE_IMAGE: lucyannofrota/p3dx:noetic
-        IMAGE_NAME: p3dx:noetic-drivers
-        UBUNTU_VERSION: 20.04
-        L4T_VERSION: R35.2.1
+        BUILD_BASE_IMAGE: lucyannofrota/jetson:noetic
+        BUILD_IMAGE_NAME: p3dx:noetic
 
         # ROS
-        ROS1_DISTRO: noetic
-        ROS1_BUILD: /ROS_NOETIC
         WORKSPACE: /workspace
 
         # Entrypoint
-        ENTRYPOINT_HOST_PATH: entrypoints/p3dx_entrypoint.bash
+        ENTRYPOINT: entrypoints/p3dx_entrypoint.bash
 
-  p3dx_noetic_foxy:
-    image: p3dx:noetic-foxy-drivers
+  # noetic_foxy_p3dx:
+
+  noetic_foxy_p3dx:
+    image: p3dx:noetic-foxy
     container_name: p3dx-noetic-foxy
     build:
       network: host
       context: ./Docker
-      dockerfile: ./Dockerfile_p3dx.dockerfile
-      target: noetic-foxy-drivers
+      dockerfile: ./p3dx.dockerfile
+      target: p3dx
       args:
-        BASE_IMAGE: lucyannofrota/p3dx:noetic-foxy
-        IMAGE_NAME: p3dx:noetic-foxy-drivers
-        UBUNTU_VERSION: 20.04
-        L4T_VERSION: R35.2.1
+        BUILD_BASE_IMAGE: lucyannofrota/jetson:noetic-foxy
+        BUILD_IMAGE_NAME: p3dx:noetic-foxy
 
         # ROS
-        ROS_DISTRO: foxy
         WORKSPACE: /workspace
-        RMW_IMPLEMENTATION_INSTALL: rmw-cyclonedds-cpp
-        RMW_IMPLEMENTATION: rmw_cyclonedds_cpp
-        ROS_DOMAIN_ID: 7
 
         # Entrypoint
-        ENTRYPOINT_HOST_PATH: entrypoints/p3dx_entrypoint.bash
-
-  p3dx_noetic_pkgs:
-    image: p3dx:noetic-robot-pkgs
-    container_name: p3dx-noetic-robot-pkgs
-    build:
-      network: host
-      context: ./Docker
-      dockerfile: ./Dockerfile_p3dx.dockerfile
-      target: noetic-robot-pkgs
-      args:
-        BASE_IMAGE: lucyannofrota/p3dx:noetic-drivers
-        IMAGE_NAME: p3dx:noetic-robot-pkgs
-        UBUNTU_VERSION: 20.04
-        L4T_VERSION: R35.2.1
-
-        WORKSPACE: /workspace
-
-  p3dx_noetic_foxy_pkgs:
-    image: p3dx:noetic-foxy-robot-pkgs
-    container_name: p3dx-noetic-foxy-robot-pkgs
-    build:
-      network: host
-      context: ./Docker
-      dockerfile: ./Dockerfile_p3dx.dockerfile
-      target: noetic-foxy-robot-pkgs
-      args:
-        BASE_IMAGE: lucyannofrota/p3dx:noetic-foxy-drivers
-        IMAGE_NAME: p3dx:noetic-foxy-robot-pkgs
-        UBUNTU_VERSION: 20.04
-        L4T_VERSION: R35.2.1
-
-        WORKSPACE: /workspace
-        ROS_MASTER_URI: http://localhost:11311
-
+        ENTRYPOINT: entrypoints/p3dx_entrypoint.bash

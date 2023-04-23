@@ -9,12 +9,12 @@ echo "|--www.isr.uc.pt----------------------|"
 echo "|--www.uc.pt--------------------------|"
 echo "+-------------------------------------+"
 echo "---<jetson_entrypoint.bash>---"
-set -e
+# set -e
 
 cd $WORKSPACE
 
-. noetic/devel/setup.bash 2>&1 /dev/null
-. foxy/install/setup.bash 2>&1 /dev/null
+. noetic/devel/setup.bash > /dev/null 2>&1
+. foxy/install/setup.bash > /dev/null 2>&1
 
 # Initial Log
 echo "Jetson docker image" | sed 's/^/  /'
@@ -33,7 +33,7 @@ echo "Distro: " | sed 's/^/  /' | sed 's/^/  /' | sed 's/^/  /'
 (printenv | grep 'ROS1_DISTRO\|ROS2_DISTRO') | sed 's/^/  /' | sed 's/^/  /' | sed 's/^/  /' | sed 's/^/  /'
 echo "Parameters: " | sed 's/^/  /' | sed 's/^/  /' | sed 's/^/  /'
 (printenv | grep 'RMW_IMPLEMENTATION\|ROS_DOMAIN_ID\|ROS_MASTER_URI') | sed 's/^/  /' | sed 's/^/  /' | sed 's/^/  /' | sed 's/^/  /'
-echo "WORKSPACE: " $WORKSPACE | sed 's/^/  /' | sed 's/^/  /'
+echo "WORKSPACE: " $WORKSPACE | sed 's/^/  /' | sed 's/^/  /' | sed 's/^/  /'
 
 echo "---</jetson_entrypoint.bash>---"
 

@@ -9,12 +9,12 @@ echo "|--www.isr.uc.pt----------------------|"
 echo "|--www.uc.pt--------------------------|"
 echo "+-------------------------------------+"
 echo "---<p3dx_entrypoint.bash>---"
-set -e
+# set -e
 
 cd $WORKSPACE
 
-. noetic/devel/setup.bash 2>&1 /dev/null
-. foxy/install/setup.bash 2>&1 /dev/null
+. noetic/devel/setup.bash > /dev/null 2>&1
+. foxy/install/setup.bash > /dev/null 2>&1
 
 # Initial Log
 echo "P3DX docker image" | sed 's/^/  /'
