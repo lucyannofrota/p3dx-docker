@@ -1,4 +1,3 @@
-# p3dx:noetic
 ARG BUILD_BASE_IMAGE=lucyannofrota/jetson:noetic
 
 FROM ${BUILD_BASE_IMAGE} as p3dx

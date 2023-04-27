@@ -103,7 +103,6 @@ RUN mkdir -p ros_base_ws && \
     rm -rf /var/lib/apt/lists/* && \
     rm -rf ${ROS1_BUILD} && \
     echo "alias noetic='source /opt/ros/noetic/setup.bash'" >> ~/.bashrc
-    # rm -f ${ROS1_BUILD}/ros_base_ws/${ROS1_DISTRO}-${ROS1_PKG}.rosinstall
 
 COPY ${ENTRYPOINT} /sbin/entrypoint.bash
 

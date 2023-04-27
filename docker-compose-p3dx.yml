@@ -67,8 +67,6 @@ services:
         # Entrypoint
         ENTRYPOINT: entrypoints/p3dx_entrypoint.bash
 
-  # noetic_foxy_p3dx:
-
   noetic_foxy_p3dx:
     image: p3dx:noetic-foxy
     container_name: p3dx-noetic-foxy
