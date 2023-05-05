@@ -1,0 +1,30 @@
+topics:
+  -
+    topic: /scan
+    type: sensor_msgs/msg/LaserScan
+  -
+    topic: /odom
+    type: nav_msgs/msg/Odometry
+  -
+    topic: /cmd_vel
+    type: geometry_msgs/msg/Twist
+  -
+    topic: /tf
+    type: tf2_msgs/msg/TFMessage
+  -
+    topic: /tf_static
+    type: tf2_msgs/msg/TFMessage
+    queue_size: 1
+    qos:
+      history: keep_all
+      durability: transient_local
+
+services_1_to_2: []
+
+services_2_to_1: 
+  -
+    service: /enable_motors
+    type: std_srvs/Empty
+  -
+    service: /disable_motors
+    type: std_srvs/Empty

@@ -20,14 +20,14 @@ ENV WORKSPACE=${WORKSPACE}
 ENV ENTRYPOINT=${ENTRYPOINT}
 
 
+COPY p3dx-pkgs ${WORKSPACE}/noetic/src
 
 RUN git clone --recursive https://github.com/cinvesrob/Aria.git /usr/local/Aria \
   && cd /usr/local/Aria \
   && make clean \
-  && make -j8
+  && make -j8 \
+  && git clone --recursive https://github.com/lucyannofrota/P3DX.git ${WORKSPACE}/noetic/src/P3DX
 
-
-COPY p3dx-pkgs ${WORKSPACE}/noetic/src
 
 WORKDIR ${WORKSPACE}/noetic
 

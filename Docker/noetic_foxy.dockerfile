@@ -203,7 +203,7 @@ RUN rm -rf ${ROS2_ROOT}/src && \
     rm -rf ${ROS2_ROOT}/logs && \
     rm -rf ${ROS2_ROOT}/build && \
     rm -f ${ROS2_ROOT}/*.rosinstall && \
-    echo "alias foxy='source /opt/ros/foxy/install/setup.bash'" >> ~/.bashrc
+    echo "alias foxy='source /workspace/foxy/install/setup.bash'" >> ~/.bashrc
 
 
 # ro1_bridge
@@ -223,6 +223,10 @@ RUN mkdir -p src && \
     colcon build --symlink-install --packages-select ros1_bridge --cmake-force-configure
 
 COPY ${ENTRYPOINT} /sbin/entrypoint.bash
+
+COPY config ${WORKSPACE}/noetic/config
+
+
 
 WORKDIR ${WORKSPACE}
 

@@ -102,7 +102,7 @@ RUN mkdir -p ros_base_ws && \
     python3 ./src/catkin/bin/catkin_make_isolated --install --install-space ${ROS1_ROOT} -DCMAKE_BUILD_TYPE=Release && \
     rm -rf /var/lib/apt/lists/* && \
     rm -rf ${ROS1_BUILD} && \
-    echo "alias noetic='source /opt/ros/noetic/setup.bash'" >> ~/.bashrc
+    echo "alias noetic='source /workspace/noetic/devel/setup.bash'" >> ~/.bashrc
 
 COPY ${ENTRYPOINT} /sbin/entrypoint.bash
 

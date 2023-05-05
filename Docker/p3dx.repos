@@ -5,5 +5,5 @@ repositories:
 
   src/ros1_bridge:
     type: git
-    url: https://github.com/ros2/ros1_bridge.git
+    url: https://github.com/lucyannofrota/ros1_bridge.git
     version: foxy
