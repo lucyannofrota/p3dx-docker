@@ -7,3 +7,8 @@ repositories:
     type: git
     url: https://github.com/lucyannofrota/ros1_bridge.git
     version: foxy
+
+  src/teleop_tools:
+    type: git
+    url: https://github.com/ros-teleop/teleop_tools.git
+    version: foxy-devel

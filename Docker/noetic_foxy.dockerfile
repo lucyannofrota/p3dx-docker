@@ -224,7 +224,8 @@ RUN mkdir -p src && \
 
 COPY ${ENTRYPOINT} /sbin/entrypoint.bash
 
-COPY config ${WORKSPACE}/noetic/config
+COPY config/noetic ${WORKSPACE}/noetic/config
+COPY config/foxy/key_teleop.yaml ${WORKSPACE}/foxy/src/teleop_tools/key_teleop/config/key_teleop.yaml
 
 
 
