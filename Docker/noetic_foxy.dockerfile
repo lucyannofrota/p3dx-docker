@@ -11,7 +11,7 @@ ARG RMW_IMPLEMENTATION_INSTALL=rmw-cyclonedds-cpp
 ARG RMW_IMPLEMENTATION=rmw_cyclonedds_cpp
 ARG ROS_DOMAIN_ID=7
 
-ARG ENTRYPOINT=entrypoints/jetson_entrypoint.bash
+ARG ENTRYPOINT_FILE=entrypoints/jetson_entrypoint.bash
 
 
 ARG ROS1_DISTRO=noetic
@@ -33,7 +33,7 @@ ENV WORKSPACE=${WORKSPACE}
 ENV BASE_IMAGE=${BUILD_BASE_IMAGE}
 ENV IMAGE_NAME=${BUILD_IMAGE_NAME}
 
-ENV ENTRYPOINT=${ENTRYPOINT}
+ENV ENTRYPOINT=${ENTRYPOINT_FILE}
 
 ENV DEBIAN_FRONTEND=noninteractive
 ENV SHELL /bin/bash
@@ -215,10 +215,14 @@ ENV ROS2_INSTALL_PATH=/opt/ros/foxy/install
 
 COPY p3dx.repos ${WORKSPACE}/foxy
 
+
+
 RUN mkdir -p src && \
     vcs import < p3dx.repos && \
-    colcon build --symlink-install --packages-skip ros1_bridge &&  \
-    source /opt/ros/noetic/setup.bash && \
+    source /opt/ros/foxy/install/setup.bash && \
+    colcon build --symlink-install --packages-skip ros1_bridge
+
+RUN source /opt/ros/noetic/setup.bash && \
     source /opt/ros/foxy/install/setup.bash && \
     colcon build --symlink-install --packages-select ros1_bridge --cmake-force-configure
 

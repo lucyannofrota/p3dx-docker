@@ -15,8 +15,8 @@ ARG L4T_MINOR=1
 ARG ROS_DISTRO=foxy
 ENV ROS_DISTRO=${ROS_DISTRO}       
 
-ARG ROS_DOMAIN_ID=7
-ENV ROS_DOMAIN_ID=${ROS_DOMAIN_ID}
+# ARG ROS_DOMAIN_ID=7
+# ENV ROS_DOMAIN_ID=${ROS_DOMAIN_ID}
 ARG RMW_IMPLEMENTATION=rmw_cyclonedds_cpp
 ENV RMW_IMPLEMENTATION=${RMW_IMPLEMENTATION}
 
@@ -48,8 +48,9 @@ RUN echo "# R${L4T_MAJOR} (release), REVISION: ${L4T_MINOR}" > /etc/nv_tegra_rel
   build-essential python3 python3-pip python3-dev python3-setuptools libusb-1.0-0-dev -y && \
   pip install protobuf && \
   wget -q --no-check-certificate -O ZED_SDK_Linux_JP.run \
-  https://download.stereolabs.com/zedsdk/${ZED_SDK_MAJOR}.${ZED_SDK_MINOR}/l4t${L4T_MAJOR}.${L4T_MINOR}/jetsons && \
-  chmod +x ZED_SDK_Linux_JP.run ; ./ZED_SDK_Linux_JP.run silent skip_tools && \
+  https://download.stereolabs.com/zedsdk/${ZED_SDK_MAJOR}.${ZED_SDK_MINOR}/l4t${L4T_MAJOR}.${L4T_MINOR}/jetsons
+
+RUN chmod +x ZED_SDK_Linux_JP.run ; ./ZED_SDK_Linux_JP.run silent skip_tools && \
   rm -rf /usr/local/zed/resources/* && \
   rm -rf ZED_SDK_Linux_JP.run && \
   rm -rf /var/lib/apt/lists/*
@@ -68,7 +69,7 @@ RUN apt-get update && apt-get install -y \
   git \
   python3-pip \
   python3-vcstool \
-  && printf "# List of repositories to use within your workspace\r# See https://github.com/dirk-thomas/vcstool\rrepositories:\r  zed-ros2-wrapper:\r    type: git\r    url: https://github.com/stereolabs/zed-ros2-wrapper.git\r    version: foxy-humble-v3.8\r  zed-ros2-interfaces:\r    type: git\r    url: https://github.com/stereolabs/zed-ros2-interfaces.git\r    version: foxy-humble-v3.8" > /workspace/zed_foxy.repos \
+  && printf "# List of repositories to use within your workspace\r# See https://github.com/dirk-thomas/vcstool\rrepositories:\r  zed-ros2-wrapper:\r    type: git\r    url: https://github.com/stereolabs/zed-ros2-wrapper.git\r    version: 8d377ba\r  zed-ros2-interfaces:\r    type: git\r    url: https://github.com/stereolabs/zed-ros2-interfaces.git\r    version: f1517b1\r  nmea_msgs:\r    type: git\r    url: https://github.com/ros-drivers/nmea_msgs.git\r    version: ros2\r  geographic_info:\r    type: git\r    url: https://github.com/ros-geographic-info/geographic_info.git\r    version: ros2\r  angles:\r    type: git\r    url: https://github.com/ros/angles.git\r    version: ros2\r  robot_localization:\r    type: git\r    url: https://github.com/cra-ros-pkg/robot_localization.git\r    version: foxy-devel" > /workspace/zed_foxy.repos \
   && vcs import < /workspace/zed_foxy.repos
 
 # Install missing dependencies
@@ -82,7 +83,6 @@ RUN wget https://github.com/ros/xacro/archive/refs/tags/${XACRO_VERSION}.tar.gz 
   wget https://github.com/ros/diagnostics/archive/refs/tags/${DIAGNOSTICS_VERSION}.tar.gz -O - | tar -xvz && mv diagnostics-${DIAGNOSTICS_VERSION} diagnostics && \
   wget https://github.com/ament/ament_lint/archive/refs/tags/${AMENT_LINT_VERSION}.tar.gz -O - | tar -xvz && mv ament_lint-${AMENT_LINT_VERSION} ament-lint
   
-
 FROM zed_wrapper as extra-pkgs
 
 ARG ROS_DISTRO
@@ -116,6 +116,15 @@ RUN /bin/bash -c "source /opt/ros/$ROS_DISTRO/install/setup.bash && \
 RUN mkdir /workspace/config
 RUN cp /workspace/src/zed-ros2-wrapper/zed_wrapper/config/common.yaml /workspace/config/
 RUN mv /workspace/config/common.yaml /workspace/config/p3dx.yaml
+RUN sed -i 's/set_as_static: false/set_as_static: true/g' $WORKSPACE/config/p3dx.yaml && \
+    sed -i 's/two_d_mode: false/two_d_mode: true/g' $WORKSPACE/config/p3dx.yaml && \
+    sed -i 's/odometry_frame: "odom"/odometry_frame: "odom_zed2"/g' $WORKSPACE/config/p3dx.yaml && \
+    sed -i 's/quality: 1/quality: 2/g' $WORKSPACE/config/p3dx.yaml && \
+    sed -i 's/HD720/VGA/g' $WORKSPACE/config/p3dx.yaml && \
+    sed -i 's/MEDIUM/VGA/g' $WORKSPACE/config/p3dx.yaml && \
+    sed -i 's/grab_frame_rate: 15/grab_frame_rate: 10 /g' $WORKSPACE/config/p3dx.yaml && \
+    sed -i 's/pub_frame_rate: 15.0 /pub_frame_rate: 10.0 /g' $WORKSPACE/config/p3dx.yaml && \
+    sed -i 's/point_cloud_freq: 15.0 /point_cloud_freq: 10.0 /g' $WORKSPACE/config/p3dx.yaml
 
 WORKDIR /workspace
 

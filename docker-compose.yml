@@ -6,16 +6,11 @@ services:
     network_mode: "host"
     image: ros2:zed
     container_name: zed-camera-foxy
-    healthcheck:
-      test: ["CMD", "bash", "-c", ". /workspace/install/setup.bash; ros2 node list | grep -q /zed2/zed_node"]
-      start_period: 1m
-      interval: 5s
-      timeout: 1s
-      retries: 300
     build:
       network: host
       context: ./Docker
       dockerfile: ./Dockerfile_zed_foxy.dockerfile
+      # target: extra-pkgs
       args:
         IMAGE_NAME: dustynv/ros:foxy-ros-base-l4t-r35.2.1
 
@@ -24,7 +19,6 @@ services:
         WORKSPACE: /workspace
         RMW_IMPLEMENTATION_INSTALL: rmw-cyclonedds-cpp
         RMW_IMPLEMENTATION: rmw_cyclonedds_cpp
-        ROS_DOMAIN_ID: 7
     privileged: true
     environment:
       - "DISPLAY"
@@ -37,15 +31,15 @@ services:
       - SYS_PTRACE
     command: >
       bash -c "
-        . install/setup.bash && 
-        RMW_IMPLEMENTATION=rmw_cyclonedds_cpp ROS_DOMAIN_ID=7 ros2 launch zed_wrapper zed2.launch.py publish_tf:=false
+        tail -f /dev/null
       "
+    # . install/setup.bash
 
   noetic:
     # image: lucyannofrota/jetson:noetic #p3dx:noetic
     container_name: jetson-noetic
     extends:
-      file: docker-compose-p3dx.yml
+      file: docker-compose-jetson.yml
       service: noetic
     network_mode: "host"
     privileged: true
@@ -63,7 +57,7 @@ services:
     # image: lucyannofrota/jetson:noetic-foxy #p3dx:noetic-foxy
     container_name: jetson-noetic-foxy
     extends:
-      file: docker-compose-p3dx.yml
+      file: docker-compose-jetson.yml
       service: noetic_foxy
     network_mode: "host"
     privileged: true
@@ -113,3 +107,37 @@ services:
     cap_add:
       - SYS_PTRACE
     command: bash -c "tail -F /dev/null"
+
+
+  smap-env:
+    image: smap:env
+    container_name: ros2-env
+    build:
+      network: host
+      context: ./Docker
+      dockerfile: ./smap.dockerfile
+      args:
+
+        BUILD_BASE_IMAGE: dustynv/ros:foxy-desktop-l4t-r35.2.1
+        BUILD_IMAGE_NAME: smap:env
+        L4T_VERSION: R35.2.1
+        UBUNTU_VERSION: 20.04
+        # ROS
+        ROS_DISTRO: foxy
+        WORKSPACE: /workspace
+        # RMW_IMPLEMENTATION_INSTALL: rmw-cyclonedds-cpp
+        # RMW_IMPLEMENTATION: rmw_cyclonedds_cpp
+    privileged: true
+    environment:
+      - "DISPLAY"
+      - "QT_X11_NO_MITSHM=1" #fix some QT bugs
+    volumes: 
+      - /tmp/.X11-unix:/tmp/.X11-unix # Share X11 socket with container
+      - $HOME/.Xauthority:/home/ros/.Xauthority # Share X11 permissions
+
+    cap_add:
+      - SYS_PTRACE
+    command: >
+      bash -c "
+        tail -f /dev/null
+      "
