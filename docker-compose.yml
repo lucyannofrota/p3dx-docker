@@ -108,6 +108,10 @@ services:
       - SYS_PTRACE
     command: bash -c "tail -F /dev/null"
 
+  smap-sampler-zed:
+    extends:
+      file: docker-compose-smap.yml
+      service: smap-sampler-zed
 
   smap-env:
     image: smap:env

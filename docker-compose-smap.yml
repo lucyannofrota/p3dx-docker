@@ -1,0 +1,28 @@
+version: '2.2'
+
+services:
+
+  smap-sampler-zed:
+    network_mode: "host"
+    image: smap:sampler-zed
+    container_name: sampler-zed
+    build:
+      network: host
+      context: ./Docker
+      dockerfile: ./smap_sampler_zed.dockerfile
+    privileged: true
+    environment:
+      - "DISPLAY"
+      - "QT_X11_NO_MITSHM=1" #fix some QT bugs
+      - "ROS_DOMAIN_ID=5"
+    volumes: 
+      - /tmp/.X11-unix:/tmp/.X11-unix # Share X11 socket with container
+      - $HOME/.Xauthority:/home/ros/.Xauthority # Share X11 permissions
+
+    cap_add:
+      - SYS_PTRACE
+    command: >
+      bash -c "
+        tail -f /dev/null
+      "
+    # . install/setup.bash
