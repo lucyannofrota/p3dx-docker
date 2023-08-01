@@ -4,7 +4,7 @@
 ARG BUILD_BASE_IMAGE=dustynv/ros:foxy-desktop-l4t-r35.2.1
 
 
-FROM ${BUILD_BASE_IMAGE} as foxy
+FROM ${BUILD_BASE_IMAGE} as dependencies
 
 ARG BUILD_BASE_IMAGE=dustynv/ros:foxy-desktop-l4t-r35.2.1
 ARG BUILD_IMAGE_NAME=smap:env
@@ -95,7 +95,31 @@ WORKDIR ${WORKSPACE}
 
 
 # RUN ls /opt/ros/foxy/install/setup.bash
-    
+    # navigation2
+# RUN mkdir src && \
+#     git clone https://github.com/ros-planning/navigation2 && \
+#     apt-get update && \
+#     rm /etc/ros/rosdep/sources.list.d/20-default.list && \
+#     rosdep init && \
+#     rosdep update && \
+#     rosdep install -y \
+#     	--ignore-src \
+#         --from-paths src \
+# 	    --rosdistro ${ROS_DISTRO} \
+# 	    --skip-keys "libopencv-dev libopencv-contrib-dev libopencv-imgproc-dev python-opencv python3-opencv" && \
+#     rm -rf /var/lib/apt/lists/* && \
+#     apt-get clean && \
+#     # build it!
+#     colcon build \
+#         --merge-install \
+#         --symlink-install \
+#         --continue-on-error \
+#         --event-handlers console_cohesion+ \
+#         --base-paths /workspace \
+#         --cmake-args "-DCMAKE_BUILD_TYPE=Release" \
+#         -Wall -Wextra -Wpedantic
+
+
 RUN mkdir src && \
     source /opt/ros/foxy/install/setup.bash && \
     rosinstall_generator --rosdistro ${ROS_DISTRO} \
@@ -119,11 +143,27 @@ RUN mkdir src && \
     nav2_recoveries \
     nav2_waypoint_follower \
     nav2_lifecycle_manager \
+    nav2_regulated_pure_pursuit_controller \
+    smac_planner \
+    ompl \
+    nav2_rviz_plugins \
+    nav2_navfn_planner \
+    nav2_dwb_controller \
+    dwb_plugins \
+    nav2_amcl \
+    dwb_core \
+    dwb_msgs \
+    dwb_critics \
+    costmap_queue \
     > ros2.${ROS_DISTRO}.navigation.rosinstall && \
     cat ros2.${ROS_DISTRO}.navigation.rosinstall && \
     vcs import src < ros2.${ROS_DISTRO}.navigation.rosinstall && \
     apt-get update && \
     rm /etc/ros/rosdep/sources.list.d/20-default.list && \
+    # git clone https://github.com/ros-planning/navigation2 && \
+    # echo "##############################################################" && \
+    # ls && echo " " && ls src && echo " " && ls src/navigation2 && echo " " && \
+    # echo "##############################################################" && \
     rosdep init && \
     rosdep update && \
     rosdep install -y \
@@ -133,10 +173,14 @@ RUN mkdir src && \
 	    --skip-keys "libopencv-dev libopencv-contrib-dev libopencv-imgproc-dev python-opencv python3-opencv" && \
     rm -rf /var/lib/apt/lists/* && \
     apt-get clean && \
-    # build it!
     colcon build \
         --merge-install \
-        --cmake-args -DCMAKE_BUILD_TYPE=Release
+        --symlink-install \
+        --continue-on-error \
+        --event-handlers console_cohesion+ \
+        --base-paths /workspace \
+        --cmake-args "-DCMAKE_BUILD_TYPE=Release" \
+        -Wall -Wextra -Wpedantic
 
     # rm -rf ${ROS_ROOT}/src && \
     # rm -rf ${ROS_ROOT}/logs && \
@@ -156,13 +200,17 @@ WORKDIR ${WORKSPACE}
 
 ENTRYPOINT [ "/sbin/entrypoint.bash" ]
 
+FROM dependencies as pkgs
 
-
-
-
-
-
-
-
-
-
+RUN . install/setup.bash \
+    && cd /workspace/src \
+    && git clone https://github.com/lucyannofrota/P3DX.git \
+    && cd /workspace \
+    && colcon build \
+        --merge-install \
+        --symlink-install \
+        --continue-on-error \
+        --event-handlers console_cohesion+ \
+        --base-paths /workspace \
+        --cmake-args "-DCMAKE_BUILD_TYPE=Release" \
+        -Wall -Wextra -Wpedantic

@@ -1,51 +1,6 @@
 version: '2.2'
 
 services:
- 
-  # noetic:
-  #   image: jetson:noetic
-  #   container_name: jetson-noetic
-  #   build:
-  #     network: host
-  #     context: ./Docker
-  #     dockerfile: ./noetic_base.dockerfile
-  #     target: noetic
-  #     args:
-  #       BUILD_BASE_IMAGE: nvcr.io/nvidia/l4t-base:r35.2.1
-  #       BUILD_IMAGE_NAME: jetson:noetic
-  #       UBUNTU_VERSION: 20.04
-  #       L4T_VERSION: R35.2.1
-
-  #       # ROS
-  #       ROS1_DISTRO: noetic
-  #       ROS1_BUILD: /ROS_NOETIC
-  #       WORKSPACE: /workspace
-  #       ROS_MASTER_URI: http://localhost:11311
-
-  #       ENTRYPOINT: entrypoints/jetson_entrypoint.bash
-
-  # noetic_foxy:
-  #   image: jetson:noetic-foxy
-  #   container_name: jetson-noetic-foxy
-  #   build:
-  #     network: host
-  #     context: ./Docker
-  #     dockerfile: ./noetic_foxy.dockerfile
-  #     target: noetic-foxy
-  #     args:
-  #       BUILD_BASE_IMAGE: lucyannofrota/jetson:noetic
-  #       BUILD_IMAGE_NAME: jetson:noetic-foxy
-
-  #       # ROS2
-  #       ROS1_DISTRO: noetic
-  #       ROS2_DISTRO: foxy
-  #       WORKSPACE: /workspace
-  #       RMW_IMPLEMENTATION_INSTALL: rmw-cyclonedds-cpp
-  #       RMW_IMPLEMENTATION: rmw_cyclonedds_cpp
-  #       ROS_DOMAIN_ID: 7
-
-  #       # Entrypoint
-  #       ENTRYPOINT: entrypoints/jetson_entrypoint.bash
 
   noetic_p3dx:
     image: p3dx:noetic
@@ -78,6 +33,26 @@ services:
         BUILD_IMAGE_NAME: p3dx:noetic-foxy
 
         # ROS
+        WORKSPACE: /workspace
+
+        # Entrypoint
+        ENTRYPOINT_FILE: entrypoints/p3dx_entrypoint.bash
+
+  p3dx_navigation:
+    image: p3dx:navigation
+    container_name: p3dx-navigation
+    build:
+      network: host
+      context: ./Docker
+      dockerfile: ./p3dx_navigation.dockerfile
+      target: pkgs
+      args:
+        BUILD_BASE_IMAGE: dustynv/ros:foxy-desktop-l4t-r35.2.1
+        BUILD_IMAGE_NAME: smap:env
+        L4T_VERSION: R35.2.1
+        UBUNTU_VERSION: 20.04
+        # ROS
+        ROS_DISTRO: foxy
         WORKSPACE: /workspace
 
         # Entrypoint
