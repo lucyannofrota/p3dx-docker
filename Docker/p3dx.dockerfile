@@ -24,7 +24,7 @@ RUN git clone --recursive https://github.com/cinvesrob/Aria.git /usr/local/Aria 
   && cd /usr/local/Aria \
   && make clean \
   && make -j8 \
-  && git clone --recursive https://github.com/lucyannofrota/P3DX.git ${WORKSPACE}/noetic/src/P3DX
+  && git clone --branch 1.0 https://github.com/lucyannofrota/P3DX.git ${WORKSPACE}/noetic/src/P3DX
 
 
 WORKDIR ${WORKSPACE}/noetic
@@ -32,6 +32,7 @@ WORKDIR ${WORKSPACE}/noetic
 SHELL ["/bin/bash", "-c"] 
 
 RUN . /opt/ros/noetic/setup.bash && \
+    # git clone https://github.com/ros/joint_state_publisher.git ${WORKSPACE}/noetic/src/joint_state_publisher && \
     catkin_make
 
 COPY ${ENTRYPOINT} /sbin/entrypoint.bash

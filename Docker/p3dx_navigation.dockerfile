@@ -101,7 +101,7 @@ FROM dependencies as pkgs
 
 RUN . install/setup.bash \
     && cd /workspace/src \
-    && git clone https://github.com/lucyannofrota/P3DX.git \
+    && git clone --branch 1.0 https://github.com/lucyannofrota/P3DX.git \
     && cd /workspace \
     && colcon build \
         --merge-install \
@@ -110,4 +110,4 @@ RUN . install/setup.bash \
         --event-handlers console_cohesion+ \
         --base-paths /workspace \
         --cmake-args "-DCMAKE_BUILD_TYPE=Release" \
-        -Wall -Wextra -Wpedantic
+        -Wall -Wextra -Wpedantic \

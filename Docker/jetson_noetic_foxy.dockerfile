@@ -175,6 +175,7 @@ RUN rm /etc/ros/rosdep/sources.list.d/20-default.list && \
     cd ${ROS2_ROOT} && \ 
     # https://answers.ros.org/question/325245/minimal-ros2-installation/?answer=325249#post-id-325249
     rosinstall_generator --deps --rosdistro ${ROS2_DISTRO} ${ROS2_PKG} \
+        joint-state-publisher \
         rmw \
         > ros2.${ROS2_DISTRO}.${ROS2_PKG}.rosinstall && \
     cat ros2.${ROS2_DISTRO}.${ROS2_PKG}.rosinstall && \
