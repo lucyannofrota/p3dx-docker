@@ -3,16 +3,16 @@ version: '2.2'
 services:
 
   noetic:
-    image: jetson:noetic
+    image: jetson-noetic
     container_name: jetson-noetic
     build:
       network: host
       context: ./Docker
-      dockerfile: ./noetic_base.dockerfile
+      dockerfile: ./jetson_noetic_base.dockerfile
       target: noetic
       args:
         BUILD_BASE_IMAGE: nvcr.io/nvidia/l4t-base:r35.2.1
-        BUILD_IMAGE_NAME: jetson:noetic
+        BUILD_IMAGE_NAME: jetson-noetic
         UBUNTU_VERSION: 20.04
         L4T_VERSION: R35.2.1
 
@@ -25,16 +25,16 @@ services:
         ENTRYPOINT_FILE: entrypoints/jetson_entrypoint.bash
 
   noetic_foxy:
-    image: jetson:noetic-foxy
+    image: jetson-noetic-foxy
     container_name: jetson-noetic-foxy
     build:
       network: host
       context: ./Docker
-      dockerfile: ./noetic_foxy.dockerfile
+      dockerfile: ./jetson_noetic_foxy.dockerfile
       target: noetic-foxy
       args:
-        BUILD_BASE_IMAGE: lucyannofrota/jetson:noetic
-        BUILD_IMAGE_NAME: jetson:noetic-foxy
+        BUILD_BASE_IMAGE: lucyannofrota/jetson-noetic
+        BUILD_IMAGE_NAME: jetson-noetic-foxy
 
         # ROS2
         ROS1_DISTRO: noetic
@@ -53,7 +53,7 @@ services:
   #   build:
   #     network: host
   #     context: ./Docker
-  #     dockerfile: ./noetic_base.dockerfile
+  #     dockerfile: ./jetson_noetic_base.dockerfile
   #     target: noetic
   #     args:
   #       BASE_IMAGE: nvcr.io/nvidia/l4t-base:r35.2.1
@@ -75,7 +75,7 @@ services:
   #   build:
   #     network: host
   #     context: ./Docker
-  #     dockerfile: ./noetic_foxy.dockerfile
+  #     dockerfile: ./jetson_noetic_foxy.dockerfile
   #     target: noetic-foxy
   #     args:
   #       BASE_IMAGE: lucyannofrota/jetson:noetic

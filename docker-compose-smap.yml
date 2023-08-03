@@ -4,8 +4,8 @@ services:
 
   smap-sampler-zed:
     network_mode: "host"
-    image: smap:sampler-zed
-    container_name: sampler-zed
+    image: smap:jetson-sampler-zed
+    container_name: jetson-sampler-zed-dev
     build:
       network: host
       context: ./Docker
@@ -28,8 +28,8 @@ services:
     # . install/setup.bash
 
   smap-env:
-    image: smap:env
-    container_name: ros2-env
+    image: smap:jetson-env
+    container_name: ros2-env-dev
     build:
       network: host
       context: ./Docker
@@ -37,7 +37,7 @@ services:
       args:
 
         BUILD_BASE_IMAGE: dustynv/ros:foxy-desktop-l4t-r35.2.1
-        BUILD_IMAGE_NAME: smap:env
+        BUILD_IMAGE_NAME: smap:jetson-env
         L4T_VERSION: R35.2.1
         UBUNTU_VERSION: 20.04
         # ROS
@@ -50,6 +50,42 @@ services:
       - "DISPLAY"
       - "QT_X11_NO_MITSHM=1" #fix some QT bugs
     volumes: 
+      - /tmp/.X11-unix:/tmp/.X11-unix # Share X11 socket with container
+      - $HOME/.Xauthority:/home/ros/.Xauthority # Share X11 permissions
+
+    cap_add:
+      - SYS_PTRACE
+    command: >
+      bash -c "
+        tail -f /dev/null
+      "
+
+  smap-yolov5:
+    image: smap:jetson-yolov5
+    container_name: jetson-yolov5-dev
+    build:
+      network: host
+      context: ./Docker
+      dockerfile: ./smap_yolo.dockerfile
+      args:
+
+        BUILD_BASE_IMAGE: dustynv/ros:foxy-pytorch-l4t-r35.2.1
+        BUILD_IMAGE_NAME: smap:jetson-yolov5
+        L4T_VERSION: R35.2.1
+        UBUNTU_VERSION: 20.04
+        # ROS
+        ROS_DISTRO: foxy
+        WORKSPACE: /workspace
+        # RMW_IMPLEMENTATION_INSTALL: rmw-cyclonedds-cpp
+        # RMW_IMPLEMENTATION: rmw_cyclonedds_cpp
+    shm_size: '8gb' # <-- when RUNNING 
+    privileged: true
+    environment:
+      - "DISPLAY"
+      - "QT_X11_NO_MITSHM=1" #fix some QT bugs
+      - "ROS_DOMAIN_ID=5"
+    volumes: 
+      - /var/run/docker.sock:/var/run/docker.sock
       - /tmp/.X11-unix:/tmp/.X11-unix # Share X11 socket with container
       - $HOME/.Xauthority:/home/ros/.Xauthority # Share X11 permissions
 

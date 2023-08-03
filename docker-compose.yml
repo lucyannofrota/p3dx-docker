@@ -73,8 +73,7 @@ services:
 
 
   noetic_p3dx:
-    # image: lucyannofrota/p3dx:noetic #p3dx:noetic
-    container_name: p3dx-noetic
+    image: lucyannofrota/p3dx:noetic #p3dx:noetic
     extends:
       file: docker-compose-p3dx.yml
       service: noetic_p3dx
@@ -92,7 +91,6 @@ services:
 
   noetic_foxy_p3dx:
     image: lucyannofrota/p3dx:noetic-foxy #p3dx:noetic-foxy
-    container_name: p3dx-noetic-foxy
     extends:
       file: docker-compose-p3dx.yml
       service: noetic_foxy_p3dx
@@ -122,3 +120,8 @@ services:
     extends:
       file: docker-compose-p3dx.yml
       service: p3dx_navigation
+
+  smap-yolov5:
+    extends:
+      file: docker-compose-smap.yml
+      service: smap-yolov5
