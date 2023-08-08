@@ -27,7 +27,7 @@ services:
       network: host
       context: ./Docker
       dockerfile: ./p3dx.dockerfile
-      target: p3dx
+      target: e_stop
       args:
         BUILD_BASE_IMAGE: lucyannofrota/jetson-noetic-foxy
         BUILD_IMAGE_NAME: p3dx-noetic-foxy

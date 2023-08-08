@@ -85,6 +85,7 @@ def main(args=None):
 
     # Initial state for LEDs:
     GPIO.output(led_pin, GPIO.LOW)
+    e_stop.send_disable_request()
 
     GPIO.add_event_detect(but_pin, GPIO.BOTH, callback=e_stop.btn_callback, bouncetime=10, polltime=0.1)
 

@@ -31,7 +31,7 @@ services:
       network: host
       context: ./Docker
       dockerfile: ./jetson_noetic_foxy.dockerfile
-      target: noetic-foxy
+      target: configs
       args:
         BUILD_BASE_IMAGE: lucyannofrota/jetson-noetic
         BUILD_IMAGE_NAME: jetson-noetic-foxy

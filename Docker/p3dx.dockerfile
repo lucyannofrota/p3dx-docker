@@ -40,3 +40,9 @@ COPY ${ENTRYPOINT} /sbin/entrypoint.bash
 WORKDIR ${WORKSPACE}
 
 ENTRYPOINT [ "/sbin/entrypoint.bash" ]
+
+FROM p3dx as e_stop
+
+RUN mkdir -p ${WORKSPACE}/foxy/src/e_stop
+
+COPY scripts/gpio_node.py ${WORKSPACE}/foxy/src/e_stop
