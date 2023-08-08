@@ -8,6 +8,7 @@ colcon build \
         --merge-install \
         --symlink-install \
         --cmake-clean-cache \
+        --continue-on-error \
         --cmake-args "-DCMAKE_BUILD_TYPE=RelWithDebInfo" "-DCMAKE_EXPORT_COMPILE_COMMANDS=On" \
         -Wall -Wextra -Wpedantic | sed 's/^/  /'
 source install/setup.bash | sed 's/^/  /'

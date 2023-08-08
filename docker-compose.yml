@@ -125,3 +125,8 @@ services:
     extends:
       file: docker-compose-smap.yml
       service: smap-yolov5
+
+  jetson-gpio:
+    extends:
+      file: docker-compose-jetson.yml
+      service: jetson-gpio

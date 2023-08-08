@@ -46,7 +46,30 @@ services:
 
         # Entrypoint
         ENTRYPOINT_FILE: entrypoints/jetson_entrypoint.bash
- 
+
+  jetson-gpio:
+    image: jetson-gpio
+    container_name: jetson-gpio-dev
+    build:
+      network: host
+      context: ./Docker
+      dockerfile: ./jetson_gpio.dockerfile
+    privileged: true
+    volumes:
+      - /dev:/dev
+      - /proc/device-tree/compatible:/proc/device-tree/compatible
+      - /proc/device-tree/chosen:/proc/device-tree/chosen
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              capabilities: [gpu]
+    command: >
+      bash -c "
+        tail -f /dev/null
+      "
+
   # jetson_noetic:
   #   image: jetson:noetic
   #   container_name: jetson-noetic

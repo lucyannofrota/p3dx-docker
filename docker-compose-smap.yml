@@ -25,6 +25,12 @@ services:
       bash -c "
         tail -f /dev/null
       "
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              capabilities: [gpu]
     # . install/setup.bash
 
   smap-env:
@@ -95,3 +101,9 @@ services:
       bash -c "
         tail -f /dev/null
       "
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              capabilities: [gpu]

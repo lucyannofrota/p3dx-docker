@@ -12,6 +12,14 @@ topics:
     topic: /tf
     type: tf2_msgs/msg/TFMessage
   -
+    topic: /motors_state
+    type: std_msgs/Bool
+    queue_size: 1
+    qos:
+      history: keep_all
+      durability: transient_local
+      reliability: best_effort
+  -
     topic: /tf_static
     type: tf2_msgs/msg/TFMessage
     queue_size: 1

@@ -227,12 +227,17 @@ RUN source /opt/ros/noetic/setup.bash && \
     source /opt/ros/foxy/install/setup.bash && \
     colcon build --symlink-install --packages-select ros1_bridge --cmake-force-configure
 
+# Intall Jetson-GPIO
+RUN apt-get update -y && \
+    apt-get install python3-pip -y && \
+    pip install Jetson.GPIO
+
+FROM noetic-foxy as configs
+
 COPY ${ENTRYPOINT} /sbin/entrypoint.bash
 
 COPY config/noetic ${WORKSPACE}/noetic/config
 COPY config/foxy/key_teleop.yaml ${WORKSPACE}/foxy/src/teleop_tools/key_teleop/config/key_teleop.yaml
-
-
 
 WORKDIR ${WORKSPACE}
 
