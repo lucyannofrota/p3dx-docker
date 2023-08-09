@@ -54,7 +54,7 @@ services:
     command: bash -c "tail -F /dev/null"
 
   noetic_foxy:
-    # image: lucyannofrota/jetson:noetic-foxy #p3dx:noetic-foxy
+    image: lucyannofrota/jetson-noetic-foxy #p3dx:noetic-foxy
     container_name: jetson-noetic-foxy
     extends:
       file: docker-compose-jetson.yml
@@ -73,7 +73,7 @@ services:
 
 
   noetic_p3dx:
-    image: lucyannofrota/p3dx:noetic #p3dx:noetic
+    image: lucyannofrota/p3dx-noetic #p3dx:noetic
     extends:
       file: docker-compose-p3dx.yml
       service: noetic_p3dx
@@ -90,7 +90,7 @@ services:
     command: bash -c "tail -F /dev/null"
 
   noetic_foxy_p3dx:
-    image: lucyannofrota/p3dx:noetic-foxy #p3dx:noetic-foxy
+    image: lucyannofrota/p3dx-noetic-foxy #p3dx:noetic-foxy
     extends:
       file: docker-compose-p3dx.yml
       service: noetic_foxy_p3dx
