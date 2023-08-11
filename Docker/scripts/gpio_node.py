@@ -47,7 +47,8 @@ class E_STOP(Node):
         return self.future.result()
     
     def btn_callback(self,channel):
-        if(self.btn_state):
+        # print(GPIO.input(but_pin))
+        if(not GPIO.input(but_pin)):
             self.get_logger().warn("Button Pressed!")
             self.btn_state = False
             self.start = time.time()
@@ -59,16 +60,18 @@ class E_STOP(Node):
             if(self.stop-self.start < 2):
                 self.send_disable_request()
                 self.get_logger().warn("\tDisable Motors")
-                motors_enable = False
+                GPIO.output(led_pin, GPIO.LOW)
+                # motors_enable = False
             else:
                 self.send_enable_request()
                 self.get_logger().warn("\tEnable Motors")
-                motors_enable = True
-            
-            if motors_enable:
                 GPIO.output(led_pin, GPIO.HIGH)
-            else:
-                GPIO.output(led_pin, GPIO.LOW)
+                # motors_enable = True
+            
+            # if motors_enable:
+            #     GPIO.output(led_pin, GPIO.HIGH)
+            # else:
+            #     GPIO.output(led_pin, GPIO.LOW)
 
 
 

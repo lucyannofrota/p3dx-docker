@@ -43,6 +43,6 @@ ENTRYPOINT [ "/sbin/entrypoint.bash" ]
 
 FROM p3dx as e_stop
 
-RUN mkdir -p ${WORKSPACE}/foxy/src/e_stop
+RUN mkdir -p ${WORKSPACE}/foxy/src/e_stop && ls
 
 COPY scripts/gpio_node.py ${WORKSPACE}/foxy/src/e_stop/gpio_node.py

@@ -63,3 +63,7 @@ RUN source /ros_entrypoint.sh && \
         --base-paths /workspace \
         --cmake-args "-DCMAKE_BUILD_TYPE=Release" \
         -Wall -Wextra -Wpedantic
+
+RUN chmod +x /workspace/src/smap/smap_perception/detectors/smap_yolo_v5/yolo_v5_node.py && \
+    chmod +x /workspace/src/smap/smap_perception/detectors/smap_yolo_v5/yolo_v5_even_node.py && \
+    chmod +x /workspace/src/smap/smap_perception/detectors/smap_yolo_v5/yolo_v5_odd_node.py
