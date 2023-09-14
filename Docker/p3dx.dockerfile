@@ -1,8 +1,8 @@
-ARG BUILD_BASE_IMAGE=lucyannofrota/jetson:noetic
+ARG BUILD_BASE_IMAGE=lucyannofrota/jetson-noetic
 
 FROM ${BUILD_BASE_IMAGE} as p3dx
 
-ARG BUILD_BASE_IMAGE=lucyannofrota/jetson:noetic
+ARG BUILD_BASE_IMAGE=lucyannofrota/jetson-noetic
 ARG BUILD_IMAGE_NAME=p3dx:noetic
 ARG WORKSPACE=/workspace
 

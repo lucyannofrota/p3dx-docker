@@ -1,0 +1,97 @@
+/usr/lib/python3/dist-packages/requests/__init__.py:89: RequestsDependencyWarning: urllib3 (1.26.15) or chardet (3.0.4) doesn't match a supported version!
+  warnings.warn("urllib3 ({}) or chardet ({}) doesn't match a supported "
+Building smap-env
+DEPRECATED: The legacy builder is deprecated and will be removed in a future release.
+            Install the buildx component to build images with BuildKit:
+            https://docs.docker.com/go/buildx/
+
+Sending build context to Docker daemon  1.095MB
+Step 1/25 : ARG BUILD_BASE_IMAGE=dustynv/ros:foxy-desktop-l4t-r35.2.1
+Step 2/25 : FROM ${BUILD_BASE_IMAGE} as dependencies
+ ---> a5a7e3e44162
+Step 3/25 : ARG BUILD_BASE_IMAGE=dustynv/ros:foxy-desktop-l4t-r35.2.1
+ ---> Running in d1093078377a
+Removing intermediate container d1093078377a
+ ---> 72a56b53e5e2
+Step 4/25 : ARG BUILD_IMAGE_NAME=smap:env
+ ---> Running in 3b6395c19271
+Removing intermediate container 3b6395c19271
+ ---> 8c5380d15fa8
+Step 5/25 : ARG WORKSPACE=/workspace
+ ---> Running in 3c88c8c1ed2e
+Removing intermediate container 3c88c8c1ed2e
+ ---> d369bed9da03
+Step 6/25 : ARG L4T_VERSION=R35.2.1
+ ---> Running in 40c183dbc20c
+Removing intermediate container 40c183dbc20c
+ ---> 91970a9d37f9
+Step 7/25 : ARG UBUNTU_VERSION=20.04
+ ---> Running in ac4ca34f8aaf
+Removing intermediate container ac4ca34f8aaf
+ ---> 58a63ccf6de2
+Step 8/25 : ARG ROS_DISTRO=foxy
+ ---> Running in 3adb4319b651
+Removing intermediate container 3adb4319b651
+ ---> 55da8d5d6a22
+Step 9/25 : ARG ENTRYPOINT=entrypoints/smap_entrypoint.bash
+ ---> Running in 39b947e7275d
+Removing intermediate container 39b947e7275d
+ ---> dbd8cb88e10a
+Step 10/25 : ENV WORKSPACE=${WORKSPACE}
+ ---> Running in bbf9bae6aaf6
+Removing intermediate container bbf9bae6aaf6
+ ---> 5a3656eb05fd
+Step 11/25 : ENV BASE_IMAGE=${BUILD_BASE_IMAGE}
+ ---> Running in fcfc548dc791
+Removing intermediate container fcfc548dc791
+ ---> 785ffe2c8c43
+Step 12/25 : ENV IMAGE_NAME=${BUILD_IMAGE_NAME}
+ ---> Running in 239e023d8bcf
+Removing intermediate container 239e023d8bcf
+ ---> b090de192725
+Step 13/25 : ENV L4T_VERSION=${L4T_VERSION}
+ ---> Running in 9a0d8c87673b
+Removing intermediate container 9a0d8c87673b
+ ---> 5fabd3ca0744
+Step 14/25 : ENV UBUNTU_VERSION=${UBUNTU_VERSION}
+ ---> Running in ba4554a20a81
+Removing intermediate container ba4554a20a81
+ ---> f60ae7692d05
+Step 15/25 : ENV ROS_DISTRO=${ROS_DISTRO}
+ ---> Running in 8e76543b4617
+Removing intermediate container 8e76543b4617
+ ---> e1ff0b0585f0
+Step 16/25 : ENV ENTRYPOINT=${ENTRYPOINT}
+ ---> Running in bafc70406adf
+Removing intermediate container bafc70406adf
+ ---> 9a04d949c4dc
+Step 17/25 : ENV DEBIAN_FRONTEND=noninteractive
+ ---> Running in 5443811552da
+Removing intermediate container 5443811552da
+ ---> 697efa134795
+Step 18/25 : WORKDIR ${WORKSPACE}
+ ---> Running in 5cb2219769fe
+Removing intermediate container 5cb2219769fe
+ ---> 5aa3d8509b9f
+Step 19/25 : COPY ${ENTRYPOINT} /sbin/entrypoint.bash
+ ---> 5b432e26c71b
+Step 20/25 : COPY /scripts/build_smap.bash ${WORKSPACE}/scripts/build_smap.bash
+ ---> ff2d56630d3b
+Step 21/25 : COPY /scripts/full_build.bash ${WORKSPACE}/scripts/full_build.bash
+ ---> 72828167426c
+Step 22/25 : COPY /scripts/setup.bash ${WORKSPACE}/scripts/setup.bash
+ ---> 9bb023663d35
+Step 23/25 : RUN chmod +x ${WORKSPACE}/scripts/build_smap.bash &&     chmod +x ${WORKSPACE}/scripts/full_build.bash &&     chmod +x ${WORKSPACE}/scripts/setup.bash
+ ---> Running in 31d4152a7452
+Removing intermediate container 31d4152a7452
+ ---> a0349678cda8
+Step 24/25 : WORKDIR ${WORKSPACE}
+ ---> Running in 9584e01a1e25
+Removing intermediate container 9584e01a1e25
+ ---> 89e5c0229bf5
+Step 25/25 : ENTRYPOINT [ "/sbin/entrypoint.bash" ]
+ ---> Running in 858eac8600c1
+Removing intermediate container 858eac8600c1
+ ---> b58588682e29
+Successfully built b58588682e29
+Successfully tagged build:jetson-env

@@ -3,7 +3,7 @@ version: '2.2'
 services:
 
   noetic_p3dx:
-    image: p3dx-noetic
+    image: pbuild:3dx-noetic
     container_name: p3dx-noetic-dev
     build:
       network: host
@@ -11,7 +11,7 @@ services:
       dockerfile: ./p3dx.dockerfile
       target: p3dx
       args:
-        BUILD_BASE_IMAGE: lucyannofrota/jetson-noetic
+        BUILD_BASE_IMAGE: build:jetson-noetic
         BUILD_IMAGE_NAME: p3dx-noetic
 
         # ROS
@@ -21,7 +21,7 @@ services:
         ENTRYPOINT_FILE: entrypoints/p3dx_entrypoint.bash
 
   noetic_foxy_p3dx:
-    image: p3dx-noetic-foxy
+    image: build:p3dx-noetic-foxy
     container_name: p3dx-noetic-foxy-dev
     build:
       network: host
@@ -29,7 +29,7 @@ services:
       dockerfile: ./p3dx.dockerfile
       target: e_stop
       args:
-        BUILD_BASE_IMAGE: lucyannofrota/jetson-noetic-foxy
+        BUILD_BASE_IMAGE: build:jetson-noetic-foxy
         BUILD_IMAGE_NAME: p3dx-noetic-foxy
 
         # ROS
@@ -45,7 +45,6 @@ services:
       network: host
       context: ./Docker
       dockerfile: ./p3dx_navigation.dockerfile
-      target: pkgs
       args:
         BUILD_BASE_IMAGE: dustynv/ros:foxy-desktop-l4t-r35.2.1
         BUILD_IMAGE_NAME: p3dx-navigation

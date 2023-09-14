@@ -1,8 +1,9 @@
 # this dockerfile roughly follows the 'Installing from source' from:
 #   http://wiki.ros.org/noetic/Installation/Source
 #
-ARG BUILD_BASE_IMAGE=nvcr.io/nvidia/l4t-base:r35.2.1
 
+
+ARG BUILD_BASE_IMAGE=nvcr.io/nvidia/l4t-base:r35.2.1
 
 FROM ${BUILD_BASE_IMAGE} as noetic
 
@@ -12,7 +13,8 @@ ARG WORKSPACE=/workspace
 ARG L4T_VERSION=R35.2.1
 ARG UBUNTU_VERSION=20.04
 
-ARG ROS1_PKG=ros_base
+# ROS1_PKG=ros_base/desktop/desktop_full
+ARG ROS1_PKG=desktop
 ARG ROS1_BUILD=/ROS_NOETIC
 ARG ROS_MASTER_URI=http://localhost:11311
 
@@ -84,17 +86,19 @@ RUN apt-get update && \
 
 WORKDIR ${ROS1_BUILD}
 
+# rqt_graph export dot graph -> https://github.com/ros-visualization/rqt_graph/issues/85
 RUN mkdir -p ros_base_ws && \
     cd ros_base_ws && \
     rosinstall_generator ${ROS1_PKG} \
-    vision_msgs \
-    image_transport \
-    urdf \
-    tf \
-    diagnostic_updater \
-    roslint \
-    robot_state_publisher \
-    --rosdistro ${ROS1_DISTRO} --deps --tar > ${ROS1_DISTRO}-${ROS1_PKG}.rosinstall && \
+        vision_msgs \
+        image_transport \
+        urdf \
+        tf \
+        diagnostic_updater \
+        roslint \
+        robot_state_publisher \
+        rqt \
+        --rosdistro ${ROS1_DISTRO} --deps --tar > ${ROS1_DISTRO}-${ROS1_PKG}.rosinstall && \
     mkdir -p src && \
     vcs import --input ${ROS1_DISTRO}-${ROS1_PKG}.rosinstall ./src && \
     apt-get update && \

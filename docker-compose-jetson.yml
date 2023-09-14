@@ -3,8 +3,8 @@ version: '2.2'
 services:
 
   noetic:
-    image: jetson-noetic
-    container_name: jetson-noetic
+    image: build:jetson-noetic
+    container_name: jetson-noetic-dev
     build:
       network: host
       context: ./Docker
@@ -23,17 +23,21 @@ services:
         ROS_MASTER_URI: http://localhost:11311
 
         ENTRYPOINT_FILE: entrypoints/jetson_entrypoint.bash
+    command: >
+      bash -c "
+        tail -f /dev/null
+      "
 
   noetic_foxy:
-    image: jetson-noetic-foxy
-    container_name: jetson-noetic-foxy
+    image: build:jetson-noetic-foxy
+    container_name: jetson-noetic-foxy-dev
     build:
       network: host
       context: ./Docker
       dockerfile: ./jetson_noetic_foxy.dockerfile
-      target: configs
+      target: test #noetic-foxy #configs
       args:
-        BUILD_BASE_IMAGE: lucyannofrota/jetson-noetic
+        BUILD_BASE_IMAGE: build:jetson-noetic
         BUILD_IMAGE_NAME: jetson-noetic-foxy
 
         # ROS2
@@ -46,6 +50,10 @@ services:
 
         # Entrypoint
         ENTRYPOINT_FILE: entrypoints/jetson_entrypoint.bash
+    command: >
+      bash -c "
+        tail -f /dev/null
+      "
 
   jetson-gpio:
     image: jetson-gpio

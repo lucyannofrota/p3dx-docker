@@ -1,8 +1,8 @@
-ARG BUILD_BASE_IMAGE=lucyannofrota/jetson:noetic
+ARG BUILD_BASE_IMAGE=lucyannofrota/jetson-noetic
 
 FROM ${BUILD_BASE_IMAGE} as noetic-foxy
 
-ARG BUILD_BASE_IMAGE=lucyannofrota/jetson:noetic
+ARG BUILD_BASE_IMAGE=lucyannofrota/jetson-noetic
 ARG BUILD_IMAGE_NAME=jetson:noetic-foxy
 ARG WORKSPACE=/workspace
 
@@ -152,6 +152,8 @@ RUN cmake --version
 RUN apt purge -y python3.9 libpython3.9* || echo "python3.9 not found, skipping removal" && \
     ls -ll /usr/bin/python*
     
+
+FROM noetic-foxy as test
     
 # 
 # compile yaml-cpp-0.6, which some ROS packages may use (but is not in the 18.04 apt repo)

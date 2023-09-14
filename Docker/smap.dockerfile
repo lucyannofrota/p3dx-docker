@@ -3,7 +3,6 @@
 #
 ARG BUILD_BASE_IMAGE=dustynv/ros:foxy-desktop-l4t-r35.2.1
 
-
 FROM ${BUILD_BASE_IMAGE} as dependencies
 
 ARG BUILD_BASE_IMAGE=dustynv/ros:foxy-desktop-l4t-r35.2.1
