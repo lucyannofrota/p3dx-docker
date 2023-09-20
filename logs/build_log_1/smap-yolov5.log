@@ -1,0 +1,1022 @@
+/usr/lib/python3/dist-packages/requests/__init__.py:89: RequestsDependencyWarning: urllib3 (1.26.15) or chardet (3.0.4) doesn't match a supported version!
+  warnings.warn("urllib3 ({}) or chardet ({}) doesn't match a supported "
+Building smap-yolov5
+DEPRECATED: The legacy builder is deprecated and will be removed in a future release.
+            Install the buildx component to build images with BuildKit:
+            https://docs.docker.com/go/buildx/
+
+Sending build context to Docker daemon  1.096MB
+Step 1/27 : ARG BUILD_BASE_IMAGE=dustynv/ros:foxy-pytorch-l4t-r35.2.1
+Step 2/27 : FROM ${BUILD_BASE_IMAGE} as smap-yolov5
+ ---> 3db028022b01
+Step 3/27 : ARG BUILD_BASE_IMAGE=dustynv/ros:foxy-pytorch-l4t-r35.2.1
+ ---> Running in e03587f9591d
+Removing intermediate container e03587f9591d
+ ---> 16b6781326e8
+Step 4/27 : ARG BUILD_IMAGE_NAME=smap:jetson-yolov5
+ ---> Running in d6337bd5cc18
+Removing intermediate container d6337bd5cc18
+ ---> 22ecee1415c5
+Step 5/27 : ARG WORKSPACE=/workspace
+ ---> Running in edefe0608daa
+Removing intermediate container edefe0608daa
+ ---> f4ada6d33936
+Step 6/27 : ARG L4T_VERSION=R35.2.1
+ ---> Running in 34a8b696c0cf
+Removing intermediate container 34a8b696c0cf
+ ---> 97a5cd5dd712
+Step 7/27 : ARG UBUNTU_VERSION=20.04
+ ---> Running in 14efe9535054
+Removing intermediate container 14efe9535054
+ ---> 870d2369ff7b
+Step 8/27 : ENV ROS_DISTRO=foxy
+ ---> Running in 0b1e39076cca
+Removing intermediate container 0b1e39076cca
+ ---> e7f19c7b3f5d
+Step 9/27 : ARG ENTRYPOINT=entrypoints/smap_entrypoint.bash
+ ---> Running in 613491eb3552
+Removing intermediate container 613491eb3552
+ ---> 0504430a44df
+Step 10/27 : ENV WORKSPACE=${WORKSPACE}
+ ---> Running in 23f9f8aeeda0
+Removing intermediate container 23f9f8aeeda0
+ ---> 4667093974b9
+Step 11/27 : ENV BASE_IMAGE=${BUILD_BASE_IMAGE}
+ ---> Running in f12f1ae8c3d9
+Removing intermediate container f12f1ae8c3d9
+ ---> 2192c202b6d5
+Step 12/27 : ENV IMAGE_NAME=${BUILD_IMAGE_NAME}
+ ---> Running in 733761cdd704
+Removing intermediate container 733761cdd704
+ ---> de7102c0c220
+Step 13/27 : ENV L4T_VERSION=${L4T_VERSION}
+ ---> Running in 3b58c48aaff3
+Removing intermediate container 3b58c48aaff3
+ ---> b7202a167870
+Step 14/27 : ENV UBUNTU_VERSION=${UBUNTU_VERSION}
+ ---> Running in ed54fbdb2f53
+Removing intermediate container ed54fbdb2f53
+ ---> 8addd215d055
+Step 15/27 : ENV ROS_DISTRO=${ROS_DISTRO}
+ ---> Running in 8836cc4edbd4
+Removing intermediate container 8836cc4edbd4
+ ---> fe5d3851d9fd
+Step 16/27 : ENV ENTRYPOINT=${ENTRYPOINT}
+ ---> Running in 3129dbab3f81
+Removing intermediate container 3129dbab3f81
+ ---> 5b3b8bcd1884
+Step 17/27 : ENV DEBIAN_FRONTEND=noninteractive
+ ---> Running in 4689ad1f3c24
+Removing intermediate container 4689ad1f3c24
+ ---> d03e56b178dc
+Step 18/27 : WORKDIR ${WORKSPACE}
+ ---> Running in acc70e0380f2
+Removing intermediate container acc70e0380f2
+ ---> cbafd09d921f
+Step 19/27 : ENV WORKSPACE=${WORKSPACE}
+ ---> Running in 1cd551628ab3
+Removing intermediate container 1cd551628ab3
+ ---> 5a30ad5dc044
+Step 20/27 : COPY ${ENTRYPOINT} /sbin/entrypoint.bash
+ ---> 9ef41026dc16
+Step 21/27 : COPY scripts/source_env.bash /sbin/source_env.bash
+ ---> ab86239a5be0
+Step 22/27 : RUN echo 'source /sbin/source_env.bash' >> /root/.bashrc
+ ---> Running in 6a45ded1cf25
+Removing intermediate container 6a45ded1cf25
+ ---> 65f31bf1f54f
+Step 23/27 : WORKDIR ${WORKSPACE}
+ ---> Running in b253f183652e
+Removing intermediate container b253f183652e
+ ---> e7735fbad77a
+Step 24/27 : ENTRYPOINT [ "/sbin/entrypoint.bash" ]
+ ---> Running in 1b8513e084a5
+Removing intermediate container 1b8513e084a5
+ ---> a1c5de2f20e6
+Step 25/27 : COPY scripts/yolo_install.bash /sbin/yolo_install.bash
+ ---> e0fd601c39b5
+Step 26/27 : RUN source /ros_entrypoint.sh &&     mkdir -p src/smap &&     git clone --recursive --branch 1.0 https://github.com/lucyannofrota/smap_interfaces.git src/smap/smap_interfaces &&     git clone --recursive --branch 1.0 https://github.com/lucyannofrota/smap_perception.git src/smap/smap_perception &&     /bin/bash /sbin/yolo_install.bash &&     colcon build         --merge-install         --symlink-install         --continue-on-error         --event-handlers console_cohesion+         --base-paths /workspace         --cmake-args "-DCMAKE_BUILD_TYPE=Release"         -Wall -Wextra -Wpedantic
+ ---> Running in b121beb3ab59
+sourcing   /opt/ros/foxy/install/setup.bash
+sourcing   /ros_deep_learning/install/setup.bash
+ROS_DISTRO foxy
+ROS_ROOT   /opt/ros/foxy
+[91mCloning into 'src/smap/smap_interfaces'...
+[0m[91mNote: switching to '1efba166cd857832272a22628a8f219bb59ea12e'.
+
+You are in 'detached HEAD' state. You can look around, make experimental
+changes and commit them, and you can discard any commits you make in this
+state without impacting any branches by switching back to a branch.
+
+If you want to create a new branch to retain commits you create, you may
+do so (now or later) by using -c with the switch command. Example:
+
+  git switch -c <new-branch-name>
+
+Or undo this operation with:
+
+  git switch -
+
+Turn off this advice by setting config variable advice.detachedHead to false
+
+[0m[91mCloning into 'src/smap/smap_perception'...
+[0m[91mNote: switching to 'e35f6d7096835c6368c20c9446037141d407dd6d'.
+
+You are in 'detached HEAD' state. You can look around, make experimental
+changes and commit them, and you can discard any commits you make in this
+state without impacting any branches by switching back to a branch.
+
+If you want to create a new branch to retain commits you create, you may
+do so (now or later) by using -c with the switch command. Example:
+
+  git switch -c <new-branch-name>
+
+Or undo this operation with:
+
+  git switch -
+
+Turn off this advice by setting config variable advice.detachedHead to false
+
+[0m[91mSubmodule 'smap_yolo_v5' (https://github.com/lucyannofrota/yolo_v5.git) registered for path 'detectors/smap_yolo_v5'
+[0m[91mSubmodule 'smap_perception_wrapper' (https://github.com/lucyannofrota/smap_perception_wrapper.git) registered for path 'smap_perception_wrapper'
+[0m[91mCloning into '/workspace/src/smap/smap_perception/detectors/smap_yolo_v5'...
+[0m[91mCloning into '/workspace/src/smap/smap_perception/smap_perception_wrapper'...
+[0mSubmodule path 'detectors/smap_yolo_v5': checked out '68b6678e984c696700e3f7afdb925dd2221d0bdb'
+Submodule path 'smap_perception_wrapper': checked out 'a8f5fe8991414ecb535d35215b7d015c695b34e3'
+---<ultralitics_yolo_v5_install.bash>---
+=== ./yolov5 (git) ===
+Cloning into '.'...
+Note: switching to '78a90c9'.
+
+You are in 'detached HEAD' state. You can look around, make experimental
+changes and commit them, and you can discard any commits you make in this
+state without impacting any branches by switching back to a branch.
+
+If you want to create a new branch to retain commits you create, you may
+do so (now or later) by using -c with the switch command. Example:
+
+  git switch -c <new-branch-name>
+
+Or undo this operation with:
+
+  git switch -
+
+Turn off this advice by setting config variable advice.detachedHead to false
+
+HEAD is now at 78a90c9 Remove duplicate assignment code (#11178)
+Collecting tqdm>=4.64.0
+  Downloading tqdm-4.66.1-py3-none-any.whl (78 kB)
+Collecting matplotlib<3.7.0
+  Downloading matplotlib-3.6.3-cp38-cp38-manylinux_2_17_aarch64.manylinux2014_aarch64.whl (11.6 MB)
+Collecting seaborn>=0.11.0
+  Downloading seaborn-0.12.2-py3-none-any.whl (293 kB)
+Collecting gitpython>=3.1.30
+  Downloading GitPython-3.1.36-py3-none-any.whl (189 kB)
+Collecting scipy>=1.4.1
+  Downloading scipy-1.10.1-cp38-cp38-manylinux_2_17_aarch64.manylinux2014_aarch64.whl (31.0 MB)
+Collecting setuptools>=65.5.1
+  Downloading setuptools-68.2.2-py3-none-any.whl (807 kB)
+Collecting onnx<1.13.0
+  Downloading onnx-1.12.0-cp38-cp38-manylinux_2_17_aarch64.manylinux2014_aarch64.whl (13.0 MB)
+Collecting numpy<1.20
+  Downloading numpy-1.19.5-cp38-cp38-manylinux2014_aarch64.whl (12.4 MB)
+Collecting pandas<1.5.0
+  Downloading pandas-1.4.4-cp38-cp38-manylinux_2_17_aarch64.manylinux2014_aarch64.whl (11.0 MB)
+Collecting cycler>=0.10
+  Downloading cycler-0.11.0-py3-none-any.whl (6.4 kB)
+Collecting fonttools>=4.22.0
+  Downloading fonttools-4.42.1-cp38-cp38-manylinux_2_17_aarch64.manylinux2014_aarch64.whl (4.5 MB)
+Collecting contourpy>=1.0.1
+  Downloading contourpy-1.1.0-cp38-cp38-manylinux_2_17_aarch64.manylinux2014_aarch64.whl (283 kB)
+Requirement already satisfied, skipping upgrade: pyparsing>=2.2.1 in /usr/lib/python3/dist-packages (from matplotlib<3.7.0->-r /workspace/src/smap/smap_perception/detectors/smap_yolo_v5/jetson-requirements.txt (line 2)) (2.4.6)
+Requirement already satisfied, skipping upgrade: pillow>=6.2.0 in /usr/local/lib/python3.8/dist-packages/Pillow-9.4.0-py3.8-linux-aarch64.egg (from matplotlib<3.7.0->-r /workspace/src/smap/smap_perception/detectors/smap_yolo_v5/jetson-requirements.txt (line 2)) (9.4.0)
+Collecting kiwisolver>=1.0.1
+  Downloading kiwisolver-1.4.5-cp38-cp38-manylinux_2_17_aarch64.manylinux2014_aarch64.whl (1.4 MB)
+Requirement already satisfied, skipping upgrade: packaging>=20.0 in /usr/local/lib/python3.8/dist-packages (from matplotlib<3.7.0->-r /workspace/src/smap/smap_perception/detectors/smap_yolo_v5/jetson-requirements.txt (line 2)) (23.0)
+Requirement already satisfied, skipping upgrade: python-dateutil>=2.7 in /usr/local/lib/python3.8/dist-packages (from matplotlib<3.7.0->-r /workspace/src/smap/smap_perception/detectors/smap_yolo_v5/jetson-requirements.txt (line 2)) (2.8.2)
+Collecting gitdb<5,>=4.0.1
+  Downloading gitdb-4.0.10-py3-none-any.whl (62 kB)
+Collecting protobuf<=3.20.1,>=3.12.2
+  Downloading protobuf-3.20.1-cp38-cp38-manylinux2014_aarch64.whl (918 kB)
+Requirement already satisfied, skipping upgrade: typing-extensions>=3.6.2.1 in /usr/local/lib/python3.8/dist-packages (from onnx<1.13.0->-r /workspace/src/smap/smap_perception/detectors/smap_yolo_v5/jetson-requirements.txt (line 8)) (4.4.0)
+Requirement already satisfied, skipping upgrade: pytz>=2020.1 in /usr/local/lib/python3.8/dist-packages (from pandas<1.5.0->-r /workspace/src/smap/smap_perception/detectors/smap_yolo_v5/jetson-requirements.txt (line 10)) (2022.7.1)
+Requirement already satisfied, skipping upgrade: six>=1.5 in /usr/lib/python3/dist-packages (from python-dateutil>=2.7->matplotlib<3.7.0->-r /workspace/src/smap/smap_perception/detectors/smap_yolo_v5/jetson-requirements.txt (line 2)) (1.14.0)
+Collecting smmap<6,>=3.0.1
+  Downloading smmap-5.0.0-py3-none-any.whl (24 kB)
+Installing collected packages: tqdm, cycler, fonttools, numpy, contourpy, kiwisolver, matplotlib, pandas, seaborn, smmap, gitdb, gitpython, scipy, setuptools, protobuf, onnx
+  Attempting uninstall: numpy
+    Found existing installation: numpy 1.24.2
+    Uninstalling numpy-1.24.2:
+      Successfully uninstalled numpy-1.24.2
+  Attempting uninstall: pandas
+    Found existing installation: pandas 1.5.3
+    Uninstalling pandas-1.5.3:
+      Successfully uninstalled pandas-1.5.3
+  Attempting uninstall: setuptools
+    Found existing installation: setuptools 45.2.0
+    Not uninstalling setuptools at /usr/lib/python3/dist-packages, outside environment /usr
+    Can't uninstall 'setuptools'. No files were found to uninstall.
+  Attempting uninstall: protobuf
+    Found existing installation: protobuf 4.22.1
+    Uninstalling protobuf-4.22.1:
+      Successfully uninstalled protobuf-4.22.1
+Successfully installed contourpy-1.1.0 cycler-0.11.0 fonttools-4.42.1 gitdb-4.0.10 gitpython-3.1.36 kiwisolver-1.4.5 matplotlib-3.6.3 numpy-1.19.5 onnx-1.12.0 pandas-1.4.4 protobuf-3.20.1 scipy-1.10.1 seaborn-0.12.2 setuptools-68.2.2 smmap-5.0.0 tqdm-4.66.1
+[91m[34m[1mexport: [0mdata=../data/coco128.yaml, weights=['yolov5s.pt'], imgsz=[640], batch_size=1, device=0, half=False, inplace=True, keras=False, optimize=False, int8=False, dynamic=False, simplify=False, opset=16, verbose=False, workspace=4, nms=False, agnostic_nms=False, topk_per_class=100, topk_all=100, iou_thres=0.45, conf_thres=0.25, include=['engine']
+[0m[91mYOLOv5 🚀 2023-9-15 Python-3.8.10 torch-2.0.0a0+ec3941ad.nv23.02 CUDA:0 (Xavier, 31011MiB)
+
+[0m[91mDownloading https://github.com/ultralytics/yolov5/releases/download/v7.0/yolov5s.pt to yolov5s.pt...
+[0m[91m  0%|          | 0.00/14.1M [00:00<?, ?B/s][0m[91m  5%|▍         | 720k/14.1M [00:00<00:01, 7.26MB/s][0m[91m 11%|█▏        | 1.59M/14.1M [00:00<00:01, 8.38MB/s][0m[91m 20%|██        | 2.86M/14.1M [00:00<00:01, 10.5MB/s][0m[91m 30%|███       | 4.27M/14.1M [00:00<00:00, 12.2MB/s][0m[91m 41%|████      | 5.75M/14.1M [00:00<00:00, 13.4MB/s][0m[91m 53%|█████▎    | 7.45M/14.1M [00:00<00:00, 14.7MB/s][0m[91m 67%|██████▋   | 9.47M/14.1M [00:00<00:00, 16.8MB/s][0m[91m 80%|████████  | 11.4M/14.1M [00:00<00:00, 17.7MB/s][0m[91m 97%|█████████▋| 13.6M/14.1M [00:00<00:00, 19.7MB/s][0m[91m100%|██████████| 14.1M/14.1M [00:00<00:00, 15.9MB/s][0m[91m
+
+[0m[91mFusing layers... 
+[0m[91mYOLOv5s summary: 213 layers, 7225885 parameters, 0 gradients
+[0m[91m
+[34m[1mPyTorch:[0m starting from yolov5s.pt with output shape (1, 25200, 85) (14.1 MB)
+[0m[91m
+[34m[1mONNX:[0m starting export with onnx 1.12.0...
+[0m[91m[34m[1mONNX:[0m export success ✅ 4.9s, saved as yolov5s.onnx (28.0 MB)
+[0m[91m
+[34m[1mTensorRT:[0m starting export with TensorRT 8.5.2.2...
+[0m[09/15/2023-04:55:02] [TRT] [I] [MemUsageChange] Init CUDA: CPU +183, GPU +0, now: CPU 1544, GPU 7663 (MiB)
+[09/15/2023-04:55:05] [TRT] [I] [MemUsageChange] Init builder kernel library: CPU +106, GPU +149, now: CPU 1672, GPU 7812 (MiB)
+[09/15/2023-04:55:05] [TRT] [I] ----------------------------------------------------------------
+[09/15/2023-04:55:05] [TRT] [I] Input filename:   yolov5s.onnx
+[09/15/2023-04:55:05] [TRT] [I] ONNX IR version:  0.0.7
+[09/15/2023-04:55:05] [TRT] [I] Opset version:    12
+[09/15/2023-04:55:05] [TRT] [I] Producer name:    pytorch
+[09/15/2023-04:55:05] [TRT] [I] Producer version: 2.0.0
+[09/15/2023-04:55:05] [TRT] [I] Domain:           
+[09/15/2023-04:55:05] [TRT] [I] Model version:    0
+[09/15/2023-04:55:05] [TRT] [I] Doc string:       
+[09/15/2023-04:55:05] [TRT] [I] ----------------------------------------------------------------
+[09/15/2023-04:55:06] [TRT] [W] onnx2trt_utils.cpp:375: Your ONNX model has been generated with INT64 weights, while TensorRT does not natively support INT64. Attempting to cast down to INT32.
+[91m../export.py:278: DeprecationWarning: Use set_memory_pool_limit instead.
+  config.max_workspace_size = workspace * 1 << 30
+[34m[1mTensorRT:[0m input "images" with shape(1, 3, 640, 640) DataType.FLOAT
+[0m[91m[34m[1mTensorRT:[0m output "output0" with shape(1, 25200, 85) DataType.FLOAT
+[0m[91m[34m[1mTensorRT:[0m building FP32 engine as yolov5s.engine
+[0m[09/15/2023-04:55:07] [TRT] [I] ---------- Layers Running on DLA ----------
+[09/15/2023-04:55:07] [TRT] [I] ---------- Layers Running on GPU ----------
+[09/15/2023-04:55:07] [TRT] [I] [GpuLayer] CONVOLUTION: /model.0/conv/Conv
+[09/15/2023-04:55:07] [TRT] [I] [GpuLayer] POINTWISE: PWN(PWN(/model.0/act/Sigmoid), /model.0/act/Mul)
+[09/15/2023-04:55:07] [TRT] [I] [GpuLayer] CONVOLUTION: /model.1/conv/Conv
+[09/15/2023-04:55:07] [TRT] [I] [GpuLayer] POINTWISE: PWN(PWN(/model.1/act/Sigmoid), /model.1/act/Mul)
+[09/15/2023-04:55:07] [TRT] [I] [GpuLayer] CONVOLUTION: /model.2/cv1/conv/Conv || /model.2/cv2/conv/Conv
+[09/15/2023-04:55:07] [TRT] [I] [GpuLayer] POINTWISE: PWN(PWN(/model.2/cv1/act/Sigmoid), /model.2/cv1/act/Mul)
+[09/15/2023-04:55:07] [TRT] [I] [GpuLayer] CONVOLUTION: /model.2/m/m.0/cv1/conv/Conv
+[09/15/2023-04:55:07] [TRT] [I] [GpuLayer] POINTWISE: PWN(PWN(/model.2/m/m.0/cv1/act/Sigmoid), /model.2/m/m.0/cv1/act/Mul)
+[09/15/2023-04:55:07] [TRT] [I] [GpuLayer] CONVOLUTION: /model.2/m/m.0/cv2/conv/Conv
+[09/15/2023-04:55:07] [TRT] [I] [GpuLayer] POINTWISE: PWN(PWN(PWN(/model.2/m/m.0/cv2/act/Sigmoid), /model.2/m/m.0/cv2/act/Mul), /model.2/m/m.0/Add)
+[09/15/2023-04:55:07] [TRT] [I] [GpuLayer] POINTWISE: PWN(PWN(/model.2/cv2/act/Sigmoid), /model.2/cv2/act/Mul)
+[09/15/2023-04:55:07] [TRT] [I] [GpuLayer] CONVOLUTION: /model.2/cv3/conv/Conv
+[09/15/2023-04:55:07] [TRT] [I] [GpuLayer] POINTWISE: PWN(PWN(/model.2/cv3/act/Sigmoid), /model.2/cv3/act/Mul)
+[09/15/2023-04:55:07] [TRT] [I] [GpuLayer] CONVOLUTION: /model.3/conv/Conv
+[09/15/2023-04:55:07] [TRT] [I] [GpuLayer] POINTWISE: PWN(PWN(/model.3/act/Sigmoid), /model.3/act/Mul)
+[09/15/2023-04:55:07] [TRT] [I] [GpuLayer] CONVOLUTION: /model.4/cv1/conv/Conv || /model.4/cv2/conv/Conv
+[09/15/2023-04:55:07] [TRT] [I] [GpuLayer] POINTWISE: PWN(PWN(/model.4/cv1/act/Sigmoid), /model.4/cv1/act/Mul)
+[09/15/2023-04:55:07] [TRT] [I] [GpuLayer] CONVOLUTION: /model.4/m/m.0/cv1/conv/Conv
+[09/15/2023-04:55:07] [TRT] [I] [GpuLayer] POINTWISE: PWN(PWN(/model.4/m/m.0/cv1/act/Sigmoid), /model.4/m/m.0/cv1/act/Mul)
+[09/15/2023-04:55:07] [TRT] [I] [GpuLayer] CONVOLUTION: /model.4/m/m.0/cv2/conv/Conv
+[09/15/2023-04:55:07] [TRT] [I] [GpuLayer] POINTWISE: PWN(PWN(PWN(/model.4/m/m.0/cv2/act/Sigmoid), /model.4/m/m.0/cv2/act/Mul), /model.4/m/m.0/Add)
+[09/15/2023-04:55:07] [TRT] [I] [GpuLayer] CONVOLUTION: /model.4/m/m.1/cv1/conv/Conv
+[09/15/2023-04:55:07] [TRT] [I] [GpuLayer] POINTWISE: PWN(PWN(/model.4/m/m.1/cv1/act/Sigmoid), /model.4/m/m.1/cv1/act/Mul)
+[09/15/2023-04:55:07] [TRT] [I] [GpuLayer] CONVOLUTION: /model.4/m/m.1/cv2/conv/Conv
+[09/15/2023-04:55:07] [TRT] [I] [GpuLayer] POINTWISE: PWN(PWN(PWN(/model.4/m/m.1/cv2/act/Sigmoid), /model.4/m/m.1/cv2/act/Mul), /model.4/m/m.1/Add)
+[09/15/2023-04:55:07] [TRT] [I] [GpuLayer] POINTWISE: PWN(PWN(/model.4/cv2/act/Sigmoid), /model.4/cv2/act/Mul)
+[09/15/2023-04:55:07] [TRT] [I] [GpuLayer] CONVOLUTION: /model.4/cv3/conv/Conv
+[09/15/2023-04:55:07] [TRT] [I] [GpuLayer] POINTWISE: PWN(PWN(/model.4/cv3/act/Sigmoid), /model.4/cv3/act/Mul)
+[09/15/2023-04:55:07] [TRT] [I] [GpuLayer] CONVOLUTION: /model.5/conv/Conv
+[09/15/2023-04:55:07] [TRT] [I] [GpuLayer] POINTWISE: PWN(PWN(/model.5/act/Sigmoid), /model.5/act/Mul)
+[09/15/2023-04:55:07] [TRT] [I] [GpuLayer] CONVOLUTION: /model.6/cv1/conv/Conv || /model.6/cv2/conv/Conv
+[09/15/2023-04:55:07] [TRT] [I] [GpuLayer] POINTWISE: PWN(PWN(/model.6/cv1/act/Sigmoid), /model.6/cv1/act/Mul)
+[09/15/2023-04:55:07] [TRT] [I] [GpuLayer] CONVOLUTION: /model.6/m/m.0/cv1/conv/Conv
+[09/15/2023-04:55:07] [TRT] [I] [GpuLayer] POINTWISE: PWN(PWN(/model.6/m/m.0/cv1/act/Sigmoid), /model.6/m/m.0/cv1/act/Mul)
+[09/15/2023-04:55:07] [TRT] [I] [GpuLayer] CONVOLUTION: /model.6/m/m.0/cv2/conv/Conv
+[09/15/2023-04:55:07] [TRT] [I] [GpuLayer] POINTWISE: PWN(PWN(PWN(/model.6/m/m.0/cv2/act/Sigmoid), /model.6/m/m.0/cv2/act/Mul), /model.6/m/m.0/Add)
+[09/15/2023-04:55:07] [TRT] [I] [GpuLayer] CONVOLUTION: /model.6/m/m.1/cv1/conv/Conv
+[09/15/2023-04:55:07] [TRT] [I] [GpuLayer] POINTWISE: PWN(PWN(/model.6/m/m.1/cv1/act/Sigmoid), /model.6/m/m.1/cv1/act/Mul)
+[09/15/2023-04:55:07] [TRT] [I] [GpuLayer] CONVOLUTION: /model.6/m/m.1/cv2/conv/Conv
+[09/15/2023-04:55:07] [TRT] [I] [GpuLayer] POINTWISE: PWN(PWN(PWN(/model.6/m/m.1/cv2/act/Sigmoid), /model.6/m/m.1/cv2/act/Mul), /model.6/m/m.1/Add)
+[09/15/2023-04:55:07] [TRT] [I] [GpuLayer] CONVOLUTION: /model.6/m/m.2/cv1/conv/Conv
+[09/15/2023-04:55:07] [TRT] [I] [GpuLayer] POINTWISE: PWN(PWN(/model.6/m/m.2/cv1/act/Sigmoid), /model.6/m/m.2/cv1/act/Mul)
+[09/15/2023-04:55:07] [TRT] [I] [GpuLayer] CONVOLUTION: /model.6/m/m.2/cv2/conv/Conv
+[09/15/2023-04:55:07] [TRT] [I] [GpuLayer] POINTWISE: PWN(PWN(PWN(/model.6/m/m.2/cv2/act/Sigmoid), /model.6/m/m.2/cv2/act/Mul), /model.6/m/m.2/Add)
+[09/15/2023-04:55:07] [TRT] [I] [GpuLayer] POINTWISE: PWN(PWN(/model.6/cv2/act/Sigmoid), /model.6/cv2/act/Mul)
+[09/15/2023-04:55:07] [TRT] [I] [GpuLayer] CONVOLUTION: /model.6/cv3/conv/Conv
+[09/15/2023-04:55:07] [TRT] [I] [GpuLayer] POINTWISE: PWN(PWN(/model.6/cv3/act/Sigmoid), /model.6/cv3/act/Mul)
+[09/15/2023-04:55:07] [TRT] [I] [GpuLayer] CONVOLUTION: /model.7/conv/Conv
+[09/15/2023-04:55:07] [TRT] [I] [GpuLayer] POINTWISE: PWN(PWN(/model.7/act/Sigmoid), /model.7/act/Mul)
+[09/15/2023-04:55:07] [TRT] [I] [GpuLayer] CONVOLUTION: /model.8/cv1/conv/Conv || /model.8/cv2/conv/Conv
+[09/15/2023-04:55:07] [TRT] [I] [GpuLayer] POINTWISE: PWN(PWN(/model.8/cv1/act/Sigmoid), /model.8/cv1/act/Mul)
+[09/15/2023-04:55:07] [TRT] [I] [GpuLayer] CONVOLUTION: /model.8/m/m.0/cv1/conv/Conv
+[09/15/2023-04:55:07] [TRT] [I] [GpuLayer] POINTWISE: PWN(PWN(/model.8/m/m.0/cv1/act/Sigmoid), /model.8/m/m.0/cv1/act/Mul)
+[09/15/2023-04:55:07] [TRT] [I] [GpuLayer] CONVOLUTION: /model.8/m/m.0/cv2/conv/Conv
+[09/15/2023-04:55:07] [TRT] [I] [GpuLayer] POINTWISE: PWN(PWN(PWN(/model.8/m/m.0/cv2/act/Sigmoid), /model.8/m/m.0/cv2/act/Mul), /model.8/m/m.0/Add)
+[09/15/2023-04:55:07] [TRT] [I] [GpuLayer] POINTWISE: PWN(PWN(/model.8/cv2/act/Sigmoid), /model.8/cv2/act/Mul)
+[09/15/2023-04:55:07] [TRT] [I] [GpuLayer] CONVOLUTION: /model.8/cv3/conv/Conv
+[09/15/2023-04:55:07] [TRT] [I] [GpuLayer] POINTWISE: PWN(PWN(/model.8/cv3/act/Sigmoid), /model.8/cv3/act/Mul)
+[09/15/2023-04:55:07] [TRT] [I] [GpuLayer] CONVOLUTION: /model.9/cv1/conv/Conv
+[09/15/2023-04:55:07] [TRT] [I] [GpuLayer] POINTWISE: PWN(PWN(/model.9/cv1/act/Sigmoid), /model.9/cv1/act/Mul)
+[09/15/2023-04:55:07] [TRT] [I] [GpuLayer] POOLING: /model.9/m/MaxPool
+[09/15/2023-04:55:07] [TRT] [I] [GpuLayer] POOLING: /model.9/m_1/MaxPool
+[09/15/2023-04:55:07] [TRT] [I] [GpuLayer] POOLING: /model.9/m_2/MaxPool
+[09/15/2023-04:55:07] [TRT] [I] [GpuLayer] COPY: /model.9/cv1/act/Mul_output_0 copy
+[09/15/2023-04:55:07] [TRT] [I] [GpuLayer] COPY: /model.9/m/MaxPool_output_0 copy
+[09/15/2023-04:55:07] [TRT] [I] [GpuLayer] COPY: /model.9/m_1/MaxPool_output_0 copy
+[09/15/2023-04:55:07] [TRT] [I] [GpuLayer] CONVOLUTION: /model.9/cv2/conv/Conv
+[09/15/2023-04:55:07] [TRT] [I] [GpuLayer] POINTWISE: PWN(PWN(/model.9/cv2/act/Sigmoid), /model.9/cv2/act/Mul)
+[09/15/2023-04:55:07] [TRT] [I] [GpuLayer] CONVOLUTION: /model.10/conv/Conv
+[09/15/2023-04:55:07] [TRT] [I] [GpuLayer] POINTWISE: PWN(PWN(/model.10/act/Sigmoid), /model.10/act/Mul)
+[09/15/2023-04:55:07] [TRT] [I] [GpuLayer] RESIZE: /model.11/Resize
+[09/15/2023-04:55:07] [TRT] [I] [GpuLayer] COPY: /model.11/Resize_output_0 copy
+[09/15/2023-04:55:07] [TRT] [I] [GpuLayer] CONVOLUTION: /model.13/cv1/conv/Conv || /model.13/cv2/conv/Conv
+[09/15/2023-04:55:07] [TRT] [I] [GpuLayer] POINTWISE: PWN(PWN(/model.13/cv1/act/Sigmoid), /model.13/cv1/act/Mul)
+[09/15/2023-04:55:07] [TRT] [I] [GpuLayer] CONVOLUTION: /model.13/m/m.0/cv1/conv/Conv
+[09/15/2023-04:55:07] [TRT] [I] [GpuLayer] POINTWISE: PWN(PWN(/model.13/m/m.0/cv1/act/Sigmoid), /model.13/m/m.0/cv1/act/Mul)
+[09/15/2023-04:55:07] [TRT] [I] [GpuLayer] CONVOLUTION: /model.13/m/m.0/cv2/conv/Conv
+[09/15/2023-04:55:07] [TRT] [I] [GpuLayer] POINTWISE: PWN(PWN(/model.13/m/m.0/cv2/act/Sigmoid), /model.13/m/m.0/cv2/act/Mul)
+[09/15/2023-04:55:07] [TRT] [I] [GpuLayer] POINTWISE: PWN(PWN(/model.13/cv2/act/Sigmoid), /model.13/cv2/act/Mul)
+[09/15/2023-04:55:07] [TRT] [I] [GpuLayer] CONVOLUTION: /model.13/cv3/conv/Conv
+[09/15/2023-04:55:07] [TRT] [I] [GpuLayer] POINTWISE: PWN(PWN(/model.13/cv3/act/Sigmoid), /model.13/cv3/act/Mul)
+[09/15/2023-04:55:07] [TRT] [I] [GpuLayer] CONVOLUTION: /model.14/conv/Conv
+[09/15/2023-04:55:07] [TRT] [I] [GpuLayer] POINTWISE: PWN(PWN(/model.14/act/Sigmoid), /model.14/act/Mul)
+[09/15/2023-04:55:07] [TRT] [I] [GpuLayer] RESIZE: /model.15/Resize
+[09/15/2023-04:55:07] [TRT] [I] [GpuLayer] COPY: /model.15/Resize_output_0 copy
+[09/15/2023-04:55:07] [TRT] [I] [GpuLayer] CONVOLUTION: /model.17/cv1/conv/Conv || /model.17/cv2/conv/Conv
+[09/15/2023-04:55:07] [TRT] [I] [GpuLayer] POINTWISE: PWN(PWN(/model.17/cv1/act/Sigmoid), /model.17/cv1/act/Mul)
+[09/15/2023-04:55:07] [TRT] [I] [GpuLayer] CONVOLUTION: /model.17/m/m.0/cv1/conv/Conv
+[09/15/2023-04:55:07] [TRT] [I] [GpuLayer] POINTWISE: PWN(PWN(/model.17/m/m.0/cv1/act/Sigmoid), /model.17/m/m.0/cv1/act/Mul)
+[09/15/2023-04:55:07] [TRT] [I] [GpuLayer] CONVOLUTION: /model.17/m/m.0/cv2/conv/Conv
+[09/15/2023-04:55:07] [TRT] [I] [GpuLayer] POINTWISE: PWN(PWN(/model.17/m/m.0/cv2/act/Sigmoid), /model.17/m/m.0/cv2/act/Mul)
+[09/15/2023-04:55:07] [TRT] [I] [GpuLayer] POINTWISE: PWN(PWN(/model.17/cv2/act/Sigmoid), /model.17/cv2/act/Mul)
+[09/15/2023-04:55:07] [TRT] [I] [GpuLayer] CONVOLUTION: /model.17/cv3/conv/Conv
+[09/15/2023-04:55:07] [TRT] [I] [GpuLayer] POINTWISE: PWN(PWN(/model.17/cv3/act/Sigmoid), /model.17/cv3/act/Mul)
+[09/15/2023-04:55:07] [TRT] [I] [GpuLayer] CONVOLUTION: /model.18/conv/Conv
+[09/15/2023-04:55:07] [TRT] [I] [GpuLayer] POINTWISE: PWN(PWN(/model.18/act/Sigmoid), /model.18/act/Mul)
+[09/15/2023-04:55:07] [TRT] [I] [GpuLayer] COPY: /model.14/act/Mul_output_0 copy
+[09/15/2023-04:55:07] [TRT] [I] [GpuLayer] CONVOLUTION: /model.20/cv1/conv/Conv || /model.20/cv2/conv/Conv
+[09/15/2023-04:55:07] [TRT] [I] [GpuLayer] POINTWISE: PWN(PWN(/model.20/cv1/act/Sigmoid), /model.20/cv1/act/Mul)
+[09/15/2023-04:55:07] [TRT] [I] [GpuLayer] CONVOLUTION: /model.20/m/m.0/cv1/conv/Conv
+[09/15/2023-04:55:07] [TRT] [I] [GpuLayer] POINTWISE: PWN(PWN(/model.20/m/m.0/cv1/act/Sigmoid), /model.20/m/m.0/cv1/act/Mul)
+[09/15/2023-04:55:07] [TRT] [I] [GpuLayer] CONVOLUTION: /model.20/m/m.0/cv2/conv/Conv
+[09/15/2023-04:55:07] [TRT] [I] [GpuLayer] POINTWISE: PWN(PWN(/model.20/m/m.0/cv2/act/Sigmoid), /model.20/m/m.0/cv2/act/Mul)
+[09/15/2023-04:55:07] [TRT] [I] [GpuLayer] POINTWISE: PWN(PWN(/model.20/cv2/act/Sigmoid), /model.20/cv2/act/Mul)
+[09/15/2023-04:55:07] [TRT] [I] [GpuLayer] CONVOLUTION: /model.20/cv3/conv/Conv
+[09/15/2023-04:55:07] [TRT] [I] [GpuLayer] POINTWISE: PWN(PWN(/model.20/cv3/act/Sigmoid), /model.20/cv3/act/Mul)
+[09/15/2023-04:55:07] [TRT] [I] [GpuLayer] CONVOLUTION: /model.21/conv/Conv
+[09/15/2023-04:55:07] [TRT] [I] [GpuLayer] POINTWISE: PWN(PWN(/model.21/act/Sigmoid), /model.21/act/Mul)
+[09/15/2023-04:55:07] [TRT] [I] [GpuLayer] COPY: /model.10/act/Mul_output_0 copy
+[09/15/2023-04:55:07] [TRT] [I] [GpuLayer] CONVOLUTION: /model.23/cv1/conv/Conv || /model.23/cv2/conv/Conv
+[09/15/2023-04:55:07] [TRT] [I] [GpuLayer] POINTWISE: PWN(PWN(/model.23/cv1/act/Sigmoid), /model.23/cv1/act/Mul)
+[09/15/2023-04:55:07] [TRT] [I] [GpuLayer] CONVOLUTION: /model.23/m/m.0/cv1/conv/Conv
+[09/15/2023-04:55:07] [TRT] [I] [GpuLayer] POINTWISE: PWN(PWN(/model.23/m/m.0/cv1/act/Sigmoid), /model.23/m/m.0/cv1/act/Mul)
+[09/15/2023-04:55:07] [TRT] [I] [GpuLayer] CONVOLUTION: /model.23/m/m.0/cv2/conv/Conv
+[09/15/2023-04:55:07] [TRT] [I] [GpuLayer] POINTWISE: PWN(PWN(/model.23/m/m.0/cv2/act/Sigmoid), /model.23/m/m.0/cv2/act/Mul)
+[09/15/2023-04:55:07] [TRT] [I] [GpuLayer] POINTWISE: PWN(PWN(/model.23/cv2/act/Sigmoid), /model.23/cv2/act/Mul)
+[09/15/2023-04:55:07] [TRT] [I] [GpuLayer] CONVOLUTION: /model.23/cv3/conv/Conv
+[09/15/2023-04:55:07] [TRT] [I] [GpuLayer] POINTWISE: PWN(PWN(/model.23/cv3/act/Sigmoid), /model.23/cv3/act/Mul)
+[09/15/2023-04:55:07] [TRT] [I] [GpuLayer] CONVOLUTION: /model.24/m.0/Conv
+[09/15/2023-04:55:07] [TRT] [I] [GpuLayer] SHUFFLE: /model.24/Reshape + /model.24/Transpose
+[09/15/2023-04:55:07] [TRT] [I] [GpuLayer] POINTWISE: PWN(/model.24/Sigmoid)
+[09/15/2023-04:55:07] [TRT] [I] [GpuLayer] SLICE: /model.24/Split
+[09/15/2023-04:55:07] [TRT] [I] [GpuLayer] SLICE: /model.24/Split_0
+[09/15/2023-04:55:07] [TRT] [I] [GpuLayer] SLICE: /model.24/Split_1
+[09/15/2023-04:55:07] [TRT] [I] [GpuLayer] CONSTANT: /model.24/Constant_2_output_0
+[09/15/2023-04:55:07] [TRT] [I] [GpuLayer] POINTWISE: PWN(PWN(/model.24/Constant_1_output_0 + (Unnamed Layer* 204) [Shuffle] + /model.24/Mul, /model.24/Add), /model.24/Constant_3_output_0 + (Unnamed Layer* 209) [Shuffle] + /model.24/Mul_1)
+[09/15/2023-04:55:07] [TRT] [I] [GpuLayer] CONSTANT: /model.24/Constant_6_output_0
+[09/15/2023-04:55:07] [TRT] [I] [GpuLayer] POINTWISE: PWN(PWN(/model.24/Constant_5_output_0 + (Unnamed Layer* 215) [Shuffle], PWN(/model.24/Constant_4_output_0 + (Unnamed Layer* 212) [Shuffle] + /model.24/Mul_2, /model.24/Pow)), /model.24/Mul_3)
+[09/15/2023-04:55:07] [TRT] [I] [GpuLayer] COPY: /model.24/Mul_1_output_0 copy
+[09/15/2023-04:55:07] [TRT] [I] [GpuLayer] COPY: /model.24/Mul_3_output_0 copy
+[09/15/2023-04:55:07] [TRT] [I] [GpuLayer] SHUFFLE: /model.24/Reshape_1
+[09/15/2023-04:55:07] [TRT] [I] [GpuLayer] COPY: /model.24/Reshape_1_copy_output
+[09/15/2023-04:55:07] [TRT] [I] [GpuLayer] CONVOLUTION: /model.24/m.1/Conv
+[09/15/2023-04:55:07] [TRT] [I] [GpuLayer] SHUFFLE: /model.24/Reshape_2 + /model.24/Transpose_1
+[09/15/2023-04:55:07] [TRT] [I] [GpuLayer] POINTWISE: PWN(/model.24/Sigmoid_1)
+[09/15/2023-04:55:07] [TRT] [I] [GpuLayer] SLICE: /model.24/Split_1_4
+[09/15/2023-04:55:07] [TRT] [I] [GpuLayer] SLICE: /model.24/Split_1_5
+[09/15/2023-04:55:07] [TRT] [I] [GpuLayer] SLICE: /model.24/Split_1_6
+[09/15/2023-04:55:07] [TRT] [I] [GpuLayer] CONSTANT: /model.24/Constant_10_output_0
+[09/15/2023-04:55:07] [TRT] [I] [GpuLayer] POINTWISE: PWN(PWN(/model.24/Constant_9_output_0 + (Unnamed Layer* 229) [Shuffle] + /model.24/Mul_4, /model.24/Add_1), /model.24/Constant_11_output_0 + (Unnamed Layer* 234) [Shuffle] + /model.24/Mul_5)
+[09/15/2023-04:55:07] [TRT] [I] [GpuLayer] CONSTANT: /model.24/Constant_14_output_0
+[09/15/2023-04:55:07] [TRT] [I] [GpuLayer] POINTWISE: PWN(PWN(/model.24/Constant_13_output_0 + (Unnamed Layer* 240) [Shuffle], PWN(/model.24/Constant_12_output_0 + (Unnamed Layer* 237) [Shuffle] + /model.24/Mul_6, /model.24/Pow_1)), /model.24/Mul_7)
+[09/15/2023-04:55:07] [TRT] [I] [GpuLayer] COPY: /model.24/Mul_5_output_0 copy
+[09/15/2023-04:55:07] [TRT] [I] [GpuLayer] COPY: /model.24/Mul_7_output_0 copy
+[09/15/2023-04:55:07] [TRT] [I] [GpuLayer] SHUFFLE: /model.24/Reshape_3
+[09/15/2023-04:55:07] [TRT] [I] [GpuLayer] COPY: /model.24/Reshape_3_copy_output
+[09/15/2023-04:55:07] [TRT] [I] [GpuLayer] CONVOLUTION: /model.24/m.2/Conv
+[09/15/2023-04:55:07] [TRT] [I] [GpuLayer] SHUFFLE: /model.24/Reshape_4 + /model.24/Transpose_2
+[09/15/2023-04:55:07] [TRT] [I] [GpuLayer] POINTWISE: PWN(/model.24/Sigmoid_2)
+[09/15/2023-04:55:07] [TRT] [I] [GpuLayer] SLICE: /model.24/Split_2
+[09/15/2023-04:55:07] [TRT] [I] [GpuLayer] SLICE: /model.24/Split_2_9
+[09/15/2023-04:55:07] [TRT] [I] [GpuLayer] SLICE: /model.24/Split_2_10
+[09/15/2023-04:55:07] [TRT] [I] [GpuLayer] CONSTANT: /model.24/Constant_18_output_0
+[09/15/2023-04:55:07] [TRT] [I] [GpuLayer] POINTWISE: PWN(PWN(/model.24/Constant_17_output_0 + (Unnamed Layer* 254) [Shuffle] + /model.24/Mul_8, /model.24/Add_2), /model.24/Constant_19_output_0 + (Unnamed Layer* 259) [Shuffle] + /model.24/Mul_9)
+[09/15/2023-04:55:07] [TRT] [I] [GpuLayer] CONSTANT: /model.24/Constant_22_output_0
+[09/15/2023-04:55:07] [TRT] [I] [GpuLayer] POINTWISE: PWN(PWN(/model.24/Constant_21_output_0 + (Unnamed Layer* 265) [Shuffle], PWN(/model.24/Constant_20_output_0 + (Unnamed Layer* 262) [Shuffle] + /model.24/Mul_10, /model.24/Pow_2)), /model.24/Mul_11)
+[09/15/2023-04:55:07] [TRT] [I] [GpuLayer] COPY: /model.24/Mul_9_output_0 copy
+[09/15/2023-04:55:07] [TRT] [I] [GpuLayer] COPY: /model.24/Mul_11_output_0 copy
+[09/15/2023-04:55:07] [TRT] [I] [GpuLayer] SHUFFLE: /model.24/Reshape_5
+[09/15/2023-04:55:07] [TRT] [I] [GpuLayer] COPY: /model.24/Reshape_5_copy_output
+[09/15/2023-04:55:07] [TRT] [I] [MemUsageChange] Init cuBLAS/cuBLASLt: CPU +0, GPU +8, now: CPU 1705, GPU 7875 (MiB)
+[09/15/2023-04:55:07] [TRT] [I] [MemUsageChange] Init cuDNN: CPU +0, GPU +9, now: CPU 1705, GPU 7884 (MiB)
+[09/15/2023-04:55:07] [TRT] [I] Local timing cache in use. Profiling results in this builder pass will not be stored.
+[09/15/2023-05:00:32] [TRT] [I] Some tactics do not have sufficient workspace memory to run. Increasing workspace size will enable more tactics, please check verbose output for requested sizes.
+[09/15/2023-05:05:52] [TRT] [I] [GraphReduction] The approximate region cut reduction algorithm is called.
+[09/15/2023-05:05:53] [TRT] [I] Total Activation Memory: 4547552256
+[09/15/2023-05:05:53] [TRT] [I] Detected 1 inputs and 4 output network tensors.
+[09/15/2023-05:05:53] [TRT] [I] Total Host Persistent Memory: 143584
+[09/15/2023-05:05:53] [TRT] [I] Total Device Persistent Memory: 1747968
+[09/15/2023-05:05:53] [TRT] [I] Total Scratch Memory: 6528000
+[09/15/2023-05:05:53] [TRT] [I] [MemUsageStats] Peak memory usage of TRT CPU/GPU memory allocators: CPU 9 MiB, GPU 2186 MiB
+[09/15/2023-05:05:53] [TRT] [I] [BlockAssignment] Started assigning block shifts. This will take 148 steps to complete.
+[09/15/2023-05:05:53] [TRT] [I] [BlockAssignment] Algorithm ShiftNTopDown took 37.411ms to assign 7 blocks to 148 nodes requiring 38912000 bytes.
+[09/15/2023-05:05:53] [TRT] [I] Total Activation Memory: 38912000
+[09/15/2023-05:05:53] [TRT] [I] [MemUsageChange] TensorRT-managed allocation in building engine: CPU +3, GPU +65, now: CPU 3, GPU 65 (MiB)
+[91m../export.py:305: DeprecationWarning: Use build_serialized_network instead.
+  with builder.build_engine(network, config) as engine, open(f, 'wb') as t:
+[34m[1mTensorRT:[0m export success ✅ 659.9s, saved as yolov5s.engine (34.8 MB)
+[0m[91m
+Export complete (692.2s)
+Results saved to [1m/workspace/src/smap/smap_perception/detectors/smap_yolo_v5/weights[0m
+Detect:          python detect.py --weights yolov5s.engine 
+Validate:        python val.py --weights yolov5s.engine 
+PyTorch Hub:     model = torch.hub.load('ultralytics/yolov5', 'custom', 'yolov5s.engine')  
+Visualize:       https://netron.app
+[0m====== Diagnostic Run torch.onnx.export version 2.0.0a0+ec3941ad.nv23.02 =======
+verbose: False, log level: Level.ERROR
+======================= 0 NONE 0 NOTE 0 WARNING 0 ERROR ========================
+
+---</ultralitics_yolo_v5_install.bash>---
+Starting >>> smap_interfaces
+[Processing: smap_interfaces]
+[Processing: smap_interfaces]
+[Processing: smap_interfaces]
+--- output: smap_interfaces
+-- The C compiler identification is GNU 9.4.0
+-- The CXX compiler identification is GNU 9.4.0
+-- Detecting C compiler ABI info
+-- Detecting C compiler ABI info - done
+-- Check for working C compiler: /usr/bin/cc - skipped
+-- Detecting C compile features
+-- Detecting C compile features - done
+-- Detecting CXX compiler ABI info
+-- Detecting CXX compiler ABI info - done
+-- Check for working CXX compiler: /usr/bin/c++ - skipped
+-- Detecting CXX compile features
+-- Detecting CXX compile features - done
+-- Found ament_cmake: 0.9.11 (/opt/ros/foxy/install/share/ament_cmake/cmake)
+-- Found PythonInterp: /usr/bin/python3 (found suitable version "3.8.10", minimum required is "3") 
+-- Using PYTHON_EXECUTABLE: /usr/bin/python3
+-- Override CMake install command with custom implementation using symlinks instead of copying resources
+-- Found builtin_interfaces: 1.0.0 (/opt/ros/foxy/install/share/builtin_interfaces/cmake)
+-- Using all available rosidl_typesupport_c: rosidl_typesupport_fastrtps_c;rosidl_typesupport_introspection_c
+-- Found rosidl_adapter: 1.3.0 (/opt/ros/foxy/install/share/rosidl_adapter/cmake)
+-- Found OpenSSL: /usr/lib/aarch64-linux-gnu/libcrypto.so (found version "1.1.1f")  
+-- Found FastRTPS: /opt/ros/foxy/install/include  
+-- Using all available rosidl_typesupport_cpp: rosidl_typesupport_fastrtps_cpp;rosidl_typesupport_introspection_cpp
+-- Found rosidl_default_generators: 1.0.1 (/opt/ros/foxy/install/share/rosidl_default_generators/cmake)
+-- Found std_msgs: 2.0.5 (/opt/ros/foxy/install/share/std_msgs/cmake)
+-- Found sensor_msgs: 2.0.5 (/opt/ros/foxy/install/share/sensor_msgs/cmake)
+-- Found PythonInterp: /usr/bin/python3 (found version "3.8.10") 
+-- Found ament_cmake_ros: 0.9.2 (/opt/ros/foxy/install/share/ament_cmake_ros/cmake)
+-- Using all available rosidl_typesupport_c: rosidl_typesupport_fastrtps_c;rosidl_typesupport_introspection_c
+-- Using all available rosidl_typesupport_cpp: rosidl_typesupport_fastrtps_cpp;rosidl_typesupport_introspection_cpp
+-- Found PythonInterp: /usr/bin/python3 (found suitable version "3.8.10", minimum required is "3.5") 
+-- Found python_cmake_module: 0.8.1 (/opt/ros/foxy/install/share/python_cmake_module/cmake)
+-- Found PythonLibs: /usr/lib/aarch64-linux-gnu/libpython3.8.so (found suitable version "3.8.10", minimum required is "3.5") 
+-- Using PYTHON_EXECUTABLE: /usr/bin/python3
+-- Using PYTHON_INCLUDE_DIRS: /usr/include/python3.8
+-- Using PYTHON_LIBRARIES: /usr/lib/aarch64-linux-gnu/libpython3.8.so
+-- Found PythonExtra: .so  
+-- Configuring done (27.5s)
+-- Generating done (1.4s)
+-- Build files have been written to: /workspace/build/smap_interfaces
+[  1%] Generating C code for ROS interfaces
+[  1%] Generating C++ code for ROS interfaces
+[  1%] Built target smap_interfaces__cpp
+[  2%] Generating C++ type support for eProsima Fast-RTPS
+[  3%] Generating C++ type support dispatch for ROS interfaces
+[  4%] Generating C++ introspection for ROS interfaces
+[  5%] Building C object CMakeFiles/smap_interfaces__rosidl_generator_c.dir/rosidl_generator_c/smap_interfaces/msg/detail/smap_data__functions.c.o
+[  6%] Building C object CMakeFiles/smap_interfaces__rosidl_generator_c.dir/rosidl_generator_c/smap_interfaces/msg/detail/smap_object__functions.c.o
+[  8%] Building C object CMakeFiles/smap_interfaces__rosidl_generator_c.dir/rosidl_generator_c/smap_interfaces/msg/detail/smap_detections__functions.c.o
+[  9%] Building C object CMakeFiles/smap_interfaces__rosidl_generator_c.dir/rosidl_generator_c/smap_interfaces/msg/detail/smap_observation__functions.c.o
+[  9%] Building C object CMakeFiles/smap_interfaces__rosidl_generator_c.dir/rosidl_generator_c/smap_interfaces/msg/detail/smap_detection_debug__functions.c.o
+[ 10%] Building C object CMakeFiles/smap_interfaces__rosidl_generator_c.dir/rosidl_generator_c/smap_interfaces/msg/detail/bounding_box2_d__functions.c.o
+[ 11%] Building C object CMakeFiles/smap_interfaces__rosidl_generator_c.dir/rosidl_generator_c/smap_interfaces/msg/detail/depth_map__functions.c.o
+[ 12%] Building C object CMakeFiles/smap_interfaces__rosidl_generator_c.dir/rosidl_generator_c/smap_interfaces/msg/detail/bounding_box3_d__functions.c.o
+[ 13%] Building C object CMakeFiles/smap_interfaces__rosidl_generator_c.dir/rosidl_generator_c/smap_interfaces/srv/detail/add_perception_module__functions.c.o
+[ 14%] Building C object CMakeFiles/smap_interfaces__rosidl_generator_c.dir/rosidl_generator_c/smap_interfaces/srv/detail/smap_classes__functions.c.o
+[ 15%] Linking C shared library libsmap_interfaces__rosidl_generator_c.so
+[ 15%] Built target smap_interfaces__rosidl_generator_c
+[ 16%] Generating C type support dispatch for ROS interfaces
+[ 17%] Generating C introspection for ROS interfaces
+[ 18%] Building CXX object CMakeFiles/smap_interfaces__rosidl_typesupport_cpp.dir/rosidl_typesupport_cpp/smap_interfaces/msg/smap_data__type_support.cpp.o
+[ 19%] Building CXX object CMakeFiles/smap_interfaces__rosidl_typesupport_cpp.dir/rosidl_typesupport_cpp/smap_interfaces/msg/smap_object__type_support.cpp.o
+[ 20%] Building CXX object CMakeFiles/smap_interfaces__rosidl_typesupport_cpp.dir/rosidl_typesupport_cpp/smap_interfaces/msg/smap_observation__type_support.cpp.o
+[ 21%] Building CXX object CMakeFiles/smap_interfaces__rosidl_typesupport_cpp.dir/rosidl_typesupport_cpp/smap_interfaces/msg/smap_detections__type_support.cpp.o
+[ 22%] Building CXX object CMakeFiles/smap_interfaces__rosidl_typesupport_introspection_cpp.dir/rosidl_typesupport_introspection_cpp/smap_interfaces/msg/detail/smap_data__type_support.cpp.o
+[ 23%] Building CXX object CMakeFiles/smap_interfaces__rosidl_typesupport_fastrtps_cpp.dir/rosidl_typesupport_fastrtps_cpp/smap_interfaces/msg/detail/dds_fastrtps/smap_data__type_support.cpp.o
+[ 24%] Building CXX object CMakeFiles/smap_interfaces__rosidl_typesupport_cpp.dir/rosidl_typesupport_cpp/smap_interfaces/msg/smap_detection_debug__type_support.cpp.o
+[ 25%] Building CXX object CMakeFiles/smap_interfaces__rosidl_typesupport_cpp.dir/rosidl_typesupport_cpp/smap_interfaces/msg/bounding_box2_d__type_support.cpp.o
+[ 27%] Building CXX object CMakeFiles/smap_interfaces__rosidl_typesupport_cpp.dir/rosidl_typesupport_cpp/smap_interfaces/msg/depth_map__type_support.cpp.o
+[ 27%] Building CXX object CMakeFiles/smap_interfaces__rosidl_typesupport_cpp.dir/rosidl_typesupport_cpp/smap_interfaces/msg/bounding_box3_d__type_support.cpp.o
+[ 28%] Building CXX object CMakeFiles/smap_interfaces__rosidl_typesupport_c.dir/rosidl_typesupport_c/smap_interfaces/msg/smap_data__type_support.cpp.o
+[ 29%] Building CXX object CMakeFiles/smap_interfaces__rosidl_typesupport_introspection_cpp.dir/rosidl_typesupport_introspection_cpp/smap_interfaces/msg/detail/smap_object__type_support.cpp.o
+[ 30%] Building CXX object CMakeFiles/smap_interfaces__rosidl_typesupport_c.dir/rosidl_typesupport_c/smap_interfaces/msg/smap_object__type_support.cpp.o
+[ 31%] Building CXX object CMakeFiles/smap_interfaces__rosidl_typesupport_c.dir/rosidl_typesupport_c/smap_interfaces/msg/smap_observation__type_support.cpp.o
+[ 32%] Building CXX object CMakeFiles/smap_interfaces__rosidl_typesupport_c.dir/rosidl_typesupport_c/smap_interfaces/msg/smap_detections__type_support.cpp.o
+[ 33%] Building C object CMakeFiles/smap_interfaces__rosidl_typesupport_introspection_c.dir/rosidl_typesupport_introspection_c/smap_interfaces/msg/detail/smap_data__type_support.c.o
+[ 34%] Building CXX object CMakeFiles/smap_interfaces__rosidl_typesupport_c.dir/rosidl_typesupport_c/smap_interfaces/msg/smap_detection_debug__type_support.cpp.o
+[ 35%] Building CXX object CMakeFiles/smap_interfaces__rosidl_typesupport_cpp.dir/rosidl_typesupport_cpp/smap_interfaces/srv/add_perception_module__type_support.cpp.o
+[ 37%] Building C object CMakeFiles/smap_interfaces__rosidl_typesupport_introspection_c.dir/rosidl_typesupport_introspection_c/smap_interfaces/msg/detail/smap_object__type_support.c.o
+[ 37%] Building CXX object CMakeFiles/smap_interfaces__rosidl_typesupport_cpp.dir/rosidl_typesupport_cpp/smap_interfaces/srv/smap_classes__type_support.cpp.o
+[ 38%] Building C object CMakeFiles/smap_interfaces__rosidl_typesupport_introspection_c.dir/rosidl_typesupport_introspection_c/smap_interfaces/msg/detail/smap_observation__type_support.c.o
+[ 39%] Building C object CMakeFiles/smap_interfaces__rosidl_typesupport_introspection_c.dir/rosidl_typesupport_introspection_c/smap_interfaces/msg/detail/smap_detections__type_support.c.o
+[ 40%] Building CXX object CMakeFiles/smap_interfaces__rosidl_typesupport_c.dir/rosidl_typesupport_c/smap_interfaces/msg/bounding_box2_d__type_support.cpp.o
+[ 41%] Building C object CMakeFiles/smap_interfaces__rosidl_typesupport_introspection_c.dir/rosidl_typesupport_introspection_c/smap_interfaces/msg/detail/smap_detection_debug__type_support.c.o
+[ 42%] Building CXX object CMakeFiles/smap_interfaces__rosidl_typesupport_c.dir/rosidl_typesupport_c/smap_interfaces/msg/bounding_box3_d__type_support.cpp.o
+[ 43%] Building C object CMakeFiles/smap_interfaces__rosidl_typesupport_introspection_c.dir/rosidl_typesupport_introspection_c/smap_interfaces/msg/detail/bounding_box2_d__type_support.c.o
+[ 44%] Building C object CMakeFiles/smap_interfaces__rosidl_typesupport_introspection_c.dir/rosidl_typesupport_introspection_c/smap_interfaces/msg/detail/bounding_box3_d__type_support.c.o
+[ 45%] Building CXX object CMakeFiles/smap_interfaces__rosidl_typesupport_fastrtps_cpp.dir/rosidl_typesupport_fastrtps_cpp/smap_interfaces/msg/detail/dds_fastrtps/smap_object__type_support.cpp.o
+[ 46%] Building C object CMakeFiles/smap_interfaces__rosidl_typesupport_introspection_c.dir/rosidl_typesupport_introspection_c/smap_interfaces/msg/detail/depth_map__type_support.c.o
+[ 47%] Building CXX object CMakeFiles/smap_interfaces__rosidl_typesupport_c.dir/rosidl_typesupport_c/smap_interfaces/msg/depth_map__type_support.cpp.o
+[ 47%] Building CXX object CMakeFiles/smap_interfaces__rosidl_typesupport_c.dir/rosidl_typesupport_c/smap_interfaces/srv/add_perception_module__type_support.cpp.o
+[ 48%] Building CXX object CMakeFiles/smap_interfaces__rosidl_typesupport_c.dir/rosidl_typesupport_c/smap_interfaces/srv/smap_classes__type_support.cpp.o
+[ 49%] Building C object CMakeFiles/smap_interfaces__rosidl_typesupport_introspection_c.dir/rosidl_typesupport_introspection_c/smap_interfaces/srv/detail/add_perception_module__type_support.c.o
+[ 50%] Building C object CMakeFiles/smap_interfaces__rosidl_typesupport_introspection_c.dir/rosidl_typesupport_introspection_c/smap_interfaces/srv/detail/smap_classes__type_support.c.o
+[ 50%] Building CXX object CMakeFiles/smap_interfaces__rosidl_typesupport_fastrtps_cpp.dir/rosidl_typesupport_fastrtps_cpp/smap_interfaces/msg/detail/dds_fastrtps/smap_observation__type_support.cpp.o
+[ 51%] Linking CXX shared library libsmap_interfaces__rosidl_typesupport_c.so
+[ 52%] Building CXX object CMakeFiles/smap_interfaces__rosidl_typesupport_introspection_cpp.dir/rosidl_typesupport_introspection_cpp/smap_interfaces/msg/detail/smap_observation__type_support.cpp.o
+[ 53%] Linking C shared library libsmap_interfaces__rosidl_typesupport_introspection_c.so
+[ 53%] Built target smap_interfaces__rosidl_typesupport_c
+[ 54%] Building CXX object CMakeFiles/smap_interfaces__rosidl_typesupport_introspection_cpp.dir/rosidl_typesupport_introspection_cpp/smap_interfaces/msg/detail/smap_detections__type_support.cpp.o
+[ 54%] Built target smap_interfaces__rosidl_typesupport_introspection_c
+[ 55%] Building CXX object CMakeFiles/smap_interfaces__rosidl_typesupport_introspection_cpp.dir/rosidl_typesupport_introspection_cpp/smap_interfaces/msg/detail/smap_detection_debug__type_support.cpp.o
+[ 56%] Building CXX object CMakeFiles/smap_interfaces__rosidl_typesupport_fastrtps_cpp.dir/rosidl_typesupport_fastrtps_cpp/smap_interfaces/msg/detail/dds_fastrtps/smap_detections__type_support.cpp.o
+[ 57%] Building CXX object CMakeFiles/smap_interfaces__rosidl_typesupport_fastrtps_cpp.dir/rosidl_typesupport_fastrtps_cpp/smap_interfaces/msg/detail/dds_fastrtps/smap_detection_debug__type_support.cpp.o
+[ 58%] Linking CXX shared library libsmap_interfaces__rosidl_typesupport_cpp.so
+[ 58%] Built target smap_interfaces__rosidl_typesupport_cpp
+[ 59%] Building CXX object CMakeFiles/smap_interfaces__rosidl_typesupport_fastrtps_cpp.dir/rosidl_typesupport_fastrtps_cpp/smap_interfaces/msg/detail/dds_fastrtps/bounding_box2_d__type_support.cpp.o
+[ 60%] Building CXX object CMakeFiles/smap_interfaces__rosidl_typesupport_fastrtps_cpp.dir/rosidl_typesupport_fastrtps_cpp/smap_interfaces/msg/detail/dds_fastrtps/bounding_box3_d__type_support.cpp.o
+[ 61%] Building CXX object CMakeFiles/smap_interfaces__rosidl_typesupport_introspection_cpp.dir/rosidl_typesupport_introspection_cpp/smap_interfaces/msg/detail/bounding_box2_d__type_support.cpp.o
+[ 62%] Building CXX object CMakeFiles/smap_interfaces__rosidl_typesupport_introspection_cpp.dir/rosidl_typesupport_introspection_cpp/smap_interfaces/msg/detail/bounding_box3_d__type_support.cpp.o
+[ 63%] Building CXX object CMakeFiles/smap_interfaces__rosidl_typesupport_fastrtps_cpp.dir/rosidl_typesupport_fastrtps_cpp/smap_interfaces/msg/detail/dds_fastrtps/depth_map__type_support.cpp.o
+[ 64%] Building CXX object CMakeFiles/smap_interfaces__rosidl_typesupport_fastrtps_cpp.dir/rosidl_typesupport_fastrtps_cpp/smap_interfaces/srv/detail/dds_fastrtps/add_perception_module__type_support.cpp.o
+[ 65%] Building CXX object CMakeFiles/smap_interfaces__rosidl_typesupport_fastrtps_cpp.dir/rosidl_typesupport_fastrtps_cpp/smap_interfaces/srv/detail/dds_fastrtps/smap_classes__type_support.cpp.o
+[ 66%] Building CXX object CMakeFiles/smap_interfaces__rosidl_typesupport_introspection_cpp.dir/rosidl_typesupport_introspection_cpp/smap_interfaces/msg/detail/depth_map__type_support.cpp.o
+[ 67%] Building CXX object CMakeFiles/smap_interfaces__rosidl_typesupport_introspection_cpp.dir/rosidl_typesupport_introspection_cpp/smap_interfaces/srv/detail/add_perception_module__type_support.cpp.o
+[ 68%] Building CXX object CMakeFiles/smap_interfaces__rosidl_typesupport_introspection_cpp.dir/rosidl_typesupport_introspection_cpp/smap_interfaces/srv/detail/smap_classes__type_support.cpp.o
+[ 69%] Linking CXX shared library libsmap_interfaces__rosidl_typesupport_introspection_cpp.so
+[ 69%] Built target smap_interfaces__rosidl_typesupport_introspection_cpp
+[ 70%] Linking CXX shared library libsmap_interfaces__rosidl_typesupport_fastrtps_cpp.so
+[ 70%] Built target smap_interfaces__rosidl_typesupport_fastrtps_cpp
+[ 71%] Generating C type support for eProsima Fast-RTPS
+[ 72%] Building CXX object CMakeFiles/smap_interfaces__rosidl_typesupport_fastrtps_c.dir/rosidl_typesupport_fastrtps_c/smap_interfaces/msg/detail/smap_data__type_support_c.cpp.o
+[ 74%] Building CXX object CMakeFiles/smap_interfaces__rosidl_typesupport_fastrtps_c.dir/rosidl_typesupport_fastrtps_c/smap_interfaces/msg/detail/smap_observation__type_support_c.cpp.o
+[ 74%] Building CXX object CMakeFiles/smap_interfaces__rosidl_typesupport_fastrtps_c.dir/rosidl_typesupport_fastrtps_c/smap_interfaces/msg/detail/smap_object__type_support_c.cpp.o
+[ 75%] Building CXX object CMakeFiles/smap_interfaces__rosidl_typesupport_fastrtps_c.dir/rosidl_typesupport_fastrtps_c/smap_interfaces/msg/detail/smap_detections__type_support_c.cpp.o
+[ 76%] Building CXX object CMakeFiles/smap_interfaces__rosidl_typesupport_fastrtps_c.dir/rosidl_typesupport_fastrtps_c/smap_interfaces/msg/detail/smap_detection_debug__type_support_c.cpp.o
+[ 77%] Building CXX object CMakeFiles/smap_interfaces__rosidl_typesupport_fastrtps_c.dir/rosidl_typesupport_fastrtps_c/smap_interfaces/msg/detail/bounding_box2_d__type_support_c.cpp.o
+[ 78%] Building CXX object CMakeFiles/smap_interfaces__rosidl_typesupport_fastrtps_c.dir/rosidl_typesupport_fastrtps_c/smap_interfaces/msg/detail/bounding_box3_d__type_support_c.cpp.o
+[ 79%] Building CXX object CMakeFiles/smap_interfaces__rosidl_typesupport_fastrtps_c.dir/rosidl_typesupport_fastrtps_c/smap_interfaces/msg/detail/depth_map__type_support_c.cpp.o
+[ 80%] Building CXX object CMakeFiles/smap_interfaces__rosidl_typesupport_fastrtps_c.dir/rosidl_typesupport_fastrtps_c/smap_interfaces/srv/detail/add_perception_module__type_support_c.cpp.o
+[ 81%] Building CXX object CMakeFiles/smap_interfaces__rosidl_typesupport_fastrtps_c.dir/rosidl_typesupport_fastrtps_c/smap_interfaces/srv/detail/smap_classes__type_support_c.cpp.o
+[ 82%] Linking CXX shared library libsmap_interfaces__rosidl_typesupport_fastrtps_c.so
+[ 82%] Built target smap_interfaces__rosidl_typesupport_fastrtps_c
+[ 82%] Built target smap_interfaces
+[ 83%] Generating Python code for ROS interfaces
+[ 83%] Built target smap_interfaces__py
+[ 84%] Building C object CMakeFiles/smap_interfaces__python.dir/rosidl_generator_py/smap_interfaces/msg/_smap_object_s.c.o
+[ 86%] Building C object CMakeFiles/smap_interfaces__python.dir/rosidl_generator_py/smap_interfaces/msg/_smap_detections_s.c.o
+[ 87%] Building C object CMakeFiles/smap_interfaces__python.dir/rosidl_generator_py/smap_interfaces/msg/_smap_data_s.c.o
+[ 88%] Building C object CMakeFiles/smap_interfaces__python.dir/rosidl_generator_py/smap_interfaces/msg/_smap_observation_s.c.o
+[ 88%] Building C object CMakeFiles/smap_interfaces__python.dir/rosidl_generator_py/smap_interfaces/msg/_smap_detection_debug_s.c.o
+[ 89%] Building C object CMakeFiles/smap_interfaces__python.dir/rosidl_generator_py/smap_interfaces/msg/_bounding_box3_d_s.c.o
+[ 91%] Building C object CMakeFiles/smap_interfaces__python.dir/rosidl_generator_py/smap_interfaces/msg/_bounding_box2_d_s.c.o
+[ 91%] Building C object CMakeFiles/smap_interfaces__python.dir/rosidl_generator_py/smap_interfaces/msg/_depth_map_s.c.o
+[ 92%] Building C object CMakeFiles/smap_interfaces__python.dir/rosidl_generator_py/smap_interfaces/srv/_add_perception_module_s.c.o
+[ 93%] Building C object CMakeFiles/smap_interfaces__python.dir/rosidl_generator_py/smap_interfaces/srv/_smap_classes_s.c.o
+[ 94%] Linking C shared library rosidl_generator_py/smap_interfaces/libsmap_interfaces__python.so
+[ 94%] Built target smap_interfaces__python
+[ 96%] Building C object CMakeFiles/smap_interfaces__rosidl_typesupport_fastrtps_c__pyext.dir/rosidl_generator_py/smap_interfaces/_smap_interfaces_s.ep.rosidl_typesupport_fastrtps_c.c.o
+[ 97%] Building C object CMakeFiles/smap_interfaces__rosidl_typesupport_c__pyext.dir/rosidl_generator_py/smap_interfaces/_smap_interfaces_s.ep.rosidl_typesupport_c.c.o
+[ 97%] Building C object CMakeFiles/smap_interfaces__rosidl_typesupport_introspection_c__pyext.dir/rosidl_generator_py/smap_interfaces/_smap_interfaces_s.ep.rosidl_typesupport_introspection_c.c.o
+[ 98%] Linking C shared library rosidl_generator_py/smap_interfaces/smap_interfaces_s__rosidl_typesupport_c.cpython-38-aarch64-linux-gnu.so
+[100%] Linking C shared library rosidl_generator_py/smap_interfaces/smap_interfaces_s__rosidl_typesupport_introspection_c.cpython-38-aarch64-linux-gnu.so
+[100%] Linking CXX shared library rosidl_generator_py/smap_interfaces/smap_interfaces_s__rosidl_typesupport_fastrtps_c.cpython-38-aarch64-linux-gnu.so
+[100%] Built target smap_interfaces__rosidl_typesupport_c__pyext
+[100%] Built target smap_interfaces__rosidl_typesupport_introspection_c__pyext
+[100%] Built target smap_interfaces__rosidl_typesupport_fastrtps_c__pyext
+-- Install configuration: "Release"
+-- Execute custom install script
+-- Symlinking: /workspace/install/share/ament_index/resource_index/rosidl_interfaces/smap_interfaces
+-- Symlinking: /workspace/install/include/smap_interfaces/msg/bounding_box2_d.h
+-- Symlinking: /workspace/install/include/smap_interfaces/msg/bounding_box3_d.h
+-- Symlinking: /workspace/install/include/smap_interfaces/msg/depth_map.h
+-- Symlinking: /workspace/install/include/smap_interfaces/msg/detail/bounding_box2_d__functions.h
+-- Symlinking: /workspace/install/include/smap_interfaces/msg/detail/bounding_box2_d__struct.h
+-- Symlinking: /workspace/install/include/smap_interfaces/msg/detail/bounding_box2_d__type_support.h
+-- Symlinking: /workspace/install/include/smap_interfaces/msg/detail/bounding_box3_d__functions.h
+-- Symlinking: /workspace/install/include/smap_interfaces/msg/detail/bounding_box3_d__struct.h
+-- Symlinking: /workspace/install/include/smap_interfaces/msg/detail/bounding_box3_d__type_support.h
+-- Symlinking: /workspace/install/include/smap_interfaces/msg/detail/depth_map__functions.h
+-- Symlinking: /workspace/install/include/smap_interfaces/msg/detail/depth_map__struct.h
+-- Symlinking: /workspace/install/include/smap_interfaces/msg/detail/depth_map__type_support.h
+-- Symlinking: /workspace/install/include/smap_interfaces/msg/detail/smap_data__functions.h
+-- Symlinking: /workspace/install/include/smap_interfaces/msg/detail/smap_data__struct.h
+-- Symlinking: /workspace/install/include/smap_interfaces/msg/detail/smap_data__type_support.h
+-- Symlinking: /workspace/install/include/smap_interfaces/msg/detail/smap_detection_debug__functions.h
+-- Symlinking: /workspace/install/include/smap_interfaces/msg/detail/smap_detection_debug__struct.h
+-- Symlinking: /workspace/install/include/smap_interfaces/msg/detail/smap_detection_debug__type_support.h
+-- Symlinking: /workspace/install/include/smap_interfaces/msg/detail/smap_detections__functions.h
+-- Symlinking: /workspace/install/include/smap_interfaces/msg/detail/smap_detections__struct.h
+-- Symlinking: /workspace/install/include/smap_interfaces/msg/detail/smap_detections__type_support.h
+-- Symlinking: /workspace/install/include/smap_interfaces/msg/detail/smap_object__functions.h
+-- Symlinking: /workspace/install/include/smap_interfaces/msg/detail/smap_object__struct.h
+-- Symlinking: /workspace/install/include/smap_interfaces/msg/detail/smap_object__type_support.h
+-- Symlinking: /workspace/install/include/smap_interfaces/msg/detail/smap_observation__functions.h
+-- Symlinking: /workspace/install/include/smap_interfaces/msg/detail/smap_observation__struct.h
+-- Symlinking: /workspace/install/include/smap_interfaces/msg/detail/smap_observation__type_support.h
+-- Symlinking: /workspace/install/include/smap_interfaces/msg/rosidl_generator_c__visibility_control.h
+-- Symlinking: /workspace/install/include/smap_interfaces/msg/smap_data.h
+-- Symlinking: /workspace/install/include/smap_interfaces/msg/smap_detection_debug.h
+-- Symlinking: /workspace/install/include/smap_interfaces/msg/smap_detections.h
+-- Symlinking: /workspace/install/include/smap_interfaces/msg/smap_object.h
+-- Symlinking: /workspace/install/include/smap_interfaces/msg/smap_observation.h
+-- Symlinking: /workspace/install/include/smap_interfaces/srv/add_perception_module.h
+-- Symlinking: /workspace/install/include/smap_interfaces/srv/detail/add_perception_module__functions.h
+-- Symlinking: /workspace/install/include/smap_interfaces/srv/detail/add_perception_module__struct.h
+-- Symlinking: /workspace/install/include/smap_interfaces/srv/detail/add_perception_module__type_support.h
+-- Symlinking: /workspace/install/include/smap_interfaces/srv/detail/smap_classes__functions.h
+-- Symlinking: /workspace/install/include/smap_interfaces/srv/detail/smap_classes__struct.h
+-- Symlinking: /workspace/install/include/smap_interfaces/srv/detail/smap_classes__type_support.h
+-- Symlinking: /workspace/install/include/smap_interfaces/srv/smap_classes.h
+-- Symlinking: /workspace/install/share/smap_interfaces/environment/library_path.sh
+-- Symlinking: /workspace/install/share/smap_interfaces/environment/library_path.dsv
+-- Symlinking: /workspace/install/include/smap_interfaces/msg/detail/bounding_box2_d__rosidl_typesupport_fastrtps_c.h
+-- Symlinking: /workspace/install/include/smap_interfaces/msg/detail/bounding_box3_d__rosidl_typesupport_fastrtps_c.h
+-- Symlinking: /workspace/install/include/smap_interfaces/msg/detail/depth_map__rosidl_typesupport_fastrtps_c.h
+-- Symlinking: /workspace/install/include/smap_interfaces/msg/detail/smap_data__rosidl_typesupport_fastrtps_c.h
+-- Symlinking: /workspace/install/include/smap_interfaces/msg/detail/smap_detection_debug__rosidl_typesupport_fastrtps_c.h
+-- Symlinking: /workspace/install/include/smap_interfaces/msg/detail/smap_detections__rosidl_typesupport_fastrtps_c.h
+-- Symlinking: /workspace/install/include/smap_interfaces/msg/detail/smap_object__rosidl_typesupport_fastrtps_c.h
+-- Symlinking: /workspace/install/include/smap_interfaces/msg/detail/smap_observation__rosidl_typesupport_fastrtps_c.h
+-- Symlinking: /workspace/install/include/smap_interfaces/msg/rosidl_typesupport_fastrtps_c__visibility_control.h
+-- Symlinking: /workspace/install/include/smap_interfaces/srv/detail/add_perception_module__rosidl_typesupport_fastrtps_c.h
+-- Symlinking: /workspace/install/include/smap_interfaces/srv/detail/smap_classes__rosidl_typesupport_fastrtps_c.h
+-- Symlinking: /workspace/install/lib/libsmap_interfaces__rosidl_typesupport_fastrtps_c.so
+-- Symlinking: /workspace/install/include/smap_interfaces/msg/detail/bounding_box2_d__rosidl_typesupport_fastrtps_cpp.hpp
+-- Symlinking: /workspace/install/include/smap_interfaces/msg/detail/bounding_box3_d__rosidl_typesupport_fastrtps_cpp.hpp
+-- Symlinking: /workspace/install/include/smap_interfaces/msg/detail/depth_map__rosidl_typesupport_fastrtps_cpp.hpp
+-- Symlinking: /workspace/install/include/smap_interfaces/msg/detail/smap_data__rosidl_typesupport_fastrtps_cpp.hpp
+-- Symlinking: /workspace/install/include/smap_interfaces/msg/detail/smap_detection_debug__rosidl_typesupport_fastrtps_cpp.hpp
+-- Symlinking: /workspace/install/include/smap_interfaces/msg/detail/smap_detections__rosidl_typesupport_fastrtps_cpp.hpp
+-- Symlinking: /workspace/install/include/smap_interfaces/msg/detail/smap_object__rosidl_typesupport_fastrtps_cpp.hpp
+-- Symlinking: /workspace/install/include/smap_interfaces/msg/detail/smap_observation__rosidl_typesupport_fastrtps_cpp.hpp
+-- Symlinking: /workspace/install/include/smap_interfaces/msg/rosidl_typesupport_fastrtps_cpp__visibility_control.h
+-- Symlinking: /workspace/install/include/smap_interfaces/srv/detail/add_perception_module__rosidl_typesupport_fastrtps_cpp.hpp
+-- Symlinking: /workspace/install/include/smap_interfaces/srv/detail/smap_classes__rosidl_typesupport_fastrtps_cpp.hpp
+-- Symlinking: /workspace/install/lib/libsmap_interfaces__rosidl_typesupport_fastrtps_cpp.so
+-- Symlinking: /workspace/install/include/smap_interfaces/msg/detail/bounding_box2_d__rosidl_typesupport_introspection_c.h
+-- Symlinking: /workspace/install/include/smap_interfaces/msg/detail/bounding_box3_d__rosidl_typesupport_introspection_c.h
+-- Symlinking: /workspace/install/include/smap_interfaces/msg/detail/depth_map__rosidl_typesupport_introspection_c.h
+-- Symlinking: /workspace/install/include/smap_interfaces/msg/detail/smap_data__rosidl_typesupport_introspection_c.h
+-- Symlinking: /workspace/install/include/smap_interfaces/msg/detail/smap_detection_debug__rosidl_typesupport_introspection_c.h
+-- Symlinking: /workspace/install/include/smap_interfaces/msg/detail/smap_detections__rosidl_typesupport_introspection_c.h
+-- Symlinking: /workspace/install/include/smap_interfaces/msg/detail/smap_object__rosidl_typesupport_introspection_c.h
+-- Symlinking: /workspace/install/include/smap_interfaces/msg/detail/smap_observation__rosidl_typesupport_introspection_c.h
+-- Symlinking: /workspace/install/include/smap_interfaces/msg/rosidl_typesupport_introspection_c__visibility_control.h
+-- Symlinking: /workspace/install/include/smap_interfaces/srv/detail/add_perception_module__rosidl_typesupport_introspection_c.h
+-- Symlinking: /workspace/install/include/smap_interfaces/srv/detail/smap_classes__rosidl_typesupport_introspection_c.h
+-- Symlinking: /workspace/install/include/smap_interfaces/msg/bounding_box2_d.hpp
+-- Symlinking: /workspace/install/include/smap_interfaces/msg/bounding_box3_d.hpp
+-- Symlinking: /workspace/install/include/smap_interfaces/msg/depth_map.hpp
+-- Symlinking: /workspace/install/include/smap_interfaces/msg/detail/bounding_box2_d__builder.hpp
+-- Symlinking: /workspace/install/include/smap_interfaces/msg/detail/bounding_box2_d__struct.hpp
+-- Symlinking: /workspace/install/include/smap_interfaces/msg/detail/bounding_box2_d__traits.hpp
+-- Symlinking: /workspace/install/include/smap_interfaces/msg/detail/bounding_box3_d__builder.hpp
+-- Symlinking: /workspace/install/include/smap_interfaces/msg/detail/bounding_box3_d__struct.hpp
+-- Symlinking: /workspace/install/include/smap_interfaces/msg/detail/bounding_box3_d__traits.hpp
+-- Symlinking: /workspace/install/include/smap_interfaces/msg/detail/depth_map__builder.hpp
+-- Symlinking: /workspace/install/include/smap_interfaces/msg/detail/depth_map__struct.hpp
+-- Symlinking: /workspace/install/include/smap_interfaces/msg/detail/depth_map__traits.hpp
+-- Symlinking: /workspace/install/include/smap_interfaces/msg/detail/smap_data__builder.hpp
+-- Symlinking: /workspace/install/include/smap_interfaces/msg/detail/smap_data__struct.hpp
+-- Symlinking: /workspace/install/include/smap_interfaces/msg/detail/smap_data__traits.hpp
+-- Symlinking: /workspace/install/include/smap_interfaces/msg/detail/smap_detection_debug__builder.hpp
+-- Symlinking: /workspace/install/include/smap_interfaces/msg/detail/smap_detection_debug__struct.hpp
+-- Symlinking: /workspace/install/include/smap_interfaces/msg/detail/smap_detection_debug__traits.hpp
+-- Symlinking: /workspace/install/include/smap_interfaces/msg/detail/smap_detections__builder.hpp
+-- Symlinking: /workspace/install/include/smap_interfaces/msg/detail/smap_detections__struct.hpp
+-- Symlinking: /workspace/install/include/smap_interfaces/msg/detail/smap_detections__traits.hpp
+-- Symlinking: /workspace/install/include/smap_interfaces/msg/detail/smap_object__builder.hpp
+-- Symlinking: /workspace/install/include/smap_interfaces/msg/detail/smap_object__struct.hpp
+-- Symlinking: /workspace/install/include/smap_interfaces/msg/detail/smap_object__traits.hpp
+-- Symlinking: /workspace/install/include/smap_interfaces/msg/detail/smap_observation__builder.hpp
+-- Symlinking: /workspace/install/include/smap_interfaces/msg/detail/smap_observation__struct.hpp
+-- Symlinking: /workspace/install/include/smap_interfaces/msg/detail/smap_observation__traits.hpp
+-- Symlinking: /workspace/install/include/smap_interfaces/msg/smap_data.hpp
+-- Symlinking: /workspace/install/include/smap_interfaces/msg/smap_detection_debug.hpp
+-- Symlinking: /workspace/install/include/smap_interfaces/msg/smap_detections.hpp
+-- Symlinking: /workspace/install/include/smap_interfaces/msg/smap_object.hpp
+-- Symlinking: /workspace/install/include/smap_interfaces/msg/smap_observation.hpp
+-- Symlinking: /workspace/install/include/smap_interfaces/srv/add_perception_module.hpp
+-- Symlinking: /workspace/install/include/smap_interfaces/srv/detail/add_perception_module__builder.hpp
+-- Symlinking: /workspace/install/include/smap_interfaces/srv/detail/add_perception_module__struct.hpp
+-- Symlinking: /workspace/install/include/smap_interfaces/srv/detail/add_perception_module__traits.hpp
+-- Symlinking: /workspace/install/include/smap_interfaces/srv/detail/smap_classes__builder.hpp
+-- Symlinking: /workspace/install/include/smap_interfaces/srv/detail/smap_classes__struct.hpp
+-- Symlinking: /workspace/install/include/smap_interfaces/srv/detail/smap_classes__traits.hpp
+-- Symlinking: /workspace/install/include/smap_interfaces/srv/smap_classes.hpp
+-- Symlinking: /workspace/install/include/smap_interfaces/msg/detail/bounding_box2_d__rosidl_typesupport_introspection_cpp.hpp
+-- Symlinking: /workspace/install/include/smap_interfaces/msg/detail/bounding_box3_d__rosidl_typesupport_introspection_cpp.hpp
+-- Symlinking: /workspace/install/include/smap_interfaces/msg/detail/depth_map__rosidl_typesupport_introspection_cpp.hpp
+-- Symlinking: /workspace/install/include/smap_interfaces/msg/detail/smap_data__rosidl_typesupport_introspection_cpp.hpp
+-- Symlinking: /workspace/install/include/smap_interfaces/msg/detail/smap_detection_debug__rosidl_typesupport_introspection_cpp.hpp
+-- Symlinking: /workspace/install/include/smap_interfaces/msg/detail/smap_detections__rosidl_typesupport_introspection_cpp.hpp
+-- Symlinking: /workspace/install/include/smap_interfaces/msg/detail/smap_object__rosidl_typesupport_introspection_cpp.hpp
+-- Symlinking: /workspace/install/include/smap_interfaces/msg/detail/smap_observation__rosidl_typesupport_introspection_cpp.hpp
+-- Symlinking: /workspace/install/include/smap_interfaces/srv/detail/add_perception_module__rosidl_typesupport_introspection_cpp.hpp
+-- Symlinking: /workspace/install/include/smap_interfaces/srv/detail/smap_classes__rosidl_typesupport_introspection_cpp.hpp
+-- Symlinking: /workspace/install/share/smap_interfaces/environment/pythonpath.sh
+-- Symlinking: /workspace/install/share/smap_interfaces/environment/pythonpath.dsv
+-- Symlinking: /workspace/install/lib/python3.8/site-packages/smap_interfaces/__init__.py
+-- Symlinking: /workspace/install/lib/python3.8/site-packages/smap_interfaces/msg/__init__.py
+-- Symlinking: /workspace/install/lib/python3.8/site-packages/smap_interfaces/msg/_bounding_box2_d.py
+-- Symlinking: /workspace/install/lib/python3.8/site-packages/smap_interfaces/msg/_bounding_box3_d.py
+-- Symlinking: /workspace/install/lib/python3.8/site-packages/smap_interfaces/msg/_depth_map.py
+-- Symlinking: /workspace/install/lib/python3.8/site-packages/smap_interfaces/msg/_smap_data.py
+-- Symlinking: /workspace/install/lib/python3.8/site-packages/smap_interfaces/msg/_smap_detection_debug.py
+-- Symlinking: /workspace/install/lib/python3.8/site-packages/smap_interfaces/msg/_smap_detections.py
+-- Symlinking: /workspace/install/lib/python3.8/site-packages/smap_interfaces/msg/_smap_object.py
+-- Symlinking: /workspace/install/lib/python3.8/site-packages/smap_interfaces/msg/_smap_observation.py
+-- Symlinking: /workspace/install/lib/python3.8/site-packages/smap_interfaces/srv/__init__.py
+-- Symlinking: /workspace/install/lib/python3.8/site-packages/smap_interfaces/srv/_add_perception_module.py
+-- Symlinking: /workspace/install/lib/python3.8/site-packages/smap_interfaces/srv/_smap_classes.py
+-- Symlinking: /workspace/install/lib/python3.8/site-packages/smap_interfaces/smap_interfaces_s__rosidl_typesupport_fastrtps_c.cpython-38-aarch64-linux-gnu.so
+-- Symlinking: /workspace/install/lib/python3.8/site-packages/smap_interfaces/smap_interfaces_s__rosidl_typesupport_introspection_c.cpython-38-aarch64-linux-gnu.so
+-- Symlinking: /workspace/install/lib/python3.8/site-packages/smap_interfaces/smap_interfaces_s__rosidl_typesupport_c.cpython-38-aarch64-linux-gnu.so
+-- Symlinking: /workspace/install/lib/libsmap_interfaces__python.so
+-- Symlinking: /workspace/install/share/smap_interfaces/msg/SmapData.idl
+-- Symlinking: /workspace/install/share/smap_interfaces/msg/SmapObject.idl
+-- Symlinking: /workspace/install/share/smap_interfaces/msg/SmapObservation.idl
+-- Symlinking: /workspace/install/share/smap_interfaces/msg/SmapDetections.idl
+-- Symlinking: /workspace/install/share/smap_interfaces/msg/SmapDetectionDebug.idl
+-- Symlinking: /workspace/install/share/smap_interfaces/msg/BoundingBox2D.idl
+-- Symlinking: /workspace/install/share/smap_interfaces/msg/BoundingBox3D.idl
+-- Symlinking: /workspace/install/share/smap_interfaces/msg/DepthMap.idl
+-- Symlinking: /workspace/install/share/smap_interfaces/srv/AddPerceptionModule.idl
+-- Symlinking: /workspace/install/share/smap_interfaces/srv/SmapClasses.idl
+-- Symlinking: /workspace/install/share/smap_interfaces/msg/SmapData.msg
+-- Symlinking: /workspace/install/share/smap_interfaces/msg/SmapObject.msg
+-- Symlinking: /workspace/install/share/smap_interfaces/msg/SmapObservation.msg
+-- Symlinking: /workspace/install/share/smap_interfaces/msg/SmapDetections.msg
+-- Symlinking: /workspace/install/share/smap_interfaces/msg/SmapDetectionDebug.msg
+-- Symlinking: /workspace/install/share/smap_interfaces/msg/BoundingBox2D.msg
+-- Symlinking: /workspace/install/share/smap_interfaces/msg/BoundingBox3D.msg
+-- Symlinking: /workspace/install/share/smap_interfaces/msg/DepthMap.msg
+-- Symlinking: /workspace/install/share/smap_interfaces/srv/AddPerceptionModule.srv
+-- Symlinking: /workspace/install/share/smap_interfaces/srv/AddPerceptionModule_Request.msg
+-- Symlinking: /workspace/install/share/smap_interfaces/srv/AddPerceptionModule_Response.msg
+-- Symlinking: /workspace/install/share/smap_interfaces/srv/SmapClasses.srv
+-- Symlinking: /workspace/install/share/smap_interfaces/srv/SmapClasses_Request.msg
+-- Symlinking: /workspace/install/share/smap_interfaces/srv/SmapClasses_Response.msg
+-- Symlinking: /workspace/install/share/ament_index/resource_index/package_run_dependencies/smap_interfaces
+-- Symlinking: /workspace/install/share/ament_index/resource_index/parent_prefix_path/smap_interfaces
+-- Symlinking: /workspace/install/share/smap_interfaces/environment/ament_prefix_path.sh
+-- Symlinking: /workspace/install/share/smap_interfaces/environment/ament_prefix_path.dsv
+-- Symlinking: /workspace/install/share/smap_interfaces/environment/path.sh
+-- Symlinking: /workspace/install/share/smap_interfaces/environment/path.dsv
+-- Symlinking: /workspace/install/share/smap_interfaces/local_setup.bash
+-- Symlinking: /workspace/install/share/smap_interfaces/local_setup.sh
+-- Symlinking: /workspace/install/share/smap_interfaces/local_setup.zsh
+-- Symlinking: /workspace/install/share/smap_interfaces/local_setup.dsv
+-- Symlinking: /workspace/install/share/smap_interfaces/package.dsv
+-- Symlinking: /workspace/install/share/ament_index/resource_index/packages/smap_interfaces
+-- Symlinking: /workspace/install/share/smap_interfaces/cmake/rosidl_cmake-extras.cmake
+-- Symlinking: /workspace/install/share/smap_interfaces/cmake/ament_cmake_export_dependencies-extras.cmake
+-- Symlinking: /workspace/install/share/smap_interfaces/cmake/ament_cmake_export_libraries-extras.cmake
+-- Symlinking: /workspace/install/share/smap_interfaces/cmake/ament_cmake_export_targets-extras.cmake
+-- Symlinking: /workspace/install/share/smap_interfaces/cmake/ament_cmake_export_include_directories-extras.cmake
+-- Symlinking: /workspace/install/share/smap_interfaces/cmake/rosidl_cmake_export_typesupport_libraries-extras.cmake
+-- Symlinking: /workspace/install/share/smap_interfaces/cmake/rosidl_cmake_export_typesupport_targets-extras.cmake
+-- Symlinking: /workspace/install/share/smap_interfaces/cmake/smap_interfacesConfig.cmake
+-- Symlinking: /workspace/install/share/smap_interfaces/cmake/smap_interfacesConfig-version.cmake
+-- Symlinking: /workspace/install/share/smap_interfaces/package.xml
+-- Installing: /workspace/install/lib/libsmap_interfaces__rosidl_generator_c.so
+-- Set runtime path of "/workspace/install/lib/libsmap_interfaces__rosidl_generator_c.so" to ""
+-- Installing: /workspace/install/lib/libsmap_interfaces__rosidl_typesupport_introspection_c.so
+-- Set runtime path of "/workspace/install/lib/libsmap_interfaces__rosidl_typesupport_introspection_c.so" to ""
+-- Installing: /workspace/install/lib/libsmap_interfaces__rosidl_typesupport_c.so
+-- Set runtime path of "/workspace/install/lib/libsmap_interfaces__rosidl_typesupport_c.so" to ""
+-- Installing: /workspace/install/lib/libsmap_interfaces__rosidl_typesupport_introspection_cpp.so
+-- Set runtime path of "/workspace/install/lib/libsmap_interfaces__rosidl_typesupport_introspection_cpp.so" to ""
+-- Installing: /workspace/install/lib/libsmap_interfaces__rosidl_typesupport_cpp.so
+-- Set runtime path of "/workspace/install/lib/libsmap_interfaces__rosidl_typesupport_cpp.so" to ""
+Compiling '/workspace/install/lib/python3.8/site-packages/smap_interfaces/__init__.py'...
+-- Installing: /workspace/install/share/smap_interfaces/cmake/smap_interfaces__rosidl_generator_cExport.cmake
+-- Installing: /workspace/install/share/smap_interfaces/cmake/smap_interfaces__rosidl_generator_cExport-release.cmake
+-- Installing: /workspace/install/share/smap_interfaces/cmake/smap_interfaces__rosidl_typesupport_introspection_cExport.cmake
+-- Installing: /workspace/install/share/smap_interfaces/cmake/smap_interfaces__rosidl_typesupport_introspection_cExport-release.cmake
+-- Installing: /workspace/install/share/smap_interfaces/cmake/smap_interfaces__rosidl_typesupport_cExport.cmake
+-- Installing: /workspace/install/share/smap_interfaces/cmake/smap_interfaces__rosidl_typesupport_cExport-release.cmake
+-- Installing: /workspace/install/share/smap_interfaces/cmake/smap_interfaces__rosidl_generator_cppExport.cmake
+-- Installing: /workspace/install/share/smap_interfaces/cmake/smap_interfaces__rosidl_typesupport_introspection_cppExport.cmake
+-- Installing: /workspace/install/share/smap_interfaces/cmake/smap_interfaces__rosidl_typesupport_introspection_cppExport-release.cmake
+-- Installing: /workspace/install/share/smap_interfaces/cmake/smap_interfaces__rosidl_typesupport_cppExport.cmake
+-- Installing: /workspace/install/share/smap_interfaces/cmake/smap_interfaces__rosidl_typesupport_cppExport-release.cmake
+---
+Finished <<< smap_interfaces [1min 50s]
+Starting >>> smap_perception_wrapper
+--- output: smap_perception_wrapper
+-- The C compiler identification is GNU 9.4.0
+-- The CXX compiler identification is GNU 9.4.0
+-- Detecting C compiler ABI info
+-- Detecting C compiler ABI info - done
+-- Check for working C compiler: /usr/bin/cc - skipped
+-- Detecting C compile features
+-- Detecting C compile features - done
+-- Detecting CXX compiler ABI info
+-- Detecting CXX compiler ABI info - done
+-- Check for working CXX compiler: /usr/bin/c++ - skipped
+-- Detecting CXX compile features
+-- Detecting CXX compile features - done
+-- Found ament_cmake: 0.9.11 (/opt/ros/foxy/install/share/ament_cmake/cmake)
+-- Found PythonInterp: /usr/bin/python3 (found suitable version "3.8.10", minimum required is "3") 
+-- Using PYTHON_EXECUTABLE: /usr/bin/python3
+-- Override CMake install command with custom implementation using symlinks instead of copying resources
+-- Found rclpy: 1.0.12 (/opt/ros/foxy/install/share/rclpy/cmake)
+-- Found ament_lint_auto: 0.9.8 (/opt/ros/foxy/install/share/ament_lint_auto/cmake)
+-- Added test 'copyright' to check source files copyright and LICENSE
+-- Added test 'flake8' to check Python code syntax and style conventions
+-- Added test 'lint_cmake' to check CMake code style
+-- Added test 'pep257' to check Python code against some of the style conventions in PEP 257
+-- Added test 'xmllint' to check XML markup files
+-- Configuring done (6.7s)
+-- Generating done (0.0s)
+-- Build files have been written to: /workspace/build/smap_perception_wrapper
+-- Install configuration: "Release"
+-- Execute custom install script
+-- Symlinking: /workspace/install/share/smap_perception_wrapper/environment/pythonpath.sh
+-- Symlinking: /workspace/install/share/smap_perception_wrapper/environment/pythonpath.dsv
+-- Symlinking: /workspace/install/lib/python3.8/site-packages/smap_perception_wrapper/__init__.py
+-- Symlinking: /workspace/install/lib/python3.8/site-packages/smap_perception_wrapper/perception_wrapper.py
+-- Symlinking: /workspace/install/share/smap_perception_wrapper//launch/classifier_bringup_template_launch.py
+-- Symlinking: /workspace/install/share/ament_index/resource_index/package_run_dependencies/smap_perception_wrapper
+-- Symlinking: /workspace/install/share/ament_index/resource_index/parent_prefix_path/smap_perception_wrapper
+-- Symlinking: /workspace/install/share/smap_perception_wrapper/environment/ament_prefix_path.sh
+-- Symlinking: /workspace/install/share/smap_perception_wrapper/environment/ament_prefix_path.dsv
+-- Symlinking: /workspace/install/share/smap_perception_wrapper/environment/path.sh
+-- Symlinking: /workspace/install/share/smap_perception_wrapper/environment/path.dsv
+-- Symlinking: /workspace/install/share/smap_perception_wrapper/local_setup.bash
+-- Symlinking: /workspace/install/share/smap_perception_wrapper/local_setup.sh
+-- Symlinking: /workspace/install/share/smap_perception_wrapper/local_setup.zsh
+-- Symlinking: /workspace/install/share/smap_perception_wrapper/local_setup.dsv
+-- Symlinking: /workspace/install/share/smap_perception_wrapper/package.dsv
+-- Symlinking: /workspace/install/share/ament_index/resource_index/packages/smap_perception_wrapper
+-- Symlinking: /workspace/install/share/smap_perception_wrapper/cmake/smap_perception_wrapperConfig.cmake
+-- Symlinking: /workspace/install/share/smap_perception_wrapper/cmake/smap_perception_wrapperConfig-version.cmake
+-- Symlinking: /workspace/install/share/smap_perception_wrapper/package.xml
+Listing '/workspace/install/lib/python3.8/site-packages/smap_perception_wrapper'...
+Compiling '/workspace/install/lib/python3.8/site-packages/smap_perception_wrapper/__init__.py'...
+Compiling '/workspace/install/lib/python3.8/site-packages/smap_perception_wrapper/perception_wrapper.py'...
+---
+Finished <<< smap_perception_wrapper [10.2s]
+Starting >>> smap_yolo_v5
+--- output: smap_yolo_v5
+-- The C compiler identification is GNU 9.4.0
+-- The CXX compiler identification is GNU 9.4.0
+-- Detecting C compiler ABI info
+-- Detecting C compiler ABI info - done
+-- Check for working C compiler: /usr/bin/cc - skipped
+-- Detecting C compile features
+-- Detecting C compile features - done
+-- Detecting CXX compiler ABI info
+-- Detecting CXX compiler ABI info - done
+-- Check for working CXX compiler: /usr/bin/c++ - skipped
+-- Detecting CXX compile features
+-- Detecting CXX compile features - done
+-- Found ament_cmake: 0.9.11 (/opt/ros/foxy/install/share/ament_cmake/cmake)
+-- Found PythonInterp: /usr/bin/python3 (found suitable version "3.8.10", minimum required is "3") 
+-- Using PYTHON_EXECUTABLE: /usr/bin/python3
+-- Override CMake install command with custom implementation using symlinks instead of copying resources
+-- Found rclpy: 1.0.12 (/opt/ros/foxy/install/share/rclpy/cmake)
+-- Found ament_lint_auto: 0.9.8 (/opt/ros/foxy/install/share/ament_lint_auto/cmake)
+-- Added test 'copyright' to check source files copyright and LICENSE
+-- Added test 'flake8' to check Python code syntax and style conventions
+-- Added test 'lint_cmake' to check CMake code style
+-- Added test 'pep257' to check Python code against some of the style conventions in PEP 257
+-- Added test 'xmllint' to check XML markup files
+-- Configuring done (6.1s)
+-- Generating done (0.0s)
+-- Build files have been written to: /workspace/build/smap_yolo_v5
+-- Install configuration: "Release"
+-- Execute custom install script
+-- Symlinking: /workspace/install/share/smap_yolo_v5/environment/pythonpath.sh
+-- Symlinking: /workspace/install/share/smap_yolo_v5/environment/pythonpath.dsv
+-- Symlinking: /workspace/install/lib/python3.8/site-packages/smap_yolo_v5/__init__.py
+-- Symlinking: /workspace/install/share/smap_yolo_v5//__init__.py
+-- Symlinking: /workspace/install/share/smap_yolo_v5//yolov5_even_launch.py
+-- Symlinking: /workspace/install/share/smap_yolo_v5//yolov5_launch.py
+-- Symlinking: /workspace/install/share/smap_yolo_v5//yolov5_odd_launch.py
+-- Symlinking: /workspace/install/share/smap_yolo_v5//weights/yolov5s.engine
+-- Symlinking: /workspace/install/share/smap_yolo_v5//weights/yolov5s.onnx
+-- Symlinking: /workspace/install/share/smap_yolo_v5//weights/yolov5s.pt
+-- Symlinking: /workspace/install/share/smap_yolo_v5//data/Argoverse.yaml
+-- Symlinking: /workspace/install/share/smap_yolo_v5//data/GlobalWheat2020.yaml
+-- Symlinking: /workspace/install/share/smap_yolo_v5//data/ImageNet.yaml
+-- Symlinking: /workspace/install/share/smap_yolo_v5//data/Objects365.yaml
+-- Symlinking: /workspace/install/share/smap_yolo_v5//data/SKU-110K.yaml
+-- Symlinking: /workspace/install/share/smap_yolo_v5//data/VOC.yaml
+-- Symlinking: /workspace/install/share/smap_yolo_v5//data/VisDrone.yaml
+-- Symlinking: /workspace/install/share/smap_yolo_v5//data/coco.yaml
+-- Symlinking: /workspace/install/share/smap_yolo_v5//data/coco128-seg.yaml
+-- Symlinking: /workspace/install/share/smap_yolo_v5//data/coco128.yaml
+-- Symlinking: /workspace/install/share/smap_yolo_v5//data/hyps/hyp.Objects365.yaml
+-- Symlinking: /workspace/install/share/smap_yolo_v5//data/hyps/hyp.VOC.yaml
+-- Symlinking: /workspace/install/share/smap_yolo_v5//data/hyps/hyp.no-augmentation.yaml
+-- Symlinking: /workspace/install/share/smap_yolo_v5//data/hyps/hyp.scratch-high.yaml
+-- Symlinking: /workspace/install/share/smap_yolo_v5//data/hyps/hyp.scratch-low.yaml
+-- Symlinking: /workspace/install/share/smap_yolo_v5//data/hyps/hyp.scratch-med.yaml
+-- Symlinking: /workspace/install/share/smap_yolo_v5//data/images/bus.jpg
+-- Symlinking: /workspace/install/share/smap_yolo_v5//data/images/zidane.jpg
+-- Symlinking: /workspace/install/share/smap_yolo_v5//data/scripts/download_weights.sh
+-- Symlinking: /workspace/install/share/smap_yolo_v5//data/scripts/get_coco.sh
+-- Symlinking: /workspace/install/share/smap_yolo_v5//data/scripts/get_coco128.sh
+-- Symlinking: /workspace/install/share/smap_yolo_v5//data/scripts/get_imagenet.sh
+-- Symlinking: /workspace/install/share/smap_yolo_v5//data/xView.yaml
+-- Symlinking: /workspace/install/share/smap_yolo_v5//models/__init__.py
+-- Symlinking: /workspace/install/share/smap_yolo_v5//models/__pycache__/__init__.cpython-38.pyc
+-- Symlinking: /workspace/install/share/smap_yolo_v5//models/__pycache__/common.cpython-38.pyc
+-- Symlinking: /workspace/install/share/smap_yolo_v5//models/__pycache__/experimental.cpython-38.pyc
+-- Symlinking: /workspace/install/share/smap_yolo_v5//models/__pycache__/yolo.cpython-38.pyc
+-- Symlinking: /workspace/install/share/smap_yolo_v5//models/common.py
+-- Symlinking: /workspace/install/share/smap_yolo_v5//models/experimental.py
+-- Symlinking: /workspace/install/share/smap_yolo_v5//models/hub/anchors.yaml
+-- Symlinking: /workspace/install/share/smap_yolo_v5//models/hub/yolov3-spp.yaml
+-- Symlinking: /workspace/install/share/smap_yolo_v5//models/hub/yolov3-tiny.yaml
+-- Symlinking: /workspace/install/share/smap_yolo_v5//models/hub/yolov3.yaml
+-- Symlinking: /workspace/install/share/smap_yolo_v5//models/hub/yolov5-bifpn.yaml
+-- Symlinking: /workspace/install/share/smap_yolo_v5//models/hub/yolov5-fpn.yaml
+-- Symlinking: /workspace/install/share/smap_yolo_v5//models/hub/yolov5-p2.yaml
+-- Symlinking: /workspace/install/share/smap_yolo_v5//models/hub/yolov5-p34.yaml
+-- Symlinking: /workspace/install/share/smap_yolo_v5//models/hub/yolov5-p6.yaml
+-- Symlinking: /workspace/install/share/smap_yolo_v5//models/hub/yolov5-p7.yaml
+-- Symlinking: /workspace/install/share/smap_yolo_v5//models/hub/yolov5-panet.yaml
+-- Symlinking: /workspace/install/share/smap_yolo_v5//models/hub/yolov5l6.yaml
+-- Symlinking: /workspace/install/share/smap_yolo_v5//models/hub/yolov5m6.yaml
+-- Symlinking: /workspace/install/share/smap_yolo_v5//models/hub/yolov5n6.yaml
+-- Symlinking: /workspace/install/share/smap_yolo_v5//models/hub/yolov5s-LeakyReLU.yaml
+-- Symlinking: /workspace/install/share/smap_yolo_v5//models/hub/yolov5s-ghost.yaml
+-- Symlinking: /workspace/install/share/smap_yolo_v5//models/hub/yolov5s-transformer.yaml
+-- Symlinking: /workspace/install/share/smap_yolo_v5//models/hub/yolov5s6.yaml
+-- Symlinking: /workspace/install/share/smap_yolo_v5//models/hub/yolov5x6.yaml
+-- Symlinking: /workspace/install/share/smap_yolo_v5//models/segment/yolov5l-seg.yaml
+-- Symlinking: /workspace/install/share/smap_yolo_v5//models/segment/yolov5m-seg.yaml
+-- Symlinking: /workspace/install/share/smap_yolo_v5//models/segment/yolov5n-seg.yaml
+-- Symlinking: /workspace/install/share/smap_yolo_v5//models/segment/yolov5s-seg.yaml
+-- Symlinking: /workspace/install/share/smap_yolo_v5//models/segment/yolov5x-seg.yaml
+-- Symlinking: /workspace/install/share/smap_yolo_v5//models/tf.py
+-- Symlinking: /workspace/install/share/smap_yolo_v5//models/yolo.py
+-- Symlinking: /workspace/install/share/smap_yolo_v5//models/yolov5l.yaml
+-- Symlinking: /workspace/install/share/smap_yolo_v5//models/yolov5m.yaml
+-- Symlinking: /workspace/install/share/smap_yolo_v5//models/yolov5n.yaml
+-- Symlinking: /workspace/install/share/smap_yolo_v5//models/yolov5s.yaml
+-- Symlinking: /workspace/install/share/smap_yolo_v5//models/yolov5x.yaml
+-- Symlinking: /workspace/install/share/smap_yolo_v5//segment/predict.py
+-- Symlinking: /workspace/install/share/smap_yolo_v5//segment/train.py
+-- Symlinking: /workspace/install/share/smap_yolo_v5//segment/tutorial.ipynb
+-- Symlinking: /workspace/install/share/smap_yolo_v5//segment/val.py
+-- Symlinking: /workspace/install/lib/smap_yolo_v5/yolo_v5_node.py
+-- Symlinking: /workspace/install/lib/smap_yolo_v5/yolo_v5_even_node.py
+-- Symlinking: /workspace/install/lib/smap_yolo_v5/yolo_v5_odd_node.py
+-- Symlinking: /workspace/install/share/ament_index/resource_index/package_run_dependencies/smap_yolo_v5
+-- Symlinking: /workspace/install/share/ament_index/resource_index/parent_prefix_path/smap_yolo_v5
+-- Symlinking: /workspace/install/share/smap_yolo_v5/environment/ament_prefix_path.sh
+-- Symlinking: /workspace/install/share/smap_yolo_v5/environment/ament_prefix_path.dsv
+-- Symlinking: /workspace/install/share/smap_yolo_v5/environment/path.sh
+-- Symlinking: /workspace/install/share/smap_yolo_v5/environment/path.dsv
+-- Symlinking: /workspace/install/share/smap_yolo_v5/local_setup.bash
+-- Symlinking: /workspace/install/share/smap_yolo_v5/local_setup.sh
+-- Symlinking: /workspace/install/share/smap_yolo_v5/local_setup.zsh
+-- Symlinking: /workspace/install/share/smap_yolo_v5/local_setup.dsv
+-- Symlinking: /workspace/install/share/smap_yolo_v5/package.dsv
+-- Symlinking: /workspace/install/share/ament_index/resource_index/packages/smap_yolo_v5
+-- Symlinking: /workspace/install/share/smap_yolo_v5/cmake/smap_yolo_v5Config.cmake
+-- Symlinking: /workspace/install/share/smap_yolo_v5/cmake/smap_yolo_v5Config-version.cmake
+-- Symlinking: /workspace/install/share/smap_yolo_v5/package.xml
+Listing '/workspace/install/lib/python3.8/site-packages/smap_yolo_v5'...
+Compiling '/workspace/install/lib/python3.8/site-packages/smap_yolo_v5/__init__.py'...
+---
+Finished <<< smap_yolo_v5 [11.2s]
+
+Summary: 3 packages finished [2min 15s]
+Removing intermediate container b121beb3ab59
+ ---> 8d432f4b9a31
+Step 27/27 : RUN chmod +x /workspace/src/smap/smap_perception/detectors/smap_yolo_v5/yolo_v5_node.py &&     chmod +x /workspace/src/smap/smap_perception/detectors/smap_yolo_v5/yolo_v5_even_node.py &&     chmod +x /workspace/src/smap/smap_perception/detectors/smap_yolo_v5/yolo_v5_odd_node.py
+ ---> Running in 07ff9958cf87
+Removing intermediate container 07ff9958cf87
+ ---> a68ce3f00b64
+[Warning] One or more build-args [ROS_DISTRO] were not consumed
+Successfully built a68ce3f00b64
+Successfully tagged build:jetson-yolov5

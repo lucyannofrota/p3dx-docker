@@ -1,0 +1,105 @@
+/usr/lib/python3/dist-packages/requests/__init__.py:89: RequestsDependencyWarning: urllib3 (1.26.15) or chardet (3.0.4) doesn't match a supported version!
+  warnings.warn("urllib3 ({}) or chardet ({}) doesn't match a supported "
+Building smap-deploy
+DEPRECATED: The legacy builder is deprecated and will be removed in a future release.
+            Install the buildx component to build images with BuildKit:
+            https://docs.docker.com/go/buildx/
+
+Sending build context to Docker daemon  1.095MB
+Step 1/27 : ARG BUILD_BASE_IMAGE=dustynv/ros:foxy-desktop-l4t-r35.2.1
+Step 2/27 : FROM ${BUILD_BASE_IMAGE} as dependencies
+ ---> a5a7e3e44162
+Step 3/27 : ARG BUILD_BASE_IMAGE=dustynv/ros:foxy-desktop-l4t-r35.2.1
+ ---> Running in 4956d5db28cc
+Removing intermediate container 4956d5db28cc
+ ---> afe48c72e805
+Step 4/27 : ARG BUILD_IMAGE_NAME=smap:env
+ ---> Running in 7ac2a03e38b5
+Removing intermediate container 7ac2a03e38b5
+ ---> c218330d82dd
+Step 5/27 : ARG WORKSPACE=/workspace
+ ---> Running in 14801a291975
+Removing intermediate container 14801a291975
+ ---> 778a2a0e0b34
+Step 6/27 : ARG L4T_VERSION=R35.2.1
+ ---> Running in 880afafd42b9
+Removing intermediate container 880afafd42b9
+ ---> 7fc4746e2657
+Step 7/27 : ARG UBUNTU_VERSION=20.04
+ ---> Running in 1732a281d904
+Removing intermediate container 1732a281d904
+ ---> 60c185cdfc03
+Step 8/27 : ARG ROS_DISTRO=foxy
+ ---> Running in 197fe5ff6322
+Removing intermediate container 197fe5ff6322
+ ---> 6cfbb0cf4e81
+Step 9/27 : ARG ENTRYPOINT=entrypoints/smap_entrypoint.bash
+ ---> Running in c7b66318c3cc
+Removing intermediate container c7b66318c3cc
+ ---> 6e2c06fb9398
+Step 10/27 : ENV WORKSPACE=${WORKSPACE}
+ ---> Running in 111bd4776bf2
+Removing intermediate container 111bd4776bf2
+ ---> 32aac86af826
+Step 11/27 : ENV BASE_IMAGE=${BUILD_BASE_IMAGE}
+ ---> Running in 0a2bdcb4e148
+Removing intermediate container 0a2bdcb4e148
+ ---> ff530a127b17
+Step 12/27 : ENV IMAGE_NAME=${BUILD_IMAGE_NAME}
+ ---> Running in e912b3b26d4b
+Removing intermediate container e912b3b26d4b
+ ---> 02bc493fae73
+Step 13/27 : ENV L4T_VERSION=${L4T_VERSION}
+ ---> Running in 3516b2709a53
+Removing intermediate container 3516b2709a53
+ ---> 112461a40a87
+Step 14/27 : ENV UBUNTU_VERSION=${UBUNTU_VERSION}
+ ---> Running in d515aed00b70
+Removing intermediate container d515aed00b70
+ ---> 4c204737e07f
+Step 15/27 : ENV ROS_DISTRO=${ROS_DISTRO}
+ ---> Running in 12b78cbb879c
+Removing intermediate container 12b78cbb879c
+ ---> d2b94684b550
+Step 16/27 : ENV ENTRYPOINT=${ENTRYPOINT}
+ ---> Running in f09a8e1899e9
+Removing intermediate container f09a8e1899e9
+ ---> 5b148a158902
+Step 17/27 : ENV DEBIAN_FRONTEND=noninteractive
+ ---> Running in 1ea71032f3ba
+Removing intermediate container 1ea71032f3ba
+ ---> 368fedab7e21
+Step 18/27 : ENV SHELL /bin/bash
+ ---> Running in e62104934835
+Removing intermediate container e62104934835
+ ---> a6348a616df0
+Step 19/27 : SHELL ["/bin/bash", "-c"]
+ ---> Running in 16d6576ff10b
+Removing intermediate container 16d6576ff10b
+ ---> b5f029a32645
+Step 20/27 : WORKDIR ${WORKSPACE}
+ ---> Running in 840afc4e5f8d
+Removing intermediate container 840afc4e5f8d
+ ---> 164dad8cd7f5
+Step 21/27 : COPY ${ENTRYPOINT} /sbin/entrypoint.bash
+ ---> 7a497ae2b827
+Step 22/27 : COPY /scripts/build_smap.bash ${WORKSPACE}/scripts/build_smap.bash
+ ---> b08a02e6fe06
+Step 23/27 : COPY /scripts/full_build.bash ${WORKSPACE}/scripts/full_build.bash
+ ---> 7b72503fb642
+Step 24/27 : COPY /scripts/setup.bash ${WORKSPACE}/scripts/setup.bash
+ ---> 51388beb88e0
+Step 25/27 : RUN chmod +x ${WORKSPACE}/scripts/build_smap.bash &&     chmod +x ${WORKSPACE}/scripts/full_build.bash &&     chmod +x ${WORKSPACE}/scripts/setup.bash
+ ---> Running in 8a4c48ae1552
+Removing intermediate container 8a4c48ae1552
+ ---> fb169f33e3c0
+Step 26/27 : WORKDIR ${WORKSPACE}
+ ---> Running in 4d768c82fa12
+Removing intermediate container 4d768c82fa12
+ ---> 190cdbf257cf
+Step 27/27 : ENTRYPOINT [ "/sbin/entrypoint.bash" ]
+ ---> Running in 70e957078710
+Removing intermediate container 70e957078710
+ ---> 826d3ccae2a1
+Successfully built 826d3ccae2a1
+Successfully tagged build:jetson-deploy

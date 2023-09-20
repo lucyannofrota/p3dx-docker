@@ -29,6 +29,8 @@ ENV ENTRYPOINT=${ENTRYPOINT}
 
 
 ENV DEBIAN_FRONTEND=noninteractive
+ENV SHELL /bin/bash
+SHELL ["/bin/bash", "-c"] 
 
 
 WORKDIR ${WORKSPACE}

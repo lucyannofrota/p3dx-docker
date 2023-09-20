@@ -3,7 +3,7 @@ version: '2.2'
 services:
 
   noetic_p3dx:
-    image: pbuild:3dx-noetic
+    image: build:3dx-noetic
     container_name: p3dx-noetic-dev
     build:
       network: host
@@ -39,7 +39,7 @@ services:
         ENTRYPOINT_FILE: entrypoints/p3dx_entrypoint.bash
 
   p3dx_navigation:
-    image: p3dx-navigation
+    image: build:p3dx-navigation
     container_name: p3dx-navigation-dev
     build:
       network: host

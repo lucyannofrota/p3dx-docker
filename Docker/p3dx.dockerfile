@@ -16,6 +16,8 @@ ENV IMAGE_NAME=${BUILD_IMAGE_NAME}
 ENV ENTRYPOINT=${ENTRYPOINT_FILE}
 
 ENV WORKSPACE=${WORKSPACE}
+ENV SHELL /bin/bash
+SHELL ["/bin/bash", "-c"] 
 
 
 COPY p3dx-pkgs ${WORKSPACE}/noetic/src
@@ -29,11 +31,12 @@ RUN git clone --recursive https://github.com/cinvesrob/Aria.git /usr/local/Aria 
 
 WORKDIR ${WORKSPACE}/noetic
 
-SHELL ["/bin/bash", "-c"] 
+# SHELL ["/bin/bash", "-c", "tail -f /dev/null"]
 
-RUN . /opt/ros/noetic/setup.bash && \
-    # git clone https://github.com/ros/joint_state_publisher.git ${WORKSPACE}/noetic/src/joint_state_publisher && \
-    catkin_make
+# git clone https://github.com/ros/joint_state_publisher.git ${WORKSPACE}/noetic/src/joint_state_publisher && \
+
+RUN /bin/bash -c "source /opt/ros/noetic/setup.bash && catkin_make"
+RUN echo "alias noetic='source /workspace/noetic/devel/setup.bash'" >> ~/.bashrc
 
 COPY ${ENTRYPOINT} /sbin/entrypoint.bash
 

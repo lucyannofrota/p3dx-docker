@@ -27,6 +27,8 @@ ENV ENTRYPOINT=${ENTRYPOINT}
 
 
 ENV DEBIAN_FRONTEND=noninteractive
+ENV SHELL /bin/bash
+SHELL ["/bin/bash", "-c"] 
 
 
 WORKDIR ${WORKSPACE}
@@ -49,8 +51,8 @@ COPY scripts/yolo_install.bash /sbin/yolo_install.bash
 
 RUN source /ros_entrypoint.sh && \
     mkdir -p src/smap && \
-    git clone --recursive --branch 1.0 https://github.com/lucyannofrota/smap_interfaces.git src/smap/smap_interfaces && \
-    git clone --recursive --branch 1.0 https://github.com/lucyannofrota/smap_perception.git src/smap/smap_perception && \
+    git clone --recursive --branch 1.0.3 https://github.com/lucyannofrota/smap_interfaces.git src/smap/smap_interfaces && \
+    git clone --recursive --branch 1.0.2 https://github.com/lucyannofrota/smap_perception.git src/smap/smap_perception && \
     # smap_yolo_v5 setup
         # Install yolo
     /bin/bash /sbin/yolo_install.bash && \

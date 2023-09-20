@@ -1,0 +1,57 @@
+Building images
+Start: 19:05:25   14/09/23
+
+
+	P3-DX:
+
+		Building noetic
+			Start: 19:05:25   14/09/23
+			End:   22:14:26   14/09/23
+			Elapsed Time: 11341 seconds
+
+		Building noetic_foxy
+			Start: 22:14:26   14/09/23
+			End:   03:32:54   15/09/23
+			Elapsed Time: 19108 seconds
+
+		Building noetic_p3dx
+			Start: 03:32:54   15/09/23
+			End:   03:39:52   15/09/23
+			Elapsed Time: 418 seconds
+
+		Building noetic_foxy_p3dx
+			Start: 03:39:52   15/09/23
+			End:   03:46:48   15/09/23
+			Elapsed Time: 416 seconds
+
+		Building p3dx_navigation
+			Start: 03:46:48   15/09/23
+			End:   05:12:24   15/09/23
+			Elapsed Time: 5136 seconds
+
+	SMAP:
+
+		Building ros2-zed
+			Start: 05:12:24   15/09/23
+			End:   05:43:38   15/09/23
+			Elapsed Time: 1874 seconds
+
+		Building smap-sampler-zed
+			Start: 05:43:38   15/09/23
+			End:   05:47:55   15/09/23
+			Elapsed Time: 257 seconds
+
+		Building smap-yolov5
+			Start: 05:47:55   15/09/23
+			End:   06:09:29   15/09/23
+			Elapsed Time: 1294 seconds
+
+		Building smap-env
+			Start: 06:09:29   15/09/23
+			End:   06:09:57   15/09/23
+			Elapsed Time: 28 seconds
+
+
+
+End:   06:09:57   15/09/23
+Elapsed Time: 39872 seconds

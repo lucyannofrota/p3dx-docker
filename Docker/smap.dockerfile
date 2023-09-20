@@ -28,6 +28,8 @@ ENV ENTRYPOINT=${ENTRYPOINT}
 
 
 ENV DEBIAN_FRONTEND=noninteractive
+ENV SHELL /bin/bash
+SHELL ["/bin/bash", "-c"] 
 
 
 WORKDIR ${WORKSPACE}
@@ -49,7 +51,10 @@ WORKDIR ${WORKSPACE}
 
 ENTRYPOINT [ "/sbin/entrypoint.bash" ]
 
-# RUN git clone --recursive --branch 1.0 https://github.com/lucyannofrota/smap_core.git ${WORKSPACE}/src/smap/smap_core && \
-#     git clone --recursive --branch 1.0 https://github.com/lucyannofrota/smap_interfaces.git ${WORKSPACE}/src/smap/smap_interfaces && \
-#     /bin/bash ${WORKSPACE}/scripts/setup.bash && \
-#     /bin/bash ${WORKSPACE}/scripts/full_build.bash
+FROM dependencies as deploy
+
+RUN git clone --recursive --branch 1.0.3 https://github.com/lucyannofrota/smap_core.git ${WORKSPACE}/src/smap/smap_core && \
+    git clone --recursive --branch 1.0.3 https://github.com/lucyannofrota/smap_interfaces.git ${WORKSPACE}/src/smap/smap_interfaces && \
+    /bin/bash ${WORKSPACE}/scripts/setup.bash && \
+    /bin/bash ${WORKSPACE}/scripts/full_build.bash
+

@@ -6,7 +6,8 @@ ARG BUILD_BASE_IMAGE=lucyannofrota/jetson-noetic
 ARG BUILD_IMAGE_NAME=jetson:noetic-foxy
 ARG WORKSPACE=/workspace
 
-ARG ROS2_PKG=ros_base
+# ROS2_PKG=ros_base/desktop/desktop_full
+ARG ROS2_PKG=desktop
 ARG RMW_IMPLEMENTATION_INSTALL=rmw-cyclonedds-cpp
 ARG RMW_IMPLEMENTATION=rmw_cyclonedds_cpp
 ARG ROS_DOMAIN_ID=7
@@ -130,6 +131,12 @@ RUN apt-get update && \
 		  lsb-release \
     && rm -rf /var/lib/apt/lists/* \
     && apt-get clean
+
+RUN python3 -m pip install --upgrade pip && \
+    pip3 install --no-cache-dir scikit-build  && \
+    pip3 install --upgrade --no-cache-dir --verbose cmake  && \
+    cmake --version  && \
+    which cmake
 		  	  
 # use pip to upgrade cmake instead because of kitware's rotating GPG keys:
 # https://github.com/dusty-nv/jetson-containers/issues/216			  
@@ -152,25 +159,41 @@ RUN cmake --version
 RUN apt purge -y python3.9 libpython3.9* || echo "python3.9 not found, skipping removal" && \
     ls -ll /usr/bin/python*
     
-
-FROM noetic-foxy as test
-    
 # 
 # compile yaml-cpp-0.6, which some ROS packages may use (but is not in the 18.04 apt repo)
 #
-RUN git clone --branch yaml-cpp-0.6.0 https://github.com/jbeder/yaml-cpp yaml-cpp-0.6 && \
-    cd yaml-cpp-0.6 && \
-    mkdir -p build && \
-    cd build && \
-    cmake -DBUILD_SHARED_LIBS=ON .. && \
-    make -j$(nproc) && \
-    cp libyaml-cpp.so.0.6.0 /usr/lib/aarch64-linux-gnu/ && \
-    ln -s /usr/lib/aarch64-linux-gnu/libyaml-cpp.so.0.6.0 /usr/lib/aarch64-linux-gnu/libyaml-cpp.so.0.6
-
+# RUN git clone --branch yaml-cpp-0.6.0 https://github.com/jbeder/yaml-cpp yaml-cpp-0.6 && \
+#     cd yaml-cpp-0.6 && \
+#     mkdir -p build && \
+#     cd build && \
+#     cmake -DBUILD_SHARED_LIBS=ON .. && \
+#     make -j$(nproc) && \
+#     cp libyaml-cpp.so.0.6.0 /usr/lib/aarch64-linux-gnu/ && \
+#     ln -s /usr/lib/aarch64-linux-gnu/libyaml-cpp.so.0.6.0 /usr/lib/aarch64-linux-gnu/libyaml-cpp.so.0.6
 
 # 
 # download/build ROS from source
 #
+
+        # launch_xml \
+        # launch_yaml \
+        # launch_testing \
+        # launch_testing_ament_cmake \
+        # demo_nodes_cpp \
+        # demo_nodes_py \
+        # example_interfaces \
+        # camera_calibration_parsers \
+        # camera_info_manager \
+        # cv_bridge \
+        # v4l2_camera \
+        # vision_opencv \
+        # vision_msgs \
+        # image_geometry \
+        # image_pipeline \
+        # image_transport \
+        # compressed_image_transport \
+        # compressed_depth_image_transport \
+        # diagnostic_msgs \
 
 RUN rm /etc/ros/rosdep/sources.list.d/20-default.list && \ 
     mkdir -p ${ROS2_ROOT}/src && \ 
@@ -206,10 +229,9 @@ RUN rm -rf ${ROS2_ROOT}/src && \
     rm -rf ${ROS2_ROOT}/logs && \
     rm -rf ${ROS2_ROOT}/build && \
     rm -f ${ROS2_ROOT}/*.rosinstall && \
-    echo "alias foxy='source /workspace/foxy/install/setup.bash'" >> ~/.bashrc
+    rm -rf /opt/ros/foxy/tmp
 
-
-# ro1_bridge
+FROM noetic-foxy as ro1_bridge
 
 WORKDIR ${WORKSPACE}/foxy
 
@@ -223,7 +245,8 @@ COPY p3dx.repos ${WORKSPACE}/foxy
 RUN mkdir -p src && \
     vcs import < p3dx.repos && \
     source /opt/ros/foxy/install/setup.bash && \
-    colcon build --symlink-install --packages-skip ros1_bridge
+    colcon build --symlink-install --packages-skip ros1_bridge && \
+    echo "alias foxy='source /workspace/foxy/install/setup.bash'" >> ~/.bashrc
 
 RUN source /opt/ros/noetic/setup.bash && \
     source /opt/ros/foxy/install/setup.bash && \
@@ -234,7 +257,7 @@ RUN apt-get update -y && \
     apt-get install python3-pip -y && \
     pip install Jetson.GPIO
 
-FROM noetic-foxy as configs
+FROM ro1_bridge as configs
 
 COPY ${ENTRYPOINT} /sbin/entrypoint.bash
 

@@ -40,10 +40,45 @@ services:
       network: host
       context: ./Docker
       dockerfile: ./smap.dockerfile
+      target: dependencies
       args:
 
         BUILD_BASE_IMAGE: dustynv/ros:foxy-desktop-l4t-r35.2.1
         BUILD_IMAGE_NAME: smap:jetson-env
+        L4T_VERSION: R35.2.1
+        UBUNTU_VERSION: 20.04
+        # ROS
+        ROS_DISTRO: foxy
+        WORKSPACE: /workspace
+        # RMW_IMPLEMENTATION_INSTALL: rmw-cyclonedds-cpp
+        # RMW_IMPLEMENTATION: rmw_cyclonedds_cpp
+    privileged: true
+    environment:
+      - "DISPLAY"
+      - "QT_X11_NO_MITSHM=1" #fix some QT bugs
+    volumes: 
+      - /tmp/.X11-unix:/tmp/.X11-unix # Share X11 socket with container
+      - $HOME/.Xauthority:/home/ros/.Xauthority # Share X11 permissions
+
+    cap_add:
+      - SYS_PTRACE
+    command: >
+      bash -c "
+        tail -f /dev/null
+      "
+  
+  smap-deploy:
+    image: build:jetson-deploy
+    container_name: smap-dev
+    build:
+      network: host
+      context: ./Docker
+      dockerfile: ./smap.dockerfile
+      target: dependencies
+      args:
+
+        BUILD_BASE_IMAGE: dustynv/ros:foxy-desktop-l4t-r35.2.1
+        BUILD_IMAGE_NAME: smap:jetson-deploy
         L4T_VERSION: R35.2.1
         UBUNTU_VERSION: 20.04
         # ROS
