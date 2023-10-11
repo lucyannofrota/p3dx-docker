@@ -74,7 +74,7 @@ services:
       network: host
       context: ./Docker
       dockerfile: ./smap.dockerfile
-      target: dependencies
+      target: deploy
       args:
 
         BUILD_BASE_IMAGE: dustynv/ros:foxy-desktop-l4t-r35.2.1

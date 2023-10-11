@@ -53,8 +53,8 @@ ENTRYPOINT [ "/sbin/entrypoint.bash" ]
 
 FROM dependencies as deploy
 
-RUN git clone --recursive --branch 1.0.3 https://github.com/lucyannofrota/smap_core.git ${WORKSPACE}/src/smap/smap_core && \
-    git clone --recursive --branch 1.0.3 https://github.com/lucyannofrota/smap_interfaces.git ${WORKSPACE}/src/smap/smap_interfaces && \
+RUN git clone --recursive --branch 0.4 https://github.com/lucyannofrota/smap_core.git ${WORKSPACE}/src/smap/smap_core && \
+    git clone --recursive --branch 0.4 https://github.com/lucyannofrota/smap_interfaces.git ${WORKSPACE}/src/smap/smap_interfaces && \
     /bin/bash ${WORKSPACE}/scripts/setup.bash && \
     /bin/bash ${WORKSPACE}/scripts/full_build.bash
 
